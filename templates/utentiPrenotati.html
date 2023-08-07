@@ -1,0 +1,71 @@
+{% extends  "layout.html" %}
+
+{% block title %}
+    <title>ADMIN - UTENTI PRENOTATI</title>
+{% endblock %}
+
+{% block style %}
+    <link rel="stylesheet" href="../static/styleTable.css">
+{% endblock %}
+
+
+{% block body %}
+
+    <!--
+    <table>
+        {% for prenotazione in prenotati %}
+        <tr>
+            <td>{{prenotazione.nome}}</td>
+            <td>{{prenotazione.cognome}}</td>
+            <td>{{prenotazione.telefono}}</td>
+            <td>{{prenotazione.data}}</td>
+            <td>{{prenotazione.ora}}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    -->
+    <div class="mainContainer">
+        <div class="pannelloDiControllo">
+            <form action="/admin">    
+                <button type="submit" class="bottoneSubmit">Torna al pannello di controllo</button>
+            </form>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>Cognome</th>
+                    <th>Numero di telefono</th>
+                    <th>Giorno</th>
+                    <th>Ora</th>
+                    <th>Azioni</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for prenotazione in prenotati %}
+                <tr>
+                    <td>{{prenotazione.nome}}</td>
+                    <td>{{prenotazione.cognome}}</td>
+                    <td>{{prenotazione.telefono}}</td>
+                    <td>{{prenotazione.data}}</td>
+                    <td>{{prenotazione.ora}}</td>
+                    <td>
+                        <form action="/rimuoviBook" method="post">
+                            <input type="hidden" name="idPrenotazione" value="{{prenotazione.id}}">
+                            <button type="submit" class="submitButton">Rimuovi</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <br>
+        
+        
+    </div>
+</body>
+</html>
+
+
+{% endblock %}
+    

@@ -1,0 +1,94 @@
+{% extends "layout.html" %}
+
+{% block title %}
+
+    <title>DIVINA - MENU</title>
+
+{% endblock %}
+
+{% block style %}
+    <link rel="stylesheet" href="../static/styleMenu.css">
+{% endblock %}
+
+{% block body %}
+    <div class="welcomeMenu">
+        <div class="scurente">
+            <div class="menuBar">
+                <form action="/home">
+                    <button class="menuButton" name="home">HOME</button>
+                </form>
+                <form action="/menu">
+                    <button class="menuButtonCurrent" name="menu">MENU</button>
+                </form>
+                <form action="/prenotazioni">
+                    <button class="menuButton" name="prenotazioni">PRENOTAZIONI</button>
+                </form>
+            </div>
+            <div class="titleDiv">
+                <h1 class="title">MENU</h1>
+                <!-- <h5 class="sections">BEVANDE | CARTA DEI VINI | ANTIPASTI | PRIMI | CARNI FROLLATE | SECONDI DI CARNE | PIZZE GOURMET | LE NOSTRE SPECIALITÀ | PIZZE CLASSICHE | PIZZE BIANCHE | DOLCI & DESSERT | DISTILLATI</h5> -->
+            </div>
+        </div>
+    </div>
+
+    <div class="menuDiv">
+        <div>
+            <div class="menuTitleDiv">
+                <h5 class="menuSection">BEVANDE</h5>
+            </div>
+            <div class="menuBevande">
+                <table class="sx">
+                    {% for bevanda in sx %}
+                    <tr>
+                        <td class="menuItem">{{ bevanda.food_name }} <span class="subtitle">{{ bevanda.description }}</span></td>
+                        <td class="menuItem">€ {{ bevanda.price }}</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+                <table class="dx">
+                    {% for bevanda in dx %}
+                    <tr>
+                        <td class="menuItem">{{ bevanda.food_name }} <span class="subtitle">{{ bevanda.description }}</span></td>
+                        <td class="menuItem">€ {{ bevanda.price }}</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+            
+        </div>
+        <br><br><br>
+        <div class="menuTitleDiv">
+            <h5 class="menuSection">NON HO VOGLIA DI INSERIRE TUTTO IL RESTO</h5>
+        </div>
+    </div>
+
+    <div class="settings">
+        <div class="menuBar">
+            <form action="#">
+                <button class="settingsButton">Termini e Condizioni</button>
+                
+            </form>
+            <form action="#">
+                <button class="settingsButton">Cookie Policy</button>
+            </form>
+            <form action="/login">
+                <button class="settingsButton" name="prenotazioni">LOGIN</button>
+            </form>
+            <form action="/register">
+                <button class="settingsButton" name="prenotazioni">REGISTER</button>
+            </form>
+        </div>
+        <div class="social">
+            <a href="https://www.instagram.com/divinapizzeria_braceria/">
+                <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.pngkey.com%2Fpng%2Ffull%2F1-19361_watercolor-instagram-icon-png-instagram-logo-white-on.png&f=1&nofb=1&ipt=377ad582c2a71eab09461ffcf60b5880d411376a17263b9ef4d1153d7e09f413&ipo=images" alt="instagram" class="socialLogo">
+            </a>
+            <a href="https://www.facebook.com/divinabraceriapizzeria">
+                <img src="../static/facebook.png" alt="facebook" class="socialLogo">
+            </a>
+            <a href="https://www.tripadvisor.it/Restaurant_Review-g187874-d3267198-Reviews-Divina_Pizzeria_Braceria-Bari_Province_of_Bari_Puglia.html">
+                <img src="../static/trip.png" alt="tripadvisor" class="socialLogo">
+            </a>
+        </div>
+    </div>
+
+    {% endblock %}

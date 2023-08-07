@@ -1,0 +1,185 @@
+/* globali */
+
+body{
+    margin: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+h1{
+    margin: 0;
+}
+
+.titleDiv{
+    width: 100%;
+    text-align: center;
+    padding-top: 18%;
+}
+
+.title{
+    font-family: 'Baskervville', serif;
+    color: white;
+    font-size: 70px;
+}
+
+.scurente{
+    height: 100vh;
+    background-color: rgba(0,0,0,.8);
+}
+
+.menuBar{
+    width: 100%;
+    justify-content: center;
+    display: flex;
+    align-items: center;
+}
+
+.menuButton{
+    border: none;
+    background-color: transparent;
+    color: white;
+    font-family: 'Victor Mono', monospace;
+    font-size: 20px;
+    margin-top: 40px;
+}
+
+.menuButton:hover{
+    color: rgb(128, 128, 128);
+    text-decoration: underline;
+
+}
+
+.menuButtonCurrent{
+    border: none;
+    background-color: transparent;
+    color: white;
+    font-family: 'Victor Mono', monospace;
+    font-size: 20px;
+    margin-top: 40px;
+    text-decoration: underline;
+}
+
+.settings{
+    height: 30vh;
+    width: 100%;
+    background-color: black;
+}
+
+.settingsButton{
+    border: 1px solid white;
+    background-color: transparent;
+    color: white;
+    font-family: 'Victor Mono', monospace;
+    padding-left: 10px; padding-right: 10px;
+    padding-top: 5px; padding-bottom: 5px;
+    margin-left: 20px; margin-right: 20px;
+    margin-top: 40px;
+    font-size: 20px;   
+}
+
+.socialLogo{
+    margin-left: 1%; margin-right: 1%;
+    padding-top: 5%;
+    max-width: 40px;
+
+}
+
+.social{
+    width: 100%;
+    text-align: center;
+}
+
+
+
+/* fine globali */
+
+
+
+
+
+
+@import url("https://fonts.googleapis.com/css?family=Lato:400,700");
+
+.formPrenotazione{
+    height: 100vh;
+    width: 100%;
+    background-image: url(1.jpeg);
+    background-size: cover;
+    background-position: center;
+}
+
+.formForm {
+    padding-top: 3%;
+    width: 350px;
+    position: relative;
+}
+.form-field::before {
+    font-size: 20px;
+    position: absolute;
+    left: 15px;
+    top: 17px;
+    color: #888888;
+    content: " ";
+    display: block;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+.form-field:nth-child(1)::before {
+    width: 20px;
+    height: 20px;
+    top: 15px;
+}
+.form-field:nth-child(2)::before {
+    width: 16px;
+    height: 16px;
+}
+.form-field {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    margin-bottom: 1rem;
+    position: relative;
+}
+.formInput {
+    font-family: inherit;
+    width: 100%;
+    outline: none;
+    background-color: #fff;
+    border-radius: 4px;
+    border: none;
+    display: block;
+    padding: 0.9rem 0.7rem;
+    box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.16);
+    font-size: 17px;
+    color: #4A4A4A;
+    text-indent: 40px;
+}
+.bottoneSubmit {
+    outline: none;
+    border: none;
+    cursor: pointer;
+    display: inline-block;
+    margin: 0 auto;
+    padding: 0.9rem 2.5rem;
+    text-align: center;
+    background-color: rgba(255,255,255,.8);
+    font-family: 'REM', sans-serif;
+    color: black;
+    border-radius: 4px;
+    box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.16);
+    font-size: 17px;
+    width: 100%;
+}
+
+.divPrenota{
+    width: 100%;
+    height: 80%;
+    display: flex;
+    justify-content: center;
+}

@@ -1,0 +1,92 @@
+{% extends "layout.html" %}
+
+{% block title %}
+
+    <title>DIVINA - PRENOTAZIONI</title>
+
+{% endblock %}
+
+{% block style %}
+    <link rel="stylesheet" href="../static/stylePrenota.css">
+{% endblock %}
+
+{% block body %}
+
+    <div class="formPrenotazione">
+        <div class="scurente">
+            <div class="menuBar">
+                <form action="/home">
+                    <button class="menuButton" name="home">HOME</button>
+                </form>
+                <form action="/menu">
+                    <button class="menuButton" name="menu">MENU</button>
+                </form>
+                <form action="/prenotazioni">
+                    <button class="menuButtonCurrent" name="prenotazioni">PRENOTAZIONI</button>
+                </form>
+            </div>
+            <div class="divPrenota">
+                <form action="/prenotazioni" method="post" class="formForm">
+                    <div class="form-field">
+                        <input type="text" name="nome" autofocus placeholder="Nome" required class="formInput">
+                    </div>
+                    
+                    <div class="form-field">
+                        <input type="text" name="cognome" placeholder="Cognome" required class="formInput">
+                    </div>
+                    
+                    <div class="form-field">
+                        <input type="text" name="phone" placeholder="Numero di Telefono" required class="formInput">
+                    </div>
+                    
+                    <div class="form-field">
+                        <input type="date" name="date" placeholder="Data" id="dataInserimento" required class="formInput">
+                    </div>
+
+                    <div class="form-field">
+                        <select name="orario" class="formInput">
+                            <option selected disabled>Seleziona un orario</option>
+                            {% for orario in orari %}
+                                <option value="{{orario.orario}}">{{orario.orario}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="form-field">
+                      <button class="bottoneSubmit" type="submit">Prenota</button>
+                    </div>
+
+                  </form>
+            </div>
+        </div>
+    </div>
+    <div class="settings">
+        <div class="menuBar">
+            <form action="#">
+                <button class="settingsButton">Termini e Condizioni</button>
+            </form>
+            <form action="#">
+                <button class="settingsButton">Cookie Policy</button>
+            </form>
+            <form action="/logout">
+                <button class="menuButton" name="prenotazioni">LOGOUT</button>
+            </form>
+        </div>
+        <div class="social">
+            <a href="https://www.instagram.com/divinapizzeria_braceria/">
+                <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.pngkey.com%2Fpng%2Ffull%2F1-19361_watercolor-instagram-icon-png-instagram-logo-white-on.png&f=1&nofb=1&ipt=377ad582c2a71eab09461ffcf60b5880d411376a17263b9ef4d1153d7e09f413&ipo=images" alt="instagram" class="socialLogo">
+            </a>
+            <a href="https://www.facebook.com/divinabraceriapizzeria">
+                <img src="../static/facebook.png" alt="facebook" class="socialLogo">
+            </a>
+            <a href="https://www.tripadvisor.it/Restaurant_Review-g187874-d3267198-Reviews-Divina_Pizzeria_Braceria-Bari_Province_of_Bari_Puglia.html">
+                <img src="../static/trip.png" alt="tripadvisor" class="socialLogo">
+            </a>
+        </div>
+    </div>
+
+
+
+
+    
+{% endblock %}

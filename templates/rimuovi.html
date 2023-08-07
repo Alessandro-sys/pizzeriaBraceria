@@ -1,0 +1,30 @@
+{% extends "layout.html" %}
+
+{% block style %}
+    <link rel="stylesheet" href="../static/stylePrenota.css">
+{% endblock %}
+
+
+{% block body %}
+
+<div class="formPrenotazione">
+    <div class="scurente">
+        <div class="divPrenota">
+            <form action="/rimuovi" method="post" class="formForm">
+                <div class="form-field">
+                    <select name="item" class="formInput">
+                        {% for item in menu %}
+                        <option value="{{ item.food_name }}">{{ item.food_name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-field">
+                    <button type="submit" class="bottoneSubmit"> rimuovi </button>
+                </div>
+            </form>
+            
+        </div>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,82 @@
+{% extends "layout.html" %}
+
+{% block title %}
+
+    <title>DIVINA - LOGIN</title>
+
+{% endblock %}
+
+{% block style %}
+    <link rel="stylesheet" href="../static/styleAdmin.css">
+{% endblock %}
+
+{% block body %}
+
+    <div class="welcome">
+        <div class="scurente">
+            <div class="menuBar">
+                <form action="/home">
+                    <button class="menuButton" name="home">HOME</button>
+                </form>
+                <form action="/menu">
+                    <button class="menuButton" name="menu">MENU</button>
+                </form>
+                <form action="/prenotazioni">
+                    <button class="menuButton" name="prenotazioni">PRENOTAZIONI</button>
+                </form>
+            </div>
+            <div class="panCon">
+                <h1 class="cp"> REGISTRATI</h1>
+                <br><br><br>
+                <div>
+                    <form action="/register" method="post" class="formForm">
+                        <div class="form-field">
+                            <input type="text" name="name" required autocomplete="off" placeholder="Nome" class="formInput">
+                        </div>
+                        <div class="form-field">
+                            <input type="text" name="surname" required autocomplete="off" placeholder="Cognome" class="formInput">
+                        </div>
+                        <div class="form-field">
+                            <input type="text" name="email" required autocomplete="off" placeholder="Email" class="formInput">
+                        </div>
+                        <div class="form-field">
+                            <input type="password" name="password" required autocomplete="off" placeholder="Password" class="formInput">
+                        </div>
+                        <div class="form-field">
+                            <button type="submit" class="bottoneSubmit" style="margin: 2%;">Register</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="settings">
+        <div class="menuBar">
+            <form action="#">
+                <button class="settingsButton">Termini e Condizioni</button>
+            </form>
+            <form action="#">
+                <button class="settingsButton">Cookie Policy</button>
+            </form>
+            <form action="/login">
+                <button class="settingsButton" name="prenotazioni">LOGIN</button>
+            </form>
+            <form action="/register">
+                <button class="settingsButton" name="prenotazioni">REGISTER</button>
+            </form>
+        </div>
+        <div class="social">
+            <a href="https://www.instagram.com/divinapizzeria_braceria/">
+                <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.pngkey.com%2Fpng%2Ffull%2F1-19361_watercolor-instagram-icon-png-instagram-logo-white-on.png&f=1&nofb=1&ipt=377ad582c2a71eab09461ffcf60b5880d411376a17263b9ef4d1153d7e09f413&ipo=images" alt="instagram" class="socialLogo">
+            </a>
+            <a href="https://www.facebook.com/divinabraceriapizzeria">
+                <img src="../static/facebook.png" alt="facebook" class="socialLogo">
+            </a>
+            <a href="https://www.tripadvisor.it/Restaurant_Review-g187874-d3267198-Reviews-Divina_Pizzeria_Braceria-Bari_Province_of_Bari_Puglia.html">
+                <img src="../static/trip.png" alt="tripadvisor" class="socialLogo">
+            </a>
+        </div>
+    </div>
+
+{% endblock %}

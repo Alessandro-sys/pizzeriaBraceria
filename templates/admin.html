@@ -1,0 +1,40 @@
+{% extends "layout.html" %}
+
+{% block title %}
+
+    <title>DIVINA - ADMIN PAGE</title>
+
+{% endblock %}
+
+{% block style %}
+    <link rel="stylesheet" href="../static/styleAdmin.css">
+{% endblock %}
+
+{% block body %}
+
+    <div class="welcome">
+        <div class="scurente">
+            <div class="panCon">
+                <h1 class="cp"> Pannello di controllo Admin</h1>
+                <br><br><br>
+                <div>
+                    <form action="/aggiungi">
+                        <button type="submit" class="bottoneSubmit" style="margin: 2%;">Aggiungi elementi al Menu</button>
+                    </form>
+                    <form action="/rimuovi">
+                        <button type="submit" class="bottoneSubmit" style="margin: 2%;">Rimuovi elementi dal Menu</button>
+                    </form>
+                    <form action="/utentiPrenotati">
+                        <button type="submit" class="bottoneSubmit" style="margin: 2%;">Controlla prenotazioni</button>
+                    </form>
+                    <form action="/">
+                        <button type="submit" class="bottoneSubmit" style="margin: 2%;">Torna alla home</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+{% endblock %}

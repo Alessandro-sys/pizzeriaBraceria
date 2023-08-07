@@ -1,0 +1,190 @@
+/* globali */
+
+body{
+    margin: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+h1{
+    margin: 0;
+}
+
+.menuBar{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.menuButton{
+    border: none;
+    background-color: transparent;
+    color: white;
+    font-family: 'Victor Mono', monospace;
+    font-size: 20px;
+    margin-top: 40px;
+}
+
+.menuButton:hover{
+    color: rgb(128, 128, 128);
+    text-decoration: underline;
+
+}
+
+.menuButtonCurrent{
+    border: none;
+    background-color: transparent;
+    color: white;
+    font-family: 'Victor Mono', monospace;
+    font-size: 20px;
+    margin-top: 40px;
+    text-decoration: underline;
+}
+
+
+.welcome{
+    height: 100vh;
+    width: 100%;
+    background-image: url(3.jpg);
+    background-size: cover;
+}
+
+.scurente{
+    height: 100vh;
+    background-color: rgba(0,0,0,.8);
+}
+
+.titleDiv{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    align-content: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.title{
+    font-family: 'Baskervville', serif;
+    color: white;
+    font-size: 70px;
+}
+.adress{
+    font-family: 'Baskervville', serif;
+    color: white;
+    font-size: 20px;
+    margin: 0;
+}
+
+.discover{
+    border: 1px solid white;
+    background-color: transparent;
+    color: white;
+    font-family: 'Baskervville', serif;
+    padding-left: 10px; padding-right: 10px;
+    padding-top: 5px; padding-bottom: 5px;
+    margin-top: 20px;
+    font-size: 20px;   
+}
+
+.discover:hover{
+    color: rgb(128, 128, 128);
+    border: 1px solid rgb(128, 128, 128);
+}
+
+
+
+
+
+.history{
+    height: 100vh;
+    width: 100%;
+    background-color: black;
+}
+
+#immagine{
+    max-width: 130vh;
+    margin-left: auto; margin-right: auto;
+    padding-top: 4%;
+}
+
+.storia{
+    max-width: fit-content;
+    max-height: fit-content;
+    background-color: rgba(0,0,0,.6);
+    border-radius: 1em;
+}
+
+.hstoria{
+    color: white;
+    font-family: 'Baskervville', serif;
+    font-size: 30px;
+}
+
+.pstoria{
+    color: white;
+    font-family: 'Baskervville', serif;
+    font-size: 20px;
+}
+
+
+.location{
+    height: 100vh;
+    width: 100%;
+    background-image: url(1.jpeg);
+    background-size: cover;
+    background-position: center;
+}
+
+.locationTitleDiv{
+    padding-top: 2%;
+    width: 100%;
+    text-align: center;
+}
+
+#map {
+    height: 400px; /* The height is 400 pixels */
+    width: 50%; /* The width is the width of the web page */
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 5%;
+}
+
+/* div mappa location */
+.mappa{
+    width: 100%;
+}
+
+.settings{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 30vh;
+    background-color: black;
+}
+
+.settingsButton{
+    border: 1px solid white;
+    background-color: transparent;
+    color: white;
+    font-family: 'REM', sans-serif;
+    padding-left: 10px; padding-right: 10px;
+    padding-top: 5px; padding-bottom: 5px;
+    margin-left: 20px; margin-right: 20px;
+    margin-top: 40px;
+    font-size: 20px;   
+}
+
+.socialLogo{
+    margin-left: 1%; margin-right: 1%;
+    padding-bottom: 2%;
+    max-width: 40px;
+
+}
+
+.social{
+    width: 100%;
+    text-align: center;
+}

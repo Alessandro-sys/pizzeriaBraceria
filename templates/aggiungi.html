@@ -1,0 +1,35 @@
+{% extends "layout.html" %}
+
+{% block title %}
+
+    <title>DIVINA - ADMIN PAGE</title>
+
+{% endblock %}
+
+{% block style %}
+    <link rel="stylesheet" href="../static/styleAdmin.css">
+{% endblock %}
+
+{% block body %}
+
+    <div class="welcome">
+        <div class="scurente">
+            <div class="panCon">
+                <h1 class="cp">Aggiungi elementi</h1>
+                <br><br><br>
+                <form action="/aggiungi" method="post" class="formForm">
+                    <input type="text" name="food_name" placeholder="nome" required autofocus autocomplete="off" class="formInput" style="margin: 2%;">
+                    <input type="text" name="price" placeholder="prezzo" required autocomplete="off" class="formInput" style="margin: 2%;">
+                    <input type="text" name="descrizione" placeholder="descrizione (facoltativo)" autocomplete="off" class="formInput" style="margin: 2%;">
+                    <button type="submit" class="bottoneSubmit" style="margin: 2%;">Aggiungi</button>
+                    
+                </form> 
+                <form action="/admin" class="formForm">
+                    <button type="submit" class="bottoneSubmit" style="margin: 2%;">Torna al pannello di controllo</button>
+                </form>
+                
+            </div>  
+        </div>
+    </div>
+
+{% endblock %}
