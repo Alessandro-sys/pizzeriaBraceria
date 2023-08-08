@@ -70,8 +70,7 @@ def prenotazioni():
         telefono = request.form.get("phone")
         data = request.form.get("date")
         ora = request.form.get("orario")
-
-        print(name + " " + surname + " " + telefono + " " + data + " " + ora)
+        status = ("incoming")
 
         if not name:
             return apology("assicurati di aver inserito il tuo nome")
@@ -88,7 +87,7 @@ def prenotazioni():
         if not ora:
             return apology("assicurati di aver inserito l'ora")
         
-        dbUsers.execute("INSERT INTO prenotazioni (nome, cognome, telefono, data, ora) VALUES (?, ?, ?, ?, ?)", name, surname, telefono, data, ora)
+        dbUsers.execute("INSERT INTO prenotazioni (nome, cognome, telefono, data, ora, status) VALUES (?, ?, ?, ?, ?, ?)", name, surname, telefono, data, ora, status)
 
         return redirect("/")
     
@@ -185,7 +184,7 @@ def aggiungi():
 
         if (not nome) or (not price):
             return apology("chigghione inserisci tutti i dati")
-
+        
         if description == None:
             db.execute("INSERT INTO bevande (food_name, price) VALUES (?, ?)", nome, price)
         else:
@@ -210,19 +209,29 @@ def rimuovi():
 def utentiPrenotati():
     if request.method == "GET":
         prenotati = dbUsers.execute("SELECT * FROM prenotazioni")
-        return render_template("utentiPrenotati.html", prenotati = prenotati)
+
+        lista_dizionari_ordinata = sorted(prenotati, key=lambda x: (datetime.strptime(x["data"], "%Y-%m-%d"), datetime.strptime(x["ora"], "%H:%M")) , reverse=True)
+
+
+        return render_template("utentiPrenotati.html", prenotati = lista_dizionari_ordinata)
+
+    elif request.method == "POST":
+        nuovoStatus = request.form.get("cambioStatus")
+        idPrenotazione = request.form.get("idPrenotazione")
+        
+        if not idPrenotazione:
+            return apology("Errore interno del server, riprova più tardi")
+
+        if not nuovoStatus:
+            return apology("Nuovo status non inserito correttamente")
+        
+        dbUsers.execute("UPDATE prenotazioni SET status = ? WHERE id = ?", nuovoStatus, idPrenotazione)
+
+        return redirect("/utentiPrenotati")
     
 
 @app.route("/rimuoviBook", methods=["GET", "POST"])
 @login_required
 def rimuoviBook():
     if request.method == "GET":
-        return redirect("/utentiPrenotati")
-    elif request.method == "POST":
-        idPrenotazione = request.form.get("idPrenotazione")
-
-        if not idPrenotazione:
-            return apology("Errore del server, ritenta tra qualche minuto")
-        
-        dbUsers.execute("DELETE FROM prenotazioni WHERE id = ?", idPrenotazione)
         return redirect("/utentiPrenotati")

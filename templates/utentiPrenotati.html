@@ -11,19 +11,6 @@
 
 {% block body %}
 
-    <!--
-    <table>
-        {% for prenotazione in prenotati %}
-        <tr>
-            <td>{{prenotazione.nome}}</td>
-            <td>{{prenotazione.cognome}}</td>
-            <td>{{prenotazione.telefono}}</td>
-            <td>{{prenotazione.data}}</td>
-            <td>{{prenotazione.ora}}</td>
-        </tr>
-        {% endfor %}
-    </table>
-    -->
     <div class="mainContainer">
         <div class="pannelloDiControllo">
             <form action="/admin">    
@@ -38,6 +25,7 @@
                     <th>Numero di telefono</th>
                     <th>Giorno</th>
                     <th>Ora</th>
+                    <th>Status</th>
                     <th>Azioni</th>
                 </tr>
             </thead>
@@ -49,23 +37,38 @@
                     <td>{{prenotazione.telefono}}</td>
                     <td>{{prenotazione.data}}</td>
                     <td>{{prenotazione.ora}}</td>
+                    
                     <td>
-                        <form action="/rimuoviBook" method="post">
-                            <input type="hidden" name="idPrenotazione" value="{{prenotazione.id}}">
-                            <button type="submit" class="submitButton">Rimuovi</button>
+                        <form action="">
+                            <button class="{{ prenotazione.status}}">
+                                {% if prenotazione.status == 'incoming' %}
+                                    Non ancora eseguito
+                                {% endif %}
+                                {% if prenotazione.status == 'doing' %}
+                                    In esecuzione
+                                {% endif %}
+                                {% if prenotazione.status == 'past' %}
+                                    Passato
+                                {% endif %}
+                            </button>
+                        </form>
+                    </td>
+                    <td>
+                        <form action="/utentiPrenotati" method="post">
+                            <input type="hidden" name="idPrenotazione" value="{{ prenotazione.id }}">
+                            <select name="cambioStatus">
+                                <option selected disabled>Stato</option>
+                                <option value="incoming">Non ancora eseguito</option>
+                                <option value="doing">In esecuzione</option>
+                                <option value="past">Passato</option>
+                            </select>
+                            <button type="submit" class="submitButton">Conferma</button>
                         </form>
                     </td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
-        <br>
-        
-        
     </div>
-</body>
-</html>
-
 
 {% endblock %}
-    
