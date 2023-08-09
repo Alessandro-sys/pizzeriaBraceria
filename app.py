@@ -235,3 +235,11 @@ def utentiPrenotati():
 def rimuoviBook():
     if request.method == "GET":
         return redirect("/utentiPrenotati")
+    
+
+
+@app.route("/sort", methods=["GET", "POST"])
+@login_required
+def sort():
+    if request.method == "POST":
+        ...
