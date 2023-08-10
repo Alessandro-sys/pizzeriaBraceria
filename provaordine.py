@@ -8,4 +8,6 @@ lista_dizionari = [
 
 lista_dizionari_ordinata = sorted(lista_dizionari, key=lambda x: (datetime.strptime(x["data"], "%Y/%m/%d"), datetime.strptime(x["ora"], "%H:%M")) , reverse=True)
 
+
+
 print(lista_dizionari_ordinata)

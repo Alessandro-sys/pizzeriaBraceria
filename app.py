@@ -1,5 +1,4 @@
 import os
-
 from cs50 import SQL
 from flask import Flask, flash, redirect, render_template, request, session
 from flask_session import Session
@@ -9,15 +8,21 @@ from datetime import datetime
 
 from helpers import apology, login_required
 
+
 db = SQL("sqlite:///database.db")
 dbUsers = SQL("sqlite:///users.db")
 
+past_order = "all"
+
+
 app = Flask(__name__)
+
 
 # Configure session to use filesystem (instead of signed cookies)
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
+
 
 @app.after_request
 def after_request(response):
@@ -27,22 +32,34 @@ def after_request(response):
     response.headers["Pragma"] = "no-cache"
     return response
 
+
 @app.route("/")
 def index():
     if len(session) == 0:
+        # if the user is not logged returns the home not logged template
         return render_template("home.html")
+    
     elif len(session) != 0:
+        # if the user is logged returns the home logged template
         return render_template("homeLogged.html")
+
 
 @app.route("/home")
 def pages():
+    # if the user gets in the www.divinapizzeria.com/home gets redirected in the / link
     return redirect("/")
+
 
 @app.route("/menu")
 def menu():
+    # select all drinks from "bevande" database
     bevande = db.execute("SELECT * FROM bevande")
+
+    # creates two lists, left and right, to store the items in the menu
     sx = []
     dx = []
+
+    # splits the drinks in two columns, style choice
     for bevanda in bevande:
         id = int(bevanda["id"])
         
@@ -51,27 +68,51 @@ def menu():
         else:
             sx.append(bevanda)
 
+    
     if len(session) == 0:
+        # if user is not logged, prints the menu in the not logged template
         return render_template("menu.html", sx = sx, dx = dx)
+    
     elif len(session) != 0:
+        # if user is logged, prints the menu in the logged template
         return render_template("menuLogged.html", sx = sx, dx = dx)
+
 
 @app.route("/prenotazioni", methods=["GET", "POST"])
 def prenotazioni():
     if request.method == "GET":
+        # selects every time avaliable for booking
         orari = db.execute("SELECT * FROM orari_disponibili")
+
         if len(session) == 0:
+            # if user is not logged, prints the booking in the not logged template
             return render_template("prenota.html", orari = orari)
+        
         elif len(session) != 0:
+            # if user is logged, prints the booking in the logged template
             return render_template("prenotaLogged.html", orari = orari)
+
+
     elif request.method == "POST":
+        # gets name from the form
         name = request.form.get("nome")
+
+        # gets surname from the form
         surname = request.form.get("cognome")
+
+        # gets password from the form
         telefono = request.form.get("phone")
+
+        # gets date from the form
         data = request.form.get("date")
+
+        # gets time from the form
         ora = request.form.get("orario")
+        
+        # set the status of the order to default "incoming"
         status = ("incoming")
 
+        # checks if all data is correctly inserted
         if not name:
             return apology("assicurati di aver inserito il tuo nome")
         
@@ -87,36 +128,49 @@ def prenotazioni():
         if not ora:
             return apology("assicurati di aver inserito l'ora")
         
+        # inserts the booking into the database
         dbUsers.execute("INSERT INTO prenotazioni (nome, cognome, telefono, data, ora, status) VALUES (?, ?, ?, ?, ?, ?)", name, surname, telefono, data, ora, status)
 
+        # user gets redirected to the homepage
         return redirect("/")
     
 
 @app.route("/logout")
 def logout():
+    # if the logout button is pressed the session resets
     session.clear()
     return redirect("/")
+
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "GET":
+        # renders the template of the login page
         return render_template("login.html")
+    
     elif request.method == "POST":
-
+        
+        # clears every past cookie from other sessions
         session.clear()
 
+        # takes email from form
         email = request.form.get("email")
+        
+        # takes password from form
         password = request.form.get("password")
 
+        # checks if email and password are correctly inserted
         if not email or not password:
             return apology("assicurati di aver inserito tutti i dati")
         
-
+        # selects the user from the email from database
         rows = dbUsers.execute("SELECT * FROM users WHERE email = ?", email)
 
+        # if len of array returned is not 1 or password is not the same as the return, returns error
         if len(rows) != 1 or not check_password_hash(rows[0]["hash"], password):
             return apology("invalid username and/or password", 403)
         
+        # if everything is correct starts the session for the selected user
         session["user_id"] = rows[0]["id"]
 
         return redirect("/")
@@ -125,46 +179,71 @@ def login():
 @app.route("/register", methods=["GET", "POST"])
 def register():
 
+    # cleans session from past cookies
     session.clear()
 
+
     if request.method == "GET":
+        # renders template for registration
         return render_template("register.html")
     
+    
     elif request.method == "POST":
+        # takes name from the form
         nome = request.form.get("name")
+        
+        # if no name is inserted returns error
         if not nome:
             return apology("Inserisci un nome")
         
+
+        # takes surname from the form
         cognome = request.form.get("surname")
+        
+        # if no surname is inserted returns error
         if not cognome:
             return apology("Inserisci un cognome")
         
+
+        # takes email from the form
         email = request.form.get("email")
+        
+        # if no email is inserted returns error
         if not email:
             return apology("Inserisci un'email")
 
+        # takes password from the form
         password = request.form.get("password")
+        
+        # if no password is inserted returns error
         if not password:
             return apology("Inserisci una password")
         
+        # selects every registered user from database
         registered = dbUsers.execute("SELECT email FROM users")
+        
+        # for each email in the database, if exists a mail same as the one inserted returns error
         for reemail in registered:
             if email in reemail["email"]:
                 return apology("Email già in uso")
         
+        # criptation of the password
         hash = generate_password_hash(password, method='pbkdf2', salt_length=16)
 
+        # checks if the criptation is correct
         if not check_password_hash(hash, password):
             return apology("Internal server error, please try again in a few minutes")
         
+        # inserts the new user's data into the database
         dbUsers.execute("INSERT INTO users (name, surname, email, hash) VALUES (?, ?, ?, ?)", nome, cognome, email, hash)
 
         return redirect("/")
     
+
 @app.route("/admin")
 @login_required
 def admin():
-    
+    # checks if the user trying to access the admin page is user 1 or 2 (the only admins of the page)
     if session["user_id"] == 1 or session["user_id"] == 2:
         return render_template("admin.html")
     
@@ -176,18 +255,29 @@ def admin():
 @login_required
 def aggiungi():
     if request.method == "GET":
+        # renders template for adding food to the menu
         return render_template("aggiungi.html")
+    
     elif request.method == "POST":
+        # takes the name of the food from the form
         nome = request.form.get("food_name")
+
+        # takes the price of the food from the menu (format x,xx (2 decimals possibly))
         price = request.form.get("price")
+
+        # takes description of the food from the form
         description = request.form.get("descrizione")
 
+        # if name or price is not inserted returns error
         if (not nome) or (not price):
             return apology("chigghione inserisci tutti i dati")
         
+        
         if description == None:
+            # if there's no description adds a new food with no description
             db.execute("INSERT INTO bevande (food_name, price) VALUES (?, ?)", nome, price)
         else:
+            # if there's a description adds a new food with description
             db.execute("INSERT INTO bevande (food_name, price, description) VALUES (?, ?, ?)", nome, price, description)
 
         return redirect("/aggiungi")
@@ -196,50 +286,97 @@ def aggiungi():
 @login_required
 def rimuovi():
     if request.method == "GET":
+        # selects every food from the menu
         menu = db.execute("SELECT * FROM bevande")
+
+        # renders form with all foods
         return render_template("rimuovi.html", menu = menu)
     
     if request.method == "POST":
+        # gets food name from the menu
+        ### IDEA ###
+        # does not remove food, applies a tag to hide it, in case some day wants to put it back in
         item = request.form.get("item")
+        
+        # deletes item from the menu database
         db.execute("DELETE FROM bevande WHERE food_name = ?", item)
+
         return redirect("/rimuovi")
+
+
 
 @app.route("/utentiPrenotati", methods=["GET", "POST"])
 @login_required
 def utentiPrenotati():
     if request.method == "GET":
-        prenotati = dbUsers.execute("SELECT * FROM prenotazioni")
+        # access the global variable past_order, it containst the last order of the bookings selected
+        global past_order
 
+        # gets current date
+        data_odierna = datetime.now().date()
+        
+        # selected every booked user from the database
+        prenotati = dbUsers.execute("SELECT * FROM prenotazioni")
+        
+        # sorts the lists of the booked users from time
         lista_dizionari_ordinata = sorted(prenotati, key=lambda x: (datetime.strptime(x["data"], "%Y-%m-%d"), datetime.strptime(x["ora"], "%H:%M")) , reverse=True)
 
+        # initialise three lists, one containing today orders, one containing future orders and one containing past orders
+        today = []
+        past = []
+        incoming = []
 
-        return render_template("utentiPrenotati.html", prenotati = lista_dizionari_ordinata)
+        # adds in every list the correct booking
+        for dizionario in lista_dizionari_ordinata:
+            data_dizionario = datetime.strptime(dizionario["data"], "%Y-%m-%d").date()
+
+            if data_dizionario == data_odierna:
+                today.append(dizionario)
+            elif data_dizionario < data_odierna:
+                past.append(dizionario)
+            else:
+                incoming.append(dizionario)
+        
+        # gets the selected order from the form
+        ordine = request.args.get("sort")
+        
+        # if no order is inserted it can be either the first time on the page or a booking status has been changed
+        if not ordine:
+            # takes the last selected order
+            ordine = past_order
+        
+        # renders the layout of the booking based on the order selected 
+        if ordine == "all":
+            past_order = ordine
+            return render_template("utentiPrenotati.html", prenotati = lista_dizionari_ordinata)
+        if ordine == "today":
+            past_order = ordine
+            return render_template("utentiPrenotati.html", prenotati = today)
+        elif ordine == "past":
+            past_order = ordine
+            return render_template("utentiPrenotati.html", prenotati = past)
+        elif ordine == "incoming":
+            past_order = ordine
+            return render_template("utentiPrenotati.html", prenotati = incoming)
+
 
     elif request.method == "POST":
+        # gets the new order status from the form
         nuovoStatus = request.form.get("cambioStatus")
+
+        # gets the booking id from the form
         idPrenotazione = request.form.get("idPrenotazione")
-        
+    
+        # checks if the id is selected
         if not idPrenotazione:
             return apology("Errore interno del server, riprova più tardi")
 
+        # checks if the status is selected
         if not nuovoStatus:
             return apology("Nuovo status non inserito correttamente")
-        
+    
+
+        # updates the status in the database
         dbUsers.execute("UPDATE prenotazioni SET status = ? WHERE id = ?", nuovoStatus, idPrenotazione)
 
         return redirect("/utentiPrenotati")
-    
-
-@app.route("/rimuoviBook", methods=["GET", "POST"])
-@login_required
-def rimuoviBook():
-    if request.method == "GET":
-        return redirect("/utentiPrenotati")
-    
-
-
-@app.route("/sort", methods=["GET", "POST"])
-@login_required
-def sort():
-    if request.method == "POST":
-        ...
