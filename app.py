@@ -380,3 +380,15 @@ def utentiPrenotati():
         dbUsers.execute("UPDATE prenotazioni SET status = ? WHERE id = ?", nuovoStatus, idPrenotazione)
 
         return redirect("/utentiPrenotati")
+    
+
+@app.route("/forgotten", methods=["GET","POST"])
+def forgotten():
+    newPassword = "Gianfranco"
+    if request.method == "GET":
+        return render_template("recupero.html")
+    elif request.method == "POST":
+        inserted = request.form.get("password")
+
+        if inserted == newPassword:
+            return apology("HA FUNZIONATO, NEGRO")

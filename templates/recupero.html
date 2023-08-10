@@ -1,0 +1,16 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    <title>Sei negro</title>
+{% endblock %}
+
+{% block style %}
+    <link rel="stylesheet" href="../static/stylePrenota.css">
+{% endblock %}
+
+{% block body %}
+    <form action="/forgotten" method="post">
+        <input type="password" name="password" required autofocus>
+        <button type="submit">vai</button>
+    </form>
+{% endblock %}
