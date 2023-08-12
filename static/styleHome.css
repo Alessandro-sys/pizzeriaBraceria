@@ -188,3 +188,22 @@ h1{
     width: 100%;
     text-align: center;
 }
+
+
+@media screen and (height < 100px) and (height > 700){
+    #map{
+        height: 300px;
+    }
+}
+
+@media screen and (height < 700px) and (height > 500px) {
+    #map{
+        height: 200px;
+    }
+}
+
+@media screen and (height < 500px) {
+    #map{
+        height: 0px;
+    }
+}
