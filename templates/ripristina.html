@@ -1,0 +1,58 @@
+{% extends "layout.html" %}
+
+{% block style %}
+    <link rel="stylesheet" href="../static/stylePrenota.css">
+{% endblock %}
+
+{% block script %}
+    <script src="../static/scriptRemove.js" defer></script>
+{% endblock %}
+
+
+{% block body %}
+
+<div class="formPrenotazione">
+    <div class="scurente">
+        <div class="divPrenota">
+            <div class="panCon" style="padding-top: 3%;">
+                <form action="/ripristinaElementi" method="post" class="formForm">
+                    <div class="form-field">
+                        <select name="section" class="formInput">
+                            <option selected disabled>Seleziona la sezione</option>
+                            <option value="bevande">Bevande</option>
+                            <option value="vini">Vini</option>
+                            
+                        </select>
+                    </div>
+
+                    <div class="form-field">
+                        <select name="item" class="formInput" id="bevande">
+                            <option selected disabled>Seleziona un elemento da ripristinare</option>
+                            {% for item in menu %}
+                            <option value="{{ item.food_name }}">{{ item.food_name }}</option>
+                            {% endfor %}
+                        </select>
+                        <select name="item" class="formInput" id="vini">
+                            <option selected disabled>Seleziona un elemento da rimuovere</option>
+                            {% for item in menuVini %}
+                            <option value="{{ item.food_name }}">{{ item.food_name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-field">
+                        <button type="submit" class="bottoneSubmit">Ripristina</button>
+                    </div>
+                </form>
+                <br><br><br>
+                <form action="/admin" class="formForm">
+                    <div class="form-field">
+                        <button type="submit" class="bottoneSubmit">Torna al pannello di controllo</button>
+                    </div>
+                </form>
+                
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

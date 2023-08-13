@@ -18,6 +18,11 @@
                 <h1 class="cp">Aggiungi elementi</h1>
                 <br><br><br>
                 <form action="/aggiungi" method="post" class="formForm">
+                    <select name="section" class="formInput" style="margin: 2%;" required>
+                        <option selected disabled>Seleziona la sezione</option>
+                        <option value="bevande">Bevande</option>
+                        <option value="vini">Vini</option>
+                    </select>
                     <input type="text" name="food_name" placeholder="nome" required autofocus autocomplete="off" class="formInput" style="margin: 2%;">
                     <input type="text" name="price" placeholder="prezzo" required autocomplete="off" class="formInput" style="margin: 2%;">
                     <input type="text" name="descrizione" placeholder="descrizione (facoltativo)" autocomplete="off" class="formInput" style="margin: 2%;">

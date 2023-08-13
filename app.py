@@ -49,8 +49,10 @@ def index():
         return render_template("home.html")
     
     elif len(session) != 0:
-        # if the user is logged returns the home logged template
-        return render_template("homeLogged.html")
+        if session["user_id"] == 1 or session["user_id"] == 5:
+            return render_template("homeAdmin.html")
+        else:
+            return render_template("homeLogged.html")
 
 
 @app.route("/home")
@@ -280,7 +282,7 @@ def register():
 @login_required
 def admin():
     # checks if the user trying to access the admin page is user 1 or 2 (the only admins of the page)
-    if session["user_id"] == 1 or session["user_id"] == 2:
+    if session["user_id"] == 1 or session["user_id"] == 5:
         return render_template("admin.html")
     
     else:
@@ -295,6 +297,9 @@ def aggiungi():
         return render_template("aggiungi.html")
     
     elif request.method == "POST":
+
+        section = request.form.get("section")
+
         # takes the name of the food from the form
         nome = request.form.get("food_name")
 
@@ -308,13 +313,20 @@ def aggiungi():
         if (not nome) or (not price):
             return apology("chigghione inserisci tutti i dati")
         
-        
-        if description == None:
-            # if there's no description adds a new food with no description
-            db.execute("INSERT INTO bevande (food_name, price) VALUES (?, ?)", nome, price)
-        else:
-            # if there's a description adds a new food with description
-            db.execute("INSERT INTO bevande (food_name, price, description) VALUES (?, ?, ?)", nome, price, description)
+        if section == "bevande":
+            if description == None:
+                # if there's no description adds a new food with no description
+                db.execute("INSERT INTO bevande (food_name, price) VALUES (?, ?)", nome, price)
+            else:
+                # if there's a description adds a new food with description
+                db.execute("INSERT INTO bevande (food_name, price, description) VALUES (?, ?, ?)", nome, price, description)
+        elif section == "vini":
+            if description == None:
+                # if there's no description adds a new food with no description
+                db.execute("INSERT INTO vini (food_name, price) VALUES (?, ?)", nome, price)
+            else:
+                # if there's a description adds a new food with description
+                db.execute("INSERT INTO vini (food_name, price, description) VALUES (?, ?, ?)", nome, price, description)
 
         return redirect("/aggiungi")
 
@@ -520,3 +532,42 @@ def newPasswordFun():
         dbUsers.execute("UPDATE users SET hash = ? WHERE id = ?", hash, currUser)
 
         return redirect("/")
+    
+
+@app.route("/ripristinaElementi", methods=["GET", "POST"])
+@login_required
+def ripristinaElementi():
+    if request.method == "GET":
+        bevande = db.execute("SELECT * FROM bevande")
+
+        bevandeRimosse = []
+
+        for bevanda in bevande:
+            if bevanda["status"] == "hidden":
+                bevandeRimosse.append(bevanda)
+        
+        vini = db.execute("SELECT * FROM vini")
+
+        viniRimossi = []
+
+        for vino in vini:
+            if vino["status"] == "hidden":
+                viniRimossi.append(vino)
+        
+        return render_template("ripristina.html", menu = bevandeRimosse, menuVini = viniRimossi)
+    
+    elif request.method == "POST":
+        status = "show"
+        section = request.form.get("section")
+        item = request.form.get("item")
+        
+        if section == "bevande":
+            # deletes item from the menu database
+            db.execute("UPDATE bevande SET status = ? WHERE food_name = ?", status, item)
+
+            return redirect("/ripristinaElementi")
+
+        elif section == "vini":
+            db.execute("UPDATE vini SET status = ? WHERE food_name = ?", status, item)
+
+            return redirect("/ripristinaElementi")
