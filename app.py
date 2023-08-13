@@ -340,24 +340,26 @@ def utentiPrenotati():
         # gets the selected order from the form
         ordine = request.args.get("sort")
         
-        # if no order is inserted it can be either the first time on the page or a booking status has been changed
-        if not ordine:
-            # takes the last selected order
-            ordine = past_order
+        # # if no order is inserted it can be either the first time on the page or a booking status has been changed
+        # if not ordine:
+        #     # takes the last selected order
+        #     ordine = past_order
         
-        # renders the layout of the booking based on the order selected 
-        if ordine == "all":
-            past_order = ordine
-            return render_template("utentiPrenotati.html", prenotati = lista_dizionari_ordinata)
-        if ordine == "today":
-            past_order = ordine
-            return render_template("utentiPrenotati.html", prenotati = today)
-        elif ordine == "past":
-            past_order = ordine
-            return render_template("utentiPrenotati.html", prenotati = past)
-        elif ordine == "incoming":
-            past_order = ordine
-            return render_template("utentiPrenotati.html", prenotati = incoming)
+        # # renders the layout of the booking based on the order selected 
+        # if ordine == "all":
+        #     past_order = ordine
+        #     return render_template("utentiPrenotati.html", prenotati = lista_dizionari_ordinata)
+        # if ordine == "today":
+        #     past_order = ordine
+        #     return render_template("utentiPrenotati.html", prenotati = today)
+        # elif ordine == "past":
+        #     past_order = ordine
+        #     return render_template("utentiPrenotati.html", prenotati = past)
+        # elif ordine == "incoming":
+        #     past_order = ordine
+        #     return render_template("utentiPrenotati.html", prenotati = incoming)
+
+        return render_template("utentiPrenotati.html", prenotati = lista_dizionari_ordinata, passati = past, arrivo = incoming, oggi = today)
 
 
     elif request.method == "POST":

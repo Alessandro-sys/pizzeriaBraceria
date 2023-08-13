@@ -138,3 +138,7 @@ table td{
     color: #4A4A4A;
     text-indent: 40px;
 }
+
+.hidden{
+    display: none;
+}

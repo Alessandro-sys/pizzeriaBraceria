@@ -24,3 +24,42 @@ async function initMap() {
 }
 
 initMap();
+
+
+
+
+
+
+
+function handleTableChange() {
+  var selectedOption = document.querySelector('select[name="sort"]');
+  var selectedTableId;
+
+  // Nascondi tutte le tabelle
+  var tables = document.querySelectorAll('table');
+  tables.forEach(function(table) {
+      table.classList.add('hidden');
+  });
+
+  // Mostra la tabella corrispondente all'opzione selezionata
+  if (selectedOption.value === 'today') {
+      selectedTableId = 'today';
+  } else if (selectedOption.value === 'past') {
+      selectedTableId = 'past';
+  } else if (selectedOption.value === 'incoming') {
+      selectedTableId = 'future';
+  } else {
+      // Opzione predefinita o "Tutti"
+      selectedTableId = 'all';
+  }
+
+  document.getElementById(selectedTableId).classList.remove('hidden');
+
+  // Imposta l'opzione corrente nel menu a tendina
+  selectedOption.selectedIndex = Array.from(selectedOption.options).findIndex(option => option.value === selectedTableId);
+}
+
+var selectElement = document.querySelector('select[name="sort"]');
+selectElement.addEventListener('change', handleTableChange);
+
+handleTableChange(); // Esegui la funzione inizialmente
