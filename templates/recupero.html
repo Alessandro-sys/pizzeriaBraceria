@@ -5,12 +5,62 @@
 {% endblock %}
 
 {% block style %}
-    <link rel="stylesheet" href="../static/stylePrenota.css">
+    <link rel="stylesheet" href="../static/styleAdmin.css">
 {% endblock %}
 
 {% block body %}
-    <form action="/forgotten" method="post">
-        <input type="password" name="password" required autofocus>
-        <button type="submit">vai</button>
-    </form>
+    <div class="welcome">
+        <div class="scurente">
+            <div class="menuBar">
+                <form action="/home">
+                    <button class="menuButton" name="home">HOME</button>
+                </form>
+                <form action="/menu">
+                    <button class="menuButton" name="menu">MENU</button>
+                </form>
+                <form action="/prenotazioni">
+                    <button class="menuButton" name="prenotazioni">PRENOTAZIONI</button>
+                </form>
+            </div>
+            <div class="panCon">
+                <h1 class="cp">Recupero Password</h1>
+                <form action="/forgotten" method="post" class="formForm">
+                    <div class="form-field">
+                        <input type="password" name="password" required autofocus placeholder="Password Email" class="formInput">
+                    </div>
+                    <div class="form-field">
+                        <button type="submit" class="bottoneSubmit">vai</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+        
+    <div class="settings">
+        <div class="menuBar">
+            <form action="#">
+                <button class="settingsButton">Termini e Condizioni</button>
+            </form>
+            <form action="#">
+                <button class="settingsButton">Cookie Policy</button>
+            </form>
+            <form action="/login">
+                <button class="settingsButton" name="prenotazioni">LOGIN</button>
+            </form>
+            <form action="/register">
+                <button class="settingsButton" name="prenotazioni">REGISTER</button>
+            </form>
+        </div>
+        <div class="social">
+            <a href="https://www.instagram.com/divinapizzeria_braceria/">
+                <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.pngkey.com%2Fpng%2Ffull%2F1-19361_watercolor-instagram-icon-png-instagram-logo-white-on.png&f=1&nofb=1&ipt=377ad582c2a71eab09461ffcf60b5880d411376a17263b9ef4d1153d7e09f413&ipo=images" alt="instagram" class="socialLogo">
+            </a>
+            <a href="https://www.facebook.com/divinabraceriapizzeria">
+                <img src="../static/facebook.png" alt="facebook" class="socialLogo">
+            </a>
+            <a href="https://www.tripadvisor.it/Restaurant_Review-g187874-d3267198-Reviews-Divina_Pizzeria_Braceria-Bari_Province_of_Bari_Puglia.html">
+                <img src="../static/trip.png" alt="tripadvisor" class="socialLogo">
+            </a>
+        </div>
+    </div>
 {% endblock %}

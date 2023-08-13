@@ -5,6 +5,13 @@ from flask_session import Session
 from tempfile import mkdtemp
 from werkzeug.security import check_password_hash, generate_password_hash
 from datetime import datetime
+# librerie per il cambio email
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+from string import Template
+import random
+
 
 from helpers import apology, login_required
 
@@ -13,6 +20,8 @@ db = SQL("sqlite:///database.db")
 dbUsers = SQL("sqlite:///users.db")
 
 past_order = "all"
+newPassword = None
+emailToRecover = ""
 
 
 app = Flask(__name__)
@@ -433,13 +442,81 @@ def utentiPrenotati():
         return redirect("/utentiPrenotati")
     
 
+@app.route("/forgottenEmail", methods=["GET", "POST"])
+def forgottenEmail():
+    global emailToRecover
+    if request.method == "GET":
+        return render_template("recuperoEmail.html")
+    elif request.method == "POST":
+        email = request.form.get("email")
+        if not email:
+            return apology("Please insert a valid email")
+        
+        user = dbUsers.execute("SELECT * FROM users WHERE email = ?", email)
+        if len(user) != 1:
+            return apology("No user found")
+        else:
+            emailToRecover = email
+            return redirect("/forgotten")
+
+
+
 @app.route("/forgotten", methods=["GET","POST"])
 def forgotten():
-    newPassword = "Gianfranco"
+    global emailToRecover
+    global newPassword
+    if newPassword == None:
+        newPassword = str(random.randint(1000, 9999))
+    else:
+        newPassword = newPassword
+
     if request.method == "GET":
+        s = smtplib.SMTP(host="smtp.gmail.com", port=587)
+        s.starttls()
+        s.login("chiarulli14@gmail.com", "dajfosbvggcdemwu")
+
+        newPasswordSend = Template("Nuova password: $password")
+        password_value = newPassword
+        body = newPasswordSend.substitute(password=password_value)
+
+        print(password_value)
+        email = "chiarulli14@gmail.com"
+
+
+        msg = MIMEMultipart()
+        msg['From'] = email
+        msg['To'] = emailToRecover
+        msg['Subject'] = "This is TEST"
+        msg.attach(MIMEText(body, 'plain'))
+
+        s.send_message(msg)
+        s.quit()
+        del msg
+
         return render_template("recupero.html")
     elif request.method == "POST":
         inserted = request.form.get("password")
 
+        print(newPassword)
+
         if inserted == newPassword:
-            return apology("HA FUNZIONATO, NEGRO")
+            rows = dbUsers.execute("SELECT * FROM users WHERE email = ?", emailToRecover)
+            session["user_id"] = rows[0]["id"]
+            newPassword = None
+            return redirect("/newPassword")
+        
+
+@app.route("/newPassword", methods=["GET", "POST"])
+def newPasswordFun():
+    if request.method == "GET":
+        return render_template("newPassword.html")
+    elif request.method == "POST":
+        password = request.form.get("password")
+        if not password:
+            return apology("Assicurati di aver inserito la password corretta")
+        
+        currUser = session["user_id"]
+        hash = generate_password_hash(password, method='pbkdf2', salt_length=16)
+        dbUsers.execute("UPDATE users SET hash = ? WHERE id = ?", hash, currUser)
+
+        return redirect("/")
