@@ -54,13 +54,19 @@ def pages():
 def menu():
     # select all drinks from "bevande" database
     bevande = db.execute("SELECT * FROM bevande")
+    
+    bevandeSenzaHidden = []
+    for bevanda in bevande:
+        if bevanda["status"] == "show":
+            bevandeSenzaHidden.append(bevanda)
+
 
     # creates two lists, left and right, to store the items in the menu
     sx = []
     dx = []
 
     # splits the drinks in two columns, style choice
-    for bevanda in bevande:
+    for bevanda in bevandeSenzaHidden:
         id = int(bevanda["id"])
         
         if (id % 2) == 0:
@@ -68,14 +74,35 @@ def menu():
         else:
             sx.append(bevanda)
 
+
+    # Sezione dei vini
+    vini = db.execute("SELECT * FROM vini")
+
+    viniSenzaHidden = []
+
+    for vino in vini:
+        if vino["status"] == "show":
+            viniSenzaHidden.append(vino)
+
+    vsx = []
+    vdx = []
+
+    for vino in viniSenzaHidden:
+        id = int(vino["id"])
+
+        if (id % 2) == 0:
+            vdx.append(vino)
+        else:
+            vsx.append(vino)
+
     
     if len(session) == 0:
         # if user is not logged, prints the menu in the not logged template
-        return render_template("menu.html", sx = sx, dx = dx)
+        return render_template("menu.html", sx = sx, dx = dx, vsx = vsx, vdx = vdx)
     
     elif len(session) != 0:
         # if user is logged, prints the menu in the logged template
-        return render_template("menuLogged.html", sx = sx, dx = dx)
+        return render_template("menuLogged.html", sx = sx, dx = dx, vsx = vsx, vdx = vdx)
 
 
 @app.route("/prenotazioni", methods=["GET", "POST"])
@@ -287,21 +314,43 @@ def aggiungi():
 def rimuovi():
     if request.method == "GET":
         # selects every food from the menu
-        menu = db.execute("SELECT * FROM bevande")
+        menuBevande = db.execute("SELECT * FROM bevande")
+
+        menuBevandeSenzaHidden = []
+
+        for bevanda in menuBevande:
+            if bevanda["status"] == "show":
+                menuBevandeSenzaHidden.append(bevanda)
+        
+
+        menuVini = db.execute("SELECT * FROM vini")
+
+        menuViniSenzaHidden = []
+
+        for vino in menuVini:
+            if vino["status"] == "show":
+                menuViniSenzaHidden.append(vino)
+
 
         # renders form with all foods
-        return render_template("rimuovi.html", menu = menu)
+        return render_template("rimuovi.html", menu = menuBevandeSenzaHidden, menuVini = menuViniSenzaHidden)
     
     if request.method == "POST":
-        # gets food name from the menu
-        ### IDEA ###
-        # does not remove food, applies a tag to hide it, in case some day wants to put it back in
+        status = "hidden"
+        section = request.form.get("section")
         item = request.form.get("item")
         
-        # deletes item from the menu database
-        db.execute("DELETE FROM bevande WHERE food_name = ?", item)
+        if section == "bevande":
+            # deletes item from the menu database
+            db.execute("UPDATE bevande SET status = ? WHERE food_name = ?", status, item)
 
-        return redirect("/rimuovi")
+            return redirect("/rimuovi")
+
+        elif section == "vini":
+            db.execute("UPDATE vini SET status = ? WHERE food_name = ?", status, item)
+
+            return redirect("/rimuovi")
+        
 
 
 

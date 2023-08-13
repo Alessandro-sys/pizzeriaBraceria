@@ -63,3 +63,9 @@ var selectElement = document.querySelector('select[name="sort"]');
 selectElement.addEventListener('change', handleTableChange);
 
 handleTableChange(); // Esegui la funzione inizialmente
+
+
+
+
+
+

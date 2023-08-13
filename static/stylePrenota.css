@@ -183,3 +183,11 @@ h1{
     display: flex;
     justify-content: center;
 }
+
+
+#bevande {
+    display: none;
+}
+#vini {
+    display: none;
+}
