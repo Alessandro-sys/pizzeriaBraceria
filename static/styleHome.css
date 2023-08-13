@@ -189,6 +189,21 @@ h1{
     text-align: center;
 }
 
+@media screen and (width < 600px) {
+    .title{
+        font-size: 50px;
+    }
+    .settings{
+        height: fit-content;
+    }
+    .settingsButton{
+        font-size: 10px;
+    }
+    .socialLogo{
+        max-width: 20px;
+    }
+}
+
 
 @media screen and (height < 100px) and (height > 700){
     #map{

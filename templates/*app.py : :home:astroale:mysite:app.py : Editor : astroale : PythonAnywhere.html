@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+
+<html lang="en" style="height: 100%">
+    <head>
+        
+            <!-- Google tag (gtag.js) -->
+            <script async src="https://www.googletagmanager.com/gtag/js?id=G-DHJF51F24N"></script>
+            <script>
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+
+              gtag('config', 'G-DHJF51F24N');
+            </script>
+        
+
+        <meta charset="utf-8">
+        <title>app.py : /home/astroale/mysite/app.py : Editor : astroale : PythonAnywhere</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="app.py : /home/astroale/mysite/app.py : Editor : astroale : PythonAnywhere">
+        <meta name="author" content="PythonAnywhere LLP">
+        <meta name="google-site-verification" content="O4UxDrfcHjC44jybs2vajc1GgRkTKCTRgVzeV6I9V14" />
+
+
+        <!-- Le styles -->
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i" />
+
+        <link rel="stylesheet" href="/static/CACHE/css/output.e9a1443813c2.css" type="text/css" media="screen">
+        <link rel="stylesheet" href="/static/CACHE/css/output.b9a4961a16f7.css" type="text/css"><link rel="stylesheet" href="/static/CACHE/css/output.d8d88e52ee79.css" type="text/css" media="screen">
+
+        <!-- Le javascript -->
+        <script type="text/javascript">
+            var Anywhere = {};
+            Anywhere.urls = {};
+            Anywhere.csrfToken = "GZ6JEOv8jRVNINLj7K2TrUUNPeWJpuSRZyKC4Ok0ySi1pJOnO1L5Blmou1lmdToe";
+        </script>
+        <script src="/static/CACHE/js/output.9912b9c89b96.js"></script>
+        
+
+        <script src="/static/CACHE/js/output.ce8d62eca661.js"></script>
+        
+    <script type="text/javascript">
+      $(document).ready(function() {
+        $.extend(Anywhere.urls, {
+          file: "/user/astroale/files/home/astroale/mysite/app.py",
+          check_hash: "/user/astroale/files/home/astroale/mysite/app.py",
+          update_editor_mode_preference: "/user/astroale/account/update_editor_mode_preference",
+          console_api: "/api/v0/user/astroale/consoles/",
+        });
+        var filename = "/home/astroale/mysite/app.py";
+        var hash = "663cc2dcc040a7e76c8fce622a12bdbf";
+        var interpreter = "python3.10";
+
+        
+            Anywhere.Editor.InitializeAce(ace, Anywhere.urls, filename, hash, interpreter, "pythonanywhere.com");
+            $("#id_keybinding_mode_select").val("normal");
+            $("#id_keybinding_mode_select").trigger("change");
+        
+        var consoleVisible = true;
+        Anywhere.Editor.splitPanes(consoleVisible);
+
+        Anywhere.WebAppControl.initialize();
+        Anywhere2.initializeFileSharingOptions(
+          $('#id_file_sharing_options')[0],
+          {
+            url: "/api/v0/user/astroale/files/sharing/",
+            csrfToken: "GZ6JEOv8jRVNINLj7K2TrUUNPeWJpuSRZyKC4Ok0ySi1pJOnO1L5Blmou1lmdToe",
+            path: "/home/astroale/mysite/app.py"
+          }
+        );
+
+      });
+    </script>
+
+        
+
+    </head>
+
+    <body style="height:100%;">
+       <div style="min-height: 100%; position: relative;">
+        
+        
+  
+
+
+
+
+  <nav class="navbar navbar-default fullscreen-main-navbar">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="/">
+        <img id="id_logo" src="/static/anywhere/images/PA-logo-snake-only.svg" height="100%" />
+      </a>
+    </div>
+
+    <div class="extra-nav-content">
+      
+
+  <div id="id_editor_toolbar">
+
+    <div class="pull-left">
+      <span id="id_breadcrumbs_div"><a class="breadcrumbs_link breadcrumb_entry" href="/user/astroale/files/" target="_parent">/</a><a class="breadcrumbs_link breadcrumb_entry" href="/user/astroale/files/home" target="_parent">home</a><span class="breadcrumb_entry">/</span><a class="breadcrumbs_link breadcrumb_entry" href="/user/astroale/files/home/astroale" target="_parent">astroale</a><span class="breadcrumb_entry">/</span><a class="breadcrumbs_link breadcrumb_entry" href="/user/astroale/files/home/astroale/mysite" target="_parent">mysite</a><span class="breadcrumb_entry">/</span><wbr><span class="breadcrumb_entry breadcrumb_terminal">app.py</span></span>
+
+      <span>
+        <span id="id_unsaved_changes_spacer">
+          <span id="id_unsaved_changes" class="pa_hidden muted">(unsaved changes)</span>
+        </span>
+      </span>
+    </div>
+
+    <div id="id_editor_messages" class="pull-left">
+      
+
+    </div>
+
+    <div class="pull-right">
+      <div id="id_editor_buttons_right" class="form-inline">
+        <span id="id_save_error" class="pa_hidden alert alert-danger">Error saving.</span>
+        <img src="/static/anywhere/images/spinner-small.gif" class="pa_hidden" id="id_save_spinner" />
+        
+          <span id="id_keyboard_shortcuts"><a href="#">Keyboard shortcuts:</a></span>
+          <select id="id_keybinding_mode_select" class="form-control input-sm">
+            <option value="normal">Normal</option>
+            <option value="vim">Vim</option>
+          </select>
+        
+        <button id="id_display_sharing_options" class="btn btn-default" data-toggle="modal" data-target="#id_file_sharing_modal" title="Get a URL to share this file">
+          <span class="glyphicon glyphicon-paperclip" aria-hidden="true"></span>
+          Share
+        </button>
+        
+          <button id="id_save" class="btn btn-success" title="Save (Ctrl + S)">
+            <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>
+            Save
+          </button>
+          <button id="id_save_as" class="btn btn-default" title="Save As">Save as...</button>
+        
+        
+          <button class="btn btn-info run_button" title="Save &amp; Run (Ctrl + R)">
+            <span><code>&gt;&gt;&gt;</code></span>
+            Run
+          </button>
+        
+
+        
+          
+            <form class="reload_web_app" style="display: flex" method="POST" action="/user/astroale/webapps/astroale.pythonanywhere.com/reload">
+              <button class="btn btn-default" type="submit" title="Reload astroale.pythonanywhere.com">
+                <i class="glyphicon glyphicon-refresh"></i>
+              </button>
+              <img style="display: none;" class="spinner" src="/static/anywhere/images/spinner-small.gif" />
+              <div style="display: none; clear: both;" class="alert alert-danger error_message generic_error">
+                There was a problem. If this keeps happening, please <a href="" class="feedback_link">send us feedback</a>.
+              </div>
+              <div style="display: none; clear: both;" class="alert alert-danger error_message slow_startup_error">
+                Your webapp took a long time to reload. It probably reloaded, but we were unable to check it.
+              </div>
+              <div style="display: none; clear: both;" class="alert alert-danger error_message virtualenv_error">
+                There is a problem with your virtualenv setup. Look at the <b>virtualenv</b> section on the web app tab for details.
+              </div>
+              <div style="display: none; clear: both;" class="alert alert-danger error_message cname_error">
+                There is a problem with your DNS configuration. Take a look at the <b>DNS setup</b> section on the web app tab for details.
+              </div>
+            </form>
+          
+        
+      </div>
+    </div>
+
+  </div>
+
+
+    </div>
+
+    <div class="dropdown fullscreen-hamburger fullscreen-mini-nav">
+      <button type="button" class="navbar-toggle" data-toggle="dropdown"  role="button" aria-haspopup="true" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <ul class="dropdown-menu pull-right">
+        
+  <li class=""><a id="id_dashboard_link" href="/user/astroale/">Dashboard</a></li>
+  <li class=""><a id="id_consoles_link" href="/user/astroale/consoles/">Consoles</a></li>
+  <li class=""><a id="id_files_link" href="/user/astroale/files/home/astroale">Files</a></li>
+  <li class=""><a id="id_web_app_link" href="/user/astroale/webapps/">Web</a></li>
+  <li class=""><a id="id_tasks_link" href="/user/astroale/tasks_tab/">Tasks</a></li>
+  <li class=""><a id="id_databases_link" href="/user/astroale/databases/">Databases</a></li>
+
+
+        
+<li class=""><a href="" target="_parent" class="feedback_link">Send feedback</a></li>
+
+
+<li class=""><a href="/forums/" target="_parent" class="forums_link">Forums</a></li>
+<li class=""><a href="https://help.pythonanywhere.com/" target="_parent" class="help_link">Help</a></li>
+<li class=""><a href="https://blog.pythonanywhere.com/" target="_parent" class="blog_link">Blog</a></li>
+
+  
+  <li class=""><a href="/user/astroale/account/" target="_parent" class="account_link">Account</a></li>
+  <li class="">
+    <form action="/logout/" method="POST" target="_parent">
+      <input type="hidden" name="csrfmiddlewaretoken" value="GZ6JEOv8jRVNINLj7K2TrUUNPeWJpuSRZyKC4Ok0ySi1pJOnO1L5Blmou1lmdToe">
+      <button type="submit" class="btn-link logout_link">Log out</button>
+    </form>
+  </li>
+
+
+      </ul>
+    </div>
+
+  </nav>
+
+
+
+        
+    
+
+
+        
+  <div>
+    <div id="id_ide_split_panes">
+
+      
+        <div id="id_editor">import os
+from cs50 import SQL
+from flask import Flask, flash, redirect, render_template, request, session
+from flask_session import Session
+from tempfile import mkdtemp
+from werkzeug.security import check_password_hash, generate_password_hash
+from datetime import datetime
+# librerie per il cambio email
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+from string import Template
+import random
+
+
+from helpers import apology, login_required
+
+
+db = SQL(&quot;sqlite:////database.db&quot;)
+dbUsers = SQL(&quot;sqlite:////users.db&quot;)
+
+past_order = &quot;all&quot;
+newPassword = None
+emailToRecover = &quot;&quot;
+
+
+app = Flask(__name__)
+
+
+# Configure session to use filesystem (instead of signed cookies)
+app.config[&quot;SESSION_PERMANENT&quot;] = False
+app.config[&quot;SESSION_TYPE&quot;] = &quot;filesystem&quot;
+Session(app)
+
+
+@app.after_request
+def after_request(response):
+    &quot;&quot;&quot;Ensure responses aren&#39;t cached&quot;&quot;&quot;
+    response.headers[&quot;Cache-Control&quot;] = &quot;no-cache, no-store, must-revalidate&quot;
+    response.headers[&quot;Expires&quot;] = 0
+    response.headers[&quot;Pragma&quot;] = &quot;no-cache&quot;
+    return response
+
+
+@app.route(&quot;/&quot;)
+def index():
+    if len(session) == 0:
+        # if the user is not logged returns the home not logged template
+        return render_template(&quot;home.html&quot;)
+
+    elif len(session) != 0:
+        if session[&quot;user_id&quot;] == 1 or session[&quot;user_id&quot;] == 5:
+            return render_template(&quot;homeAdmin.html&quot;)
+        else:
+            return render_template(&quot;homeLogged.html&quot;)
+
+
+@app.route(&quot;/home&quot;)
+def pages():
+    # if the user gets in the www.divinapizzeria.com/home gets redirected in the / link
+    return redirect(&quot;/&quot;)
+
+
+@app.route(&quot;/menu&quot;)
+def menu():
+    # select all drinks from &quot;bevande&quot; database
+    bevande = db.execute(&quot;SELECT * FROM bevande&quot;)
+
+    bevandeSenzaHidden = []
+    for bevanda in bevande:
+        if bevanda[&quot;status&quot;] == &quot;show&quot;:
+            bevandeSenzaHidden.append(bevanda)
+
+
+    # creates two lists, left and right, to store the items in the menu
+    sx = []
+    dx = []
+
+    # splits the drinks in two columns, style choice
+    for bevanda in bevandeSenzaHidden:
+        id = int(bevanda[&quot;id&quot;])
+
+        if (id % 2) == 0:
+            dx.append(bevanda)
+        else:
+            sx.append(bevanda)
+
+
+    # Sezione dei vini
+    vini = db.execute(&quot;SELECT * FROM vini&quot;)
+
+    viniSenzaHidden = []
+
+    for vino in vini:
+        if vino[&quot;status&quot;] == &quot;show&quot;:
+            viniSenzaHidden.append(vino)
+
+    vsx = []
+    vdx = []
+
+    for vino in viniSenzaHidden:
+        id = int(vino[&quot;id&quot;])
+
+        if (id % 2) == 0:
+            vdx.append(vino)
+        else:
+            vsx.append(vino)
+
+
+    if len(session) == 0:
+        # if user is not logged, prints the menu in the not logged template
+        return render_template(&quot;menu.html&quot;, sx = sx, dx = dx, vsx = vsx, vdx = vdx)
+
+    elif len(session) != 0:
+        # if user is logged, prints the menu in the logged template
+        return render_template(&quot;menuLogged.html&quot;, sx = sx, dx = dx, vsx = vsx, vdx = vdx)
+
+
+@app.route(&quot;/prenotazioni&quot;, methods=[&quot;GET&quot;, &quot;POST&quot;])
+def prenotazioni():
+    if request.method == &quot;GET&quot;:
+        # selects every time avaliable for booking
+        orari = db.execute(&quot;SELECT * FROM orari_disponibili&quot;)
+
+        if len(session) == 0:
+            # if user is not logged, prints the booking in the not logged template
+            return render_template(&quot;prenota.html&quot;, orari = orari)
+
+        elif len(session) != 0:
+            # if user is logged, prints the booking in the logged template
+            return render_template(&quot;prenotaLogged.html&quot;, orari = orari)
+
+
+    elif request.method == &quot;POST&quot;:
+        # gets name from the form
+        name = request.form.get(&quot;nome&quot;)
+
+        # gets surname from the form
+        surname = request.form.get(&quot;cognome&quot;)
+
+        # gets password from the form
+        telefono = request.form.get(&quot;phone&quot;)
+
+        # gets date from the form
+        data = request.form.get(&quot;date&quot;)
+
+        # gets time from the form
+        ora = request.form.get(&quot;orario&quot;)
+
+        # gets how many people are coming
+        posti = request.form.get(&quot;posti&quot;)
+
+        # set the status of the order to default &quot;incoming&quot;
+        status = (&quot;incoming&quot;)
+
+        # checks if all data is correctly inserted
+        if not name:
+            return apology(&quot;assicurati di aver inserito il tuo nome&quot;)
+
+        if not surname:
+            return apology(&quot;assicurati di aver inserito il tuo cognome&quot;)
+
+        if not telefono:
+            return apology(&quot;assicurati di aver inserito il tuo telefono&quot;)
+
+        if not data:
+            return apology(&quot;assicurati di aver inserito la data&quot;)
+
+        if not ora:
+            return apology(&quot;assicurati di aver inserito l&#39;ora&quot;)
+
+        if not posti:
+            return apology(&quot;assicurati di aver inserito il numero di persone&quot;)
+
+        # inserts the booking into the database
+        dbUsers.execute(&quot;INSERT INTO prenotazioni (nome, cognome, telefono, data, ora, status, posti) VALUES (?, ?, ?, ?, ?, ?, ?)&quot;, name, surname, telefono, data, ora, status, posti)
+
+        # user gets redirected to the homepage
+        return redirect(&quot;/&quot;)
+
+
+@app.route(&quot;/logout&quot;)
+def logout():
+    # if the logout button is pressed the session resets
+    session.clear()
+    return redirect(&quot;/&quot;)
+
+
+@app.route(&quot;/login&quot;, methods=[&quot;GET&quot;, &quot;POST&quot;])
+def login():
+    if request.method == &quot;GET&quot;:
+        # renders the template of the login page
+        return render_template(&quot;login.html&quot;)
+
+    elif request.method == &quot;POST&quot;:
+
+        # clears every past cookie from other sessions
+        session.clear()
+
+        # takes email from form
+        email = request.form.get(&quot;email&quot;)
+
+        # takes password from form
+        password = request.form.get(&quot;password&quot;)
+
+        # checks if email and password are correctly inserted
+        if not email or not password:
+            return apology(&quot;assicurati di aver inserito tutti i dati&quot;)
+
+        # selects the user from the email from database
+        rows = dbUsers.execute(&quot;SELECT * FROM users WHERE email = ?&quot;, email)
+
+        # if len of array returned is not 1 or password is not the same as the return, returns error
+        if len(rows) != 1 or not check_password_hash(rows[0][&quot;hash&quot;], password):
+            return apology(&quot;invalid username and/or password&quot;, 403)
+
+        # if everything is correct starts the session for the selected user
+        session[&quot;user_id&quot;] = rows[0][&quot;id&quot;]
+
+        return redirect(&quot;/&quot;)
+
+
+@app.route(&quot;/register&quot;, methods=[&quot;GET&quot;, &quot;POST&quot;])
+def register():
+
+    # cleans session from past cookies
+    session.clear()
+
+
+    if request.method == &quot;GET&quot;:
+        # renders template for registration
+        return render_template(&quot;register.html&quot;)
+
+
+    elif request.method == &quot;POST&quot;:
+        # takes name from the form
+        nome = request.form.get(&quot;name&quot;)
+
+        # if no name is inserted returns error
+        if not nome:
+            return apology(&quot;Inserisci un nome&quot;)
+
+
+        # takes surname from the form
+        cognome = request.form.get(&quot;surname&quot;)
+
+        # if no surname is inserted returns error
+        if not cognome:
+            return apology(&quot;Inserisci un cognome&quot;)
+
+
+        # takes email from the form
+        email = request.form.get(&quot;email&quot;)
+
+        # if no email is inserted returns error
+        if not email:
+            return apology(&quot;Inserisci un&#39;email&quot;)
+
+        # takes password from the form
+        password = request.form.get(&quot;password&quot;)
+
+        # if no password is inserted returns error
+        if not password:
+            return apology(&quot;Inserisci una password&quot;)
+
+        # selects every registered user from database
+        registered = dbUsers.execute(&quot;SELECT email FROM users&quot;)
+
+        # for each email in the database, if exists a mail same as the one inserted returns error
+        for reemail in registered:
+            if email in reemail[&quot;email&quot;]:
+                return apology(&quot;Email già in uso&quot;)
+
+        # criptation of the password
+        hash = generate_password_hash(password, method=&#39;pbkdf2&#39;, salt_length=16)
+
+        # checks if the criptation is correct
+        if not check_password_hash(hash, password):
+            return apology(&quot;Internal server error, please try again in a few minutes&quot;)
+
+        # inserts the new user&#39;s data into the database
+        dbUsers.execute(&quot;INSERT INTO users (name, surname, email, hash) VALUES (?, ?, ?, ?)&quot;, nome, cognome, email, hash)
+
+        return redirect(&quot;/&quot;)
+
+
+@app.route(&quot;/admin&quot;)
+@login_required
+def admin():
+    # checks if the user trying to access the admin page is user 1 or 2 (the only admins of the page)
+    if session[&quot;user_id&quot;] == 1 or session[&quot;user_id&quot;] == 5:
+        return render_template(&quot;admin.html&quot;)
+
+    else:
+        return apology(&quot;Non sei autorizzato a visitare questa pagina.&quot;)
+
+
+@app.route(&quot;/aggiungi&quot;, methods=[&quot;GET&quot;, &quot;POST&quot;])
+@login_required
+def aggiungi():
+    if request.method == &quot;GET&quot;:
+        # renders template for adding food to the menu
+        return render_template(&quot;aggiungi.html&quot;)
+
+    elif request.method == &quot;POST&quot;:
+
+        section = request.form.get(&quot;section&quot;)
+
+        # takes the name of the food from the form
+        nome = request.form.get(&quot;food_name&quot;)
+
+        # takes the price of the food from the menu (format x,xx (2 decimals possibly))
+        price = request.form.get(&quot;price&quot;)
+
+        # takes description of the food from the form
+        description = request.form.get(&quot;descrizione&quot;)
+
+        # if name or price is not inserted returns error
+        if (not nome) or (not price):
+            return apology(&quot;chigghione inserisci tutti i dati&quot;)
+
+        if section == &quot;bevande&quot;:
+            if description == None:
+                # if there&#39;s no description adds a new food with no description
+                db.execute(&quot;INSERT INTO bevande (food_name, price) VALUES (?, ?)&quot;, nome, price)
+            else:
+                # if there&#39;s a description adds a new food with description
+                db.execute(&quot;INSERT INTO bevande (food_name, price, description) VALUES (?, ?, ?)&quot;, nome, price, description)
+        elif section == &quot;vini&quot;:
+            if description == None:
+                # if there&#39;s no description adds a new food with no description
+                db.execute(&quot;INSERT INTO vini (food_name, price) VALUES (?, ?)&quot;, nome, price)
+            else:
+                # if there&#39;s a description adds a new food with description
+                db.execute(&quot;INSERT INTO vini (food_name, price, description) VALUES (?, ?, ?)&quot;, nome, price, description)
+
+        return redirect(&quot;/aggiungi&quot;)
+
+@app.route(&quot;/rimuovi&quot;, methods=[&quot;GET&quot;, &quot;POST&quot;])
+@login_required
+def rimuovi():
+    if request.method == &quot;GET&quot;:
+        # selects every food from the menu
+        menuBevande = db.execute(&quot;SELECT * FROM bevande&quot;)
+
+        menuBevandeSenzaHidden = []
+
+        for bevanda in menuBevande:
+            if bevanda[&quot;status&quot;] == &quot;show&quot;:
+                menuBevandeSenzaHidden.append(bevanda)
+
+
+        menuVini = db.execute(&quot;SELECT * FROM vini&quot;)
+
+        menuViniSenzaHidden = []
+
+        for vino in menuVini:
+            if vino[&quot;status&quot;] == &quot;show&quot;:
+                menuViniSenzaHidden.append(vino)
+
+
+        # renders form with all foods
+        return render_template(&quot;rimuovi.html&quot;, menu = menuBevandeSenzaHidden, menuVini = menuViniSenzaHidden)
+
+    if request.method == &quot;POST&quot;:
+        status = &quot;hidden&quot;
+        section = request.form.get(&quot;section&quot;)
+        item = request.form.get(&quot;item&quot;)
+
+        if not section or not item:
+            return apology(&quot;Assicurati di aver riempito tutti i campi&quot;)
+
+        if section == &quot;bevande&quot;:
+            # deletes item from the menu database
+            db.execute(&quot;UPDATE bevande SET status = ? WHERE food_name = ?&quot;, status, item)
+
+            return redirect(&quot;/rimuovi&quot;)
+
+        elif section == &quot;vini&quot;:
+            db.execute(&quot;UPDATE vini SET status = ? WHERE food_name = ?&quot;, status, item)
+
+            return redirect(&quot;/rimuovi&quot;)
+
+
+
+
+@app.route(&quot;/utentiPrenotati&quot;, methods=[&quot;GET&quot;, &quot;POST&quot;])
+@login_required
+def utentiPrenotati():
+    if request.method == &quot;GET&quot;:
+        # access the global variable past_order, it containst the last order of the bookings selected
+        global past_order
+
+        # gets current date
+        data_odierna = datetime.now().date()
+
+        # selected every booked user from the database
+        prenotati = dbUsers.execute(&quot;SELECT * FROM prenotazioni&quot;)
+
+        # sorts the lists of the booked users from time
+        lista_dizionari_ordinata = sorted(prenotati, key=lambda x: (datetime.strptime(x[&quot;data&quot;], &quot;%Y-%m-%d&quot;), datetime.strptime(x[&quot;ora&quot;], &quot;%H:%M&quot;)) , reverse=True)
+
+        # initialise three lists, one containing today orders, one containing future orders and one containing past orders
+        today = []
+        past = []
+        incoming = []
+
+        # adds in every list the correct booking
+        for dizionario in lista_dizionari_ordinata:
+            data_dizionario = datetime.strptime(dizionario[&quot;data&quot;], &quot;%Y-%m-%d&quot;).date()
+
+            if data_dizionario == data_odierna:
+                today.append(dizionario)
+            elif data_dizionario &lt; data_odierna:
+                past.append(dizionario)
+            else:
+                incoming.append(dizionario)
+
+        # gets the selected order from the form
+        ordine = request.args.get(&quot;sort&quot;)
+
+        # # if no order is inserted it can be either the first time on the page or a booking status has been changed
+        # if not ordine:
+        #     # takes the last selected order
+        #     ordine = past_order
+
+        # # renders the layout of the booking based on the order selected
+        # if ordine == &quot;all&quot;:
+        #     past_order = ordine
+        #     return render_template(&quot;utentiPrenotati.html&quot;, prenotati = lista_dizionari_ordinata)
+        # if ordine == &quot;today&quot;:
+        #     past_order = ordine
+        #     return render_template(&quot;utentiPrenotati.html&quot;, prenotati = today)
+        # elif ordine == &quot;past&quot;:
+        #     past_order = ordine
+        #     return render_template(&quot;utentiPrenotati.html&quot;, prenotati = past)
+        # elif ordine == &quot;incoming&quot;:
+        #     past_order = ordine
+        #     return render_template(&quot;utentiPrenotati.html&quot;, prenotati = incoming)
+
+        return render_template(&quot;utentiPrenotati.html&quot;, prenotati = lista_dizionari_ordinata, passati = past, arrivo = incoming, oggi = today)
+
+
+    elif request.method == &quot;POST&quot;:
+        # gets the new order status from the form
+        nuovoStatus = request.form.get(&quot;cambioStatus&quot;)
+
+        # gets the booking id from the form
+        idPrenotazione = request.form.get(&quot;idPrenotazione&quot;)
+
+        # checks if the id is selected
+        if not idPrenotazione:
+            return apology(&quot;Errore interno del server, riprova più tardi&quot;)
+
+        # checks if the status is selected
+        if not nuovoStatus:
+            return apology(&quot;Nuovo status non inserito correttamente&quot;)
+
+
+        # updates the status in the database
+        dbUsers.execute(&quot;UPDATE prenotazioni SET status = ? WHERE id = ?&quot;, nuovoStatus, idPrenotazione)
+
+        return redirect(&quot;/utentiPrenotati&quot;)
+
+
+@app.route(&quot;/forgottenEmail&quot;, methods=[&quot;GET&quot;, &quot;POST&quot;])
+def forgottenEmail():
+    global emailToRecover
+    if request.method == &quot;GET&quot;:
+        return render_template(&quot;recuperoEmail.html&quot;)
+    elif request.method == &quot;POST&quot;:
+        email = request.form.get(&quot;email&quot;)
+        if not email:
+            return apology(&quot;Please insert a valid email&quot;)
+
+        user = dbUsers.execute(&quot;SELECT * FROM users WHERE email = ?&quot;, email)
+        if len(user) != 1:
+            return apology(&quot;No user found&quot;)
+        else:
+            emailToRecover = email
+            return redirect(&quot;/forgotten&quot;)
+
+
+
+@app.route(&quot;/forgotten&quot;, methods=[&quot;GET&quot;,&quot;POST&quot;])
+def forgotten():
+    global emailToRecover
+    global newPassword
+    if newPassword == None:
+        newPassword = str(random.randint(1000, 9999))
+    else:
+        newPassword = newPassword
+
+    if request.method == &quot;GET&quot;:
+        s = smtplib.SMTP(host=&quot;smtp.gmail.com&quot;, port=587)
+        s.starttls()
+        s.login(&quot;chiarulli14@gmail.com&quot;, &quot;dajfosbvggcdemwu&quot;)
+
+        newPasswordSend = Template(&quot;Nuova password: $password&quot;)
+        password_value = newPassword
+        body = newPasswordSend.substitute(password=password_value)
+
+        print(password_value)
+        email = &quot;chiarulli14@gmail.com&quot;
+
+
+        msg = MIMEMultipart()
+        msg[&#39;From&#39;] = email
+        msg[&#39;To&#39;] = emailToRecover
+        msg[&#39;Subject&#39;] = &quot;This is TEST&quot;
+        msg.attach(MIMEText(body, &#39;plain&#39;))
+
+        s.send_message(msg)
+        s.quit()
+        del msg
+
+        return render_template(&quot;recupero.html&quot;)
+    elif request.method == &quot;POST&quot;:
+        inserted = request.form.get(&quot;password&quot;)
+
+        print(newPassword)
+
+        if inserted == newPassword:
+            rows = dbUsers.execute(&quot;SELECT * FROM users WHERE email = ?&quot;, emailToRecover)
+            session[&quot;user_id&quot;] = rows[0][&quot;id&quot;]
+            newPassword = None
+            return redirect(&quot;/newPassword&quot;)
+
+
+@app.route(&quot;/newPassword&quot;, methods=[&quot;GET&quot;, &quot;POST&quot;])
+def newPasswordFun():
+    if request.method == &quot;GET&quot;:
+        return render_template(&quot;newPassword.html&quot;)
+    elif request.method == &quot;POST&quot;:
+        password = request.form.get(&quot;password&quot;)
+        if not password:
+            return apology(&quot;Assicurati di aver inserito la password corretta&quot;)
+
+        currUser = session[&quot;user_id&quot;]
+        hash = generate_password_hash(password, method=&#39;pbkdf2&#39;, salt_length=16)
+        dbUsers.execute(&quot;UPDATE users SET hash = ? WHERE id = ?&quot;, hash, currUser)
+
+        return redirect(&quot;/&quot;)
+
+
+@app.route(&quot;/ripristinaElementi&quot;, methods=[&quot;GET&quot;, &quot;POST&quot;])
+@login_required
+def ripristinaElementi():
+    if request.method == &quot;GET&quot;:
+        bevande = db.execute(&quot;SELECT * FROM bevande&quot;)
+
+        bevandeRimosse = []
+
+        for bevanda in bevande:
+            if bevanda[&quot;status&quot;] == &quot;hidden&quot;:
+                bevandeRimosse.append(bevanda)
+
+        vini = db.execute(&quot;SELECT * FROM vini&quot;)
+
+        viniRimossi = []
+
+        for vino in vini:
+            if vino[&quot;status&quot;] == &quot;hidden&quot;:
+                viniRimossi.append(vino)
+
+        return render_template(&quot;ripristina.html&quot;, menu = bevandeRimosse, menuVini = viniRimossi)
+
+    elif request.method == &quot;POST&quot;:
+        status = &quot;show&quot;
+        section = request.form.get(&quot;section&quot;)
+        item = request.form.get(&quot;item&quot;)
+
+        if section == &quot;bevande&quot;:
+            # deletes item from the menu database
+            db.execute(&quot;UPDATE bevande SET status = ? WHERE food_name = ?&quot;, status, item)
+
+            return redirect(&quot;/ripristinaElementi&quot;)
+
+        elif section == &quot;vini&quot;:
+            db.execute(&quot;UPDATE vini SET status = ? WHERE food_name = ?&quot;, status, item)
+
+            return redirect(&quot;/ripristinaElementi&quot;)</div>
+      
+
+      <div id="id_ide_console">
+        
+          <iframe src="/user/astroale/consoles/29737083/frame/" id="id_console" name="console" class="soft_keyboard_sensitive">
+          </iframe>
+        
+      </div>
+
+    </div>
+
+    <div id="id_go_to_line_dialog" class="pa_hidden">
+      <p class="form-inline">Line number: <input id="id_go_to_line_dialog_input" /></p>
+      <div class="dialog_buttons">
+        <button class="btn btn-default" id="id_go_to_line_dialog_ok_button">Go</button>
+        <button class="btn btn-default" id="id_go_to_line_dialog_close_button">Close</button>
+      </div>
+    </div>
+
+    <div id="id_file_changed_on_disk" class="pa_hidden">
+      <p>Are you sure you want to save it?  Alternatively, you could re-open it in a new tab to check differences</p>
+      <div class="dialog_buttons">
+        <button id="id_force_save" class="btn btn-danger">Force Save</button>
+        <button id="id_cancel_save" class="btn btn-default">Cancel</button>
+      </div>
+    </div>
+
+    <div id="id_save_as_dialog" class="pa_hidden">
+      <form class="form-inline">
+        <div class="form-group">
+          <label for="id_save_as_path">Please enter a path:</label>
+          <input id="id_save_as_path" class="form-control" style="width: 100%;" />
+        </div>
+        <img id="id_save_as_spinner" class="spinner pa_hidden" src="/static/anywhere/images/spinner-small.gif" />
+        <p>
+          <span id="id_save_as_error" class="error_message"></span>
+        </p>
+        <div class="dialog_buttons">
+          <button id="id_save_as_ok" type="submit" class="btn btn-primary">Save</button>
+          <button id="id_save_as_cancel" type="button" class="btn btn-default">Cancel</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="modal fade" id="id_file_sharing_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel">File Sharing options</h4>
+          </div>
+          <div class="modal-body">
+            <div id="id_file_sharing_options"></div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+
+        
+      </div>
+
+        
+
+
+        <div id="id_feedback_dialog" title="Help us improve" style="display:none">
+    <div id="id_feedback_dialog_blurb_big" class="dialog_blurb_big">
+        It's always a pleasure to hear from you!
+    </div>
+    <div id="id_feedback_dialog_blurb_small">
+        Ask us a question, or tell us what you love or hate about PythonAnywhere.<br/>
+        We'll get back to you over email ASAP.
+    </div>
+    <textarea id="id_feedback_dialog_text" rows="6"></textarea>
+    <input id="id_feedback_dialog_email_address" type="text" placeholder="Email address (optional - only necessary if you would like us to contact you)"/>
+    
+    <div id="id_feedback_dialog_error" style="display: none">
+        Sorry, there was an error connecting to the server. <br/>Please try again in a few moments...
+    </div>
+    <div id="id_feedback_dialog_rate_limit_error" style="display: none">
+        Sorry, we have had to rate-limit your feedback sending.<br/>Please try again in a few moments...
+    </div>
+    <div id="id_feedback_dialog_success" style="display: none">
+        Thanks for the feedback! Our tireless devs will get back to you soon.
+    </div>
+    <div class="dialog_buttons">
+        <img id="id_feedback_dialog_spinner" src="/static/anywhere/images/spinner-small.gif" />
+        <button class="btn btn-primary" id="id_feedback_dialog_ok_button">OK</button>
+        <button class="btn btn-default" id="id_feedback_dialog_cancel_button">Cancel</button>
+    </div>
+    <div id="id_feedback_dialog_only_close_button" style="display: none">
+        <button class="btn btn-primary" id="id_feedback_dialog_close_button">Close</button>
+    </div>
+</div>
+
+
+        
+        <!-- preload font awesome fonts to avoid glitch when switching icons -->
+        <div style="width: 0; height: 0; overflow: hidden"><i class="fa fa-square-o fa-3x" ></i></div>
+    </body>
+</html>
