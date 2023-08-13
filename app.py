@@ -146,6 +146,9 @@ def prenotazioni():
 
         # gets time from the form
         ora = request.form.get("orario")
+
+        # gets how many people are coming
+        posti = request.form.get("posti")
         
         # set the status of the order to default "incoming"
         status = ("incoming")
@@ -166,8 +169,11 @@ def prenotazioni():
         if not ora:
             return apology("assicurati di aver inserito l'ora")
         
+        if not posti:
+            return apology("assicurati di aver inserito il numero di persone")
+
         # inserts the booking into the database
-        dbUsers.execute("INSERT INTO prenotazioni (nome, cognome, telefono, data, ora, status) VALUES (?, ?, ?, ?, ?, ?)", name, surname, telefono, data, ora, status)
+        dbUsers.execute("INSERT INTO prenotazioni (nome, cognome, telefono, data, ora, status, posti) VALUES (?, ?, ?, ?, ?, ?, ?)", name, surname, telefono, data, ora, status, posti)
 
         # user gets redirected to the homepage
         return redirect("/")
@@ -360,6 +366,9 @@ def rimuovi():
         status = "hidden"
         section = request.form.get("section")
         item = request.form.get("item")
+
+        if not section or not item:
+            return apology("Assicurati di aver riempito tutti i campi")
         
         if section == "bevande":
             # deletes item from the menu database

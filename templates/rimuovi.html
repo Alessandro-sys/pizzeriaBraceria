@@ -26,13 +26,13 @@
                     </div>
 
                     <div class="form-field">
-                        <select name="item" class="formInput" id="bevande">
+                        <select name="item" class="formInput" id="bevande" required>
                             <option selected disabled>Seleziona un elemento da rimuovere</option>
                             {% for item in menu %}
                             <option value="{{ item.food_name }}">{{ item.food_name }}</option>
                             {% endfor %}
                         </select>
-                        <select name="item" class="formInput" id="vini">
+                        <select name="item" class="formInput" id="vini" required>
                             <option selected disabled>Seleziona un elemento da rimuovere</option>
                             {% for item in menuVini %}
                             <option value="{{ item.food_name }}">{{ item.food_name }}</option>
