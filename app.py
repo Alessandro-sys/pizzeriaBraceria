@@ -298,88 +298,95 @@ def admin():
 @app.route("/aggiungi", methods=["GET", "POST"])
 @login_required
 def aggiungi():
-    if request.method == "GET":
-        # renders template for adding food to the menu
-        return render_template("aggiungi.html")
-    
-    elif request.method == "POST":
+    if session["user_id"] == 1 or session["user_id"] == 5:
 
-        section = request.form.get("section")
-
-        # takes the name of the food from the form
-        nome = request.form.get("food_name")
-
-        # takes the price of the food from the menu (format x,xx (2 decimals possibly))
-        price = request.form.get("price")
-
-        # takes description of the food from the form
-        description = request.form.get("descrizione")
-
-        # if name or price is not inserted returns error
-        if (not nome) or (not price):
-            return apology("chigghione inserisci tutti i dati")
+        if request.method == "GET":
+            # renders template for adding food to the menu
+            return render_template("aggiungi.html")
         
-        if section == "bevande":
-            if description == None:
-                # if there's no description adds a new food with no description
-                db.execute("INSERT INTO bevande (food_name, price) VALUES (?, ?)", nome, price)
-            else:
-                # if there's a description adds a new food with description
-                db.execute("INSERT INTO bevande (food_name, price, description) VALUES (?, ?, ?)", nome, price, description)
-        elif section == "vini":
-            if description == None:
-                # if there's no description adds a new food with no description
-                db.execute("INSERT INTO vini (food_name, price) VALUES (?, ?)", nome, price)
-            else:
-                # if there's a description adds a new food with description
-                db.execute("INSERT INTO vini (food_name, price, description) VALUES (?, ?, ?)", nome, price, description)
+        elif request.method == "POST":
 
-        return redirect("/aggiungi")
+            section = request.form.get("section")
+
+            # takes the name of the food from the form
+            nome = request.form.get("food_name")
+
+            # takes the price of the food from the menu (format x,xx (2 decimals possibly))
+            price = request.form.get("price")
+
+            # takes description of the food from the form
+            description = request.form.get("descrizione")
+
+            # if name or price is not inserted returns error
+            if (not nome) or (not price):
+                return apology("chigghione inserisci tutti i dati")
+            
+            if section == "bevande":
+                if description == None:
+                    # if there's no description adds a new food with no description
+                    db.execute("INSERT INTO bevande (food_name, price) VALUES (?, ?)", nome, price)
+                else:
+                    # if there's a description adds a new food with description
+                    db.execute("INSERT INTO bevande (food_name, price, description) VALUES (?, ?, ?)", nome, price, description)
+            elif section == "vini":
+                if description == None:
+                    # if there's no description adds a new food with no description
+                    db.execute("INSERT INTO vini (food_name, price) VALUES (?, ?)", nome, price)
+                else:
+                    # if there's a description adds a new food with description
+                    db.execute("INSERT INTO vini (food_name, price, description) VALUES (?, ?, ?)", nome, price, description)
+
+            return redirect("/aggiungi")
+    else:
+        return apology("Non sei autorizzato")
 
 @app.route("/rimuovi", methods=["GET", "POST"])
 @login_required
 def rimuovi():
-    if request.method == "GET":
-        # selects every food from the menu
-        menuBevande = db.execute("SELECT * FROM bevande")
+    if session["user_id"] == 1 or session["user_id"] == 5:
+        if request.method == "GET":
+            # selects every food from the menu
+            menuBevande = db.execute("SELECT * FROM bevande")
 
-        menuBevandeSenzaHidden = []
+            menuBevandeSenzaHidden = []
 
-        for bevanda in menuBevande:
-            if bevanda["status"] == "show":
-                menuBevandeSenzaHidden.append(bevanda)
+            for bevanda in menuBevande:
+                if bevanda["status"] == "show":
+                    menuBevandeSenzaHidden.append(bevanda)
+            
+
+            menuVini = db.execute("SELECT * FROM vini")
+
+            menuViniSenzaHidden = []
+
+            for vino in menuVini:
+                if vino["status"] == "show":
+                    menuViniSenzaHidden.append(vino)
+
+
+            # renders form with all foods
+            return render_template("rimuovi.html", menu = menuBevandeSenzaHidden, menuVini = menuViniSenzaHidden)
         
+        if request.method == "POST":
+            status = "hidden"
+            section = request.form.get("section")
+            item = request.form.get("item")
 
-        menuVini = db.execute("SELECT * FROM vini")
+            if not section or not item:
+                return apology("Assicurati di aver riempito tutti i campi")
+            
+            if section == "bevande":
+                # deletes item from the menu database
+                db.execute("UPDATE bevande SET status = ? WHERE food_name = ?", status, item)
 
-        menuViniSenzaHidden = []
+                return redirect("/rimuovi")
 
-        for vino in menuVini:
-            if vino["status"] == "show":
-                menuViniSenzaHidden.append(vino)
+            elif section == "vini":
+                db.execute("UPDATE vini SET status = ? WHERE food_name = ?", status, item)
 
-
-        # renders form with all foods
-        return render_template("rimuovi.html", menu = menuBevandeSenzaHidden, menuVini = menuViniSenzaHidden)
-    
-    if request.method == "POST":
-        status = "hidden"
-        section = request.form.get("section")
-        item = request.form.get("item")
-
-        if not section or not item:
-            return apology("Assicurati di aver riempito tutti i campi")
-        
-        if section == "bevande":
-            # deletes item from the menu database
-            db.execute("UPDATE bevande SET status = ? WHERE food_name = ?", status, item)
-
-            return redirect("/rimuovi")
-
-        elif section == "vini":
-            db.execute("UPDATE vini SET status = ? WHERE food_name = ?", status, item)
-
-            return redirect("/rimuovi")
+                return redirect("/rimuovi")
+    else:
+        return apology("Non sei autorizzato")
         
 
 
@@ -387,80 +394,83 @@ def rimuovi():
 @app.route("/utentiPrenotati", methods=["GET", "POST"])
 @login_required
 def utentiPrenotati():
-    if request.method == "GET":
-        # access the global variable past_order, it containst the last order of the bookings selected
-        global past_order
+    if session["user_id"] == 1 or session["user_id"] == 5:
+        if request.method == "GET":
+            # access the global variable past_order, it containst the last order of the bookings selected
+            global past_order
 
-        # gets current date
-        data_odierna = datetime.now().date()
+            # gets current date
+            data_odierna = datetime.now().date()
+            
+            # selected every booked user from the database
+            prenotati = dbUsers.execute("SELECT * FROM prenotazioni")
+            
+            # sorts the lists of the booked users from time
+            lista_dizionari_ordinata = sorted(prenotati, key=lambda x: (datetime.strptime(x["data"], "%Y-%m-%d"), datetime.strptime(x["ora"], "%H:%M")) , reverse=True)
+
+            # initialise three lists, one containing today orders, one containing future orders and one containing past orders
+            today = []
+            past = []
+            incoming = []
+
+            # adds in every list the correct booking
+            for dizionario in lista_dizionari_ordinata:
+                data_dizionario = datetime.strptime(dizionario["data"], "%Y-%m-%d").date()
+
+                if data_dizionario == data_odierna:
+                    today.append(dizionario)
+                elif data_dizionario < data_odierna:
+                    past.append(dizionario)
+                else:
+                    incoming.append(dizionario)
+            
+            # gets the selected order from the form
+            ordine = request.args.get("sort")
+            
+            # # if no order is inserted it can be either the first time on the page or a booking status has been changed
+            # if not ordine:
+            #     # takes the last selected order
+            #     ordine = past_order
+            
+            # # renders the layout of the booking based on the order selected 
+            # if ordine == "all":
+            #     past_order = ordine
+            #     return render_template("utentiPrenotati.html", prenotati = lista_dizionari_ordinata)
+            # if ordine == "today":
+            #     past_order = ordine
+            #     return render_template("utentiPrenotati.html", prenotati = today)
+            # elif ordine == "past":
+            #     past_order = ordine
+            #     return render_template("utentiPrenotati.html", prenotati = past)
+            # elif ordine == "incoming":
+            #     past_order = ordine
+            #     return render_template("utentiPrenotati.html", prenotati = incoming)
+
+            return render_template("utentiPrenotati.html", prenotati = lista_dizionari_ordinata, passati = past, arrivo = incoming, oggi = today)
+
+
+        elif request.method == "POST":
+            # gets the new order status from the form
+            nuovoStatus = request.form.get("cambioStatus")
+
+            # gets the booking id from the form
+            idPrenotazione = request.form.get("idPrenotazione")
         
-        # selected every booked user from the database
-        prenotati = dbUsers.execute("SELECT * FROM prenotazioni")
+            # checks if the id is selected
+            if not idPrenotazione:
+                return apology("Errore interno del server, riprova più tardi")
+
+            # checks if the status is selected
+            if not nuovoStatus:
+                return apology("Nuovo status non inserito correttamente")
         
-        # sorts the lists of the booked users from time
-        lista_dizionari_ordinata = sorted(prenotati, key=lambda x: (datetime.strptime(x["data"], "%Y-%m-%d"), datetime.strptime(x["ora"], "%H:%M")) , reverse=True)
 
-        # initialise three lists, one containing today orders, one containing future orders and one containing past orders
-        today = []
-        past = []
-        incoming = []
+            # updates the status in the database
+            dbUsers.execute("UPDATE prenotazioni SET status = ? WHERE id = ?", nuovoStatus, idPrenotazione)
 
-        # adds in every list the correct booking
-        for dizionario in lista_dizionari_ordinata:
-            data_dizionario = datetime.strptime(dizionario["data"], "%Y-%m-%d").date()
-
-            if data_dizionario == data_odierna:
-                today.append(dizionario)
-            elif data_dizionario < data_odierna:
-                past.append(dizionario)
-            else:
-                incoming.append(dizionario)
-        
-        # gets the selected order from the form
-        ordine = request.args.get("sort")
-        
-        # # if no order is inserted it can be either the first time on the page or a booking status has been changed
-        # if not ordine:
-        #     # takes the last selected order
-        #     ordine = past_order
-        
-        # # renders the layout of the booking based on the order selected 
-        # if ordine == "all":
-        #     past_order = ordine
-        #     return render_template("utentiPrenotati.html", prenotati = lista_dizionari_ordinata)
-        # if ordine == "today":
-        #     past_order = ordine
-        #     return render_template("utentiPrenotati.html", prenotati = today)
-        # elif ordine == "past":
-        #     past_order = ordine
-        #     return render_template("utentiPrenotati.html", prenotati = past)
-        # elif ordine == "incoming":
-        #     past_order = ordine
-        #     return render_template("utentiPrenotati.html", prenotati = incoming)
-
-        return render_template("utentiPrenotati.html", prenotati = lista_dizionari_ordinata, passati = past, arrivo = incoming, oggi = today)
-
-
-    elif request.method == "POST":
-        # gets the new order status from the form
-        nuovoStatus = request.form.get("cambioStatus")
-
-        # gets the booking id from the form
-        idPrenotazione = request.form.get("idPrenotazione")
-    
-        # checks if the id is selected
-        if not idPrenotazione:
-            return apology("Errore interno del server, riprova più tardi")
-
-        # checks if the status is selected
-        if not nuovoStatus:
-            return apology("Nuovo status non inserito correttamente")
-    
-
-        # updates the status in the database
-        dbUsers.execute("UPDATE prenotazioni SET status = ? WHERE id = ?", nuovoStatus, idPrenotazione)
-
-        return redirect("/utentiPrenotati")
+            return redirect("/utentiPrenotati")
+    else:
+        return apology("Non sei autorizzato")
     
 
 @app.route("/forgottenEmail", methods=["GET", "POST"])
@@ -546,37 +556,41 @@ def newPasswordFun():
 @app.route("/ripristinaElementi", methods=["GET", "POST"])
 @login_required
 def ripristinaElementi():
-    if request.method == "GET":
-        bevande = db.execute("SELECT * FROM bevande")
+    if session["user_id"] == 1 or session["user_id"] == 5:
 
-        bevandeRimosse = []
+        if request.method == "GET":
+            bevande = db.execute("SELECT * FROM bevande")
 
-        for bevanda in bevande:
-            if bevanda["status"] == "hidden":
-                bevandeRimosse.append(bevanda)
+            bevandeRimosse = []
+
+            for bevanda in bevande:
+                if bevanda["status"] == "hidden":
+                    bevandeRimosse.append(bevanda)
+            
+            vini = db.execute("SELECT * FROM vini")
+
+            viniRimossi = []
+
+            for vino in vini:
+                if vino["status"] == "hidden":
+                    viniRimossi.append(vino)
+            
+            return render_template("ripristina.html", menu = bevandeRimosse, menuVini = viniRimossi)
         
-        vini = db.execute("SELECT * FROM vini")
+        elif request.method == "POST":
+            status = "show"
+            section = request.form.get("section")
+            item = request.form.get("item")
+            
+            if section == "bevande":
+                # deletes item from the menu database
+                db.execute("UPDATE bevande SET status = ? WHERE food_name = ?", status, item)
 
-        viniRimossi = []
+                return redirect("/ripristinaElementi")
 
-        for vino in vini:
-            if vino["status"] == "hidden":
-                viniRimossi.append(vino)
-        
-        return render_template("ripristina.html", menu = bevandeRimosse, menuVini = viniRimossi)
-    
-    elif request.method == "POST":
-        status = "show"
-        section = request.form.get("section")
-        item = request.form.get("item")
-        
-        if section == "bevande":
-            # deletes item from the menu database
-            db.execute("UPDATE bevande SET status = ? WHERE food_name = ?", status, item)
+            elif section == "vini":
+                db.execute("UPDATE vini SET status = ? WHERE food_name = ?", status, item)
 
-            return redirect("/ripristinaElementi")
-
-        elif section == "vini":
-            db.execute("UPDATE vini SET status = ? WHERE food_name = ?", status, item)
-
-            return redirect("/ripristinaElementi")
+                return redirect("/ripristinaElementi")
+    else:
+        return apology("Non sei autorizzato")

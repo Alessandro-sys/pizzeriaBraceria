@@ -203,3 +203,14 @@ h1{
     color: #4A4A4A;
     text-indent: 40px;
 }
+
+a{
+    color: white;
+}
+
+a:hover{
+    color:#888888;
+}
+a:visited{
+    color: white;
+}
