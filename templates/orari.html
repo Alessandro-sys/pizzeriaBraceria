@@ -1,0 +1,75 @@
+{% extends  "layout.html" %}
+
+{% block title %}
+    <title>ADMIN - UTENTI PRENOTATI</title>
+{% endblock %}
+
+{% block style %}
+    <link rel="stylesheet" href="../static/styleTable.css">
+{% endblock %}
+
+
+{% block body %}
+
+    <div class="mainContainer">
+        <div class="pannelloDiControllo">
+            <form action="/admin">    
+                <button type="submit" class="bottoneSubmit">Torna al pannello di controllo</button>
+            </form>
+        </div>
+        <div class="titoloAggiungi">
+            <h1 class="titoloSupremo">Aggiungi Nuovo Orario</h1>
+        </div>
+        <div class="pannelloDiControllo">
+            
+            <form action="/aggiungiOrario" method="post" class="formFormForm">
+                <input type="text" name="nuovoOrario" placeholder="Orario" required autofocus autocomplete="off" class="formInput" style="margin: 2%;">
+                <button type="submit" class="bottoneSubmit" style="margin: 2%;">Aggiungi</button>
+            </form>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Orario</th>
+                    <th>Status</th>
+                    <th>Azioni</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for orario in orari %}
+                <tr>
+                    <td>{{orario.orario}}</td>
+                    <td>
+                        <form action="">
+                            <button class="{{ orario.status }}">
+                                {% if orario.status == 'disp' %}
+                                    Disponibile
+                                {% endif %}
+                                {% if orario.status == 'ndisp' %}
+                                    Non Disponibile
+                                {% endif %}
+                            </button>
+                        </form>
+                    </td>
+                    <td>
+                        <form action="/orari" method="post" class="formForm">
+                            <input type="hidden" name="idOrario" value="{{ orario.id }}">
+                            <select name="cambioStatus" class="formInput">
+                                {% if orario.status == 'disp' %}
+                                    <option value="disp" selected disabled>Disponibile</option>
+                                    <option value="ndisp">Non Disponibile</option>
+                                {% endif %}
+                                {% if orario.status == 'ndisp' %}
+                                    <option value="ndisp" selected disabled>Non Disponibile</option>
+                                    <option value="disp">Disponibile</option>
+                                {% endif %}
+                            </select>
+                            <button type="submit" class="submitButton">Conferma</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+{% endblock %}

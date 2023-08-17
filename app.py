@@ -122,13 +122,22 @@ def prenotazioni():
         # selects every time avaliable for booking
         orari = db.execute("SELECT * FROM orari_disponibili")
 
+        orariEffettivi = []
+
+        for orario in orari:
+            if orario["status"] == "disp":
+                    orariEffettivi.append(orario)
+
+        
+        orariOrdinati = sorted(orariEffettivi, key=lambda x: datetime.strptime(x["orario"], '%H:%M'))
+
         if len(session) == 0:
             # if user is not logged, prints the booking in the not logged template
-            return render_template("prenota.html", orari = orari)
+            return render_template("prenota.html", orari = orariOrdinati)
         
         elif len(session) != 0:
             # if user is logged, prints the booking in the logged template
-            return render_template("prenotaLogged.html", orari = orari)
+            return render_template("prenotaLogged.html", orari = orariOrdinati)
 
 
     elif request.method == "POST":
@@ -175,6 +184,8 @@ def prenotazioni():
         # inserts the booking into the database
         dbUsers.execute("INSERT INTO prenotazioni (nome, cognome, telefono, data, ora, status, posti) VALUES (?, ?, ?, ?, ?, ?, ?)", name, surname, telefono, data, ora, status, posti)
 
+        ## DA SISTEMARE DOPO. VA MODIFICATO LO STATUS SOLO ALLA DATA SELEZIONATA
+        # db.execute("UPDATE orari_disponibili SET status = 'ndisp' WHERE orario = ?", ora)
         # user gets redirected to the homepage
         return redirect("/")
     
@@ -597,3 +608,63 @@ def ripristinaElementi():
                 return redirect("/ripristinaElementi")
     else:
         return apology("Non sei autorizzato")
+
+
+
+@app.route("/orari", methods=["GET","POST"])
+@login_required
+def orari():
+    if session["user_id"] == 1 or session["user_id"] == 5:
+        if request.method == "GET":
+            orari = db.execute("SELECT * FROM orari_disponibili")
+
+            orariOrdinati = sorted(orari, key=lambda x: datetime.strptime(x["orario"], '%H:%M'))
+
+            return render_template("orari.html", orari = orariOrdinati)
+        
+        elif request.method == "POST":
+            idOrario = request.form.get("idOrario")
+            nuovoStatus = request.form.get("cambioStatus")
+
+            if not idOrario:
+                return apology("Errore interno del server", 104)
+            if not nuovoStatus:
+                return apology("Assdicurati di aver completato tutti i campi")
+            
+            db.execute("UPDATE orari_disponibili SET status = ? WHERE id = ?", nuovoStatus, idOrario)
+
+            return redirect("/orari")
+
+    else:
+        return apology("Non sei autorizzato")
+    
+
+@app.route("/aggiungiOrario", methods=["GET","POST"])
+@login_required
+def aggiungiOrario():
+    if session["user_id"] == 1 or session["user_id"] == 5:
+        if request.method == "GET":
+            return redirect("/orari")
+        elif request.method == "POST":
+            nuovoOrario = request.form.get("nuovoOrario")
+
+            if not nuovoOrario:
+                return apology("Assicurati di aver riempito tutti i campi")
+            
+
+            def verifica_formato_ore(input_string):
+                try:
+                    datetime.strptime(input_string, '%H:%M')
+                    return True
+                except ValueError:
+                    return False
+
+            
+            if verifica_formato_ore(nuovoOrario):
+                db.execute("INSERT INTO orari_disponibili (orario) VALUES (?)", nuovoOrario)
+                return redirect("orari")
+            else:
+                return apology("Assicurati di aver inserito l'orario nel formato coretto, hh:mm")
+
+        
+            
