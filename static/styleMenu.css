@@ -126,6 +126,7 @@ h1{
     font-size: 20px;
     line-height: 60px;
     padding-right: 30px;
+    word-wrap: break-word;
     vertical-align: baseline;
 }
 
@@ -189,4 +190,9 @@ h1{
 
 }
 
+
+table td{
+    max-width: 30vh;
+    
+}
 

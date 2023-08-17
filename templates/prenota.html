@@ -40,7 +40,7 @@
                     </div>
                     
                     <div class="form-field">
-                        <input type="date" name="date" placeholder="Data" id="dataInserimento" required class="formInput">
+                        <input type="date" name="date" id="dataInserimento" required class="formDate">
                     </div>
 
                     <div class="form-field">
@@ -48,7 +48,7 @@
                     </div>
 
                     <div class="form-field">
-                        <select name="orario" class="formInput">
+                        <select name="orario" class="formOrario">
                             <option selected disabled>Seleziona un orario</option>
                             {% for orario in orari %}
                                 <option value="{{orario.orario}}">{{orario.orario}}</option>

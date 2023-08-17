@@ -232,3 +232,35 @@ h1{
     .popup button:hover {
         background-color: #0056b3;
     }
+
+
+
+.formDate {
+    font-family: inherit;
+    width: 100%;
+    outline: none;
+    background-color: #fff;
+    border-radius: 4px;
+    border: none;
+    text-align: left;
+    padding: 0.9rem;
+    box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.16);
+    font-size: 17px;
+    color: rgb(117,117,117);
+    text-indent: 19px;
+}
+
+.formOrario {
+    font-family: inherit;
+    width: 100%;
+    outline: none;
+    background-color: #fff;
+    border-radius: 4px;
+    border: none;
+    display: block;
+    padding: 0.9rem 0.7rem;
+    box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.16);
+    font-size: 17px;
+    color: rgb(117,117,117);
+    text-indent: 40px;
+}

@@ -348,13 +348,16 @@ def rimuovi():
             # selects every food from the menu
             menuBevande = db.execute("SELECT * FROM bevande")
 
+            # creates a new list containing all the showed drinks
             menuBevandeSenzaHidden = []
 
+            # for each drink adds to the previous list only the drinks with the tag "show"
             for bevanda in menuBevande:
                 if bevanda["status"] == "show":
                     menuBevandeSenzaHidden.append(bevanda)
             
 
+            # Does the same thing with wines
             menuVini = db.execute("SELECT * FROM vini")
 
             menuViniSenzaHidden = []
@@ -517,7 +520,7 @@ def forgotten():
         msg = MIMEMultipart()
         msg['From'] = email
         msg['To'] = emailToRecover
-        msg['Subject'] = "This is TEST"
+        msg['Subject'] = "Recupero Password Divina"
         msg.attach(MIMEText(body, 'plain'))
 
         s.send_message(msg)
