@@ -156,11 +156,13 @@ def prenotazioni():
         # gets time from the form
         ora = request.form.get("orario")
 
+        email = request.form.get("email")
+
         # gets how many people are coming
         posti = request.form.get("posti")
         
         # set the status of the order to default "incoming"
-        status = ("incoming")
+        status = ("pending")
 
         # checks if all data is correctly inserted
         if not name:
@@ -178,11 +180,37 @@ def prenotazioni():
         if not ora:
             return apology("assicurati di aver inserito l'ora")
         
+        if not email:
+            return apology("assicurati di aver inserito l'email")
+        
         if not posti:
             return apology("assicurati di aver inserito il numero di persone")
 
+        
+
         # inserts the booking into the database
-        dbUsers.execute("INSERT INTO prenotazioni (nome, cognome, telefono, data, ora, status, posti) VALUES (?, ?, ?, ?, ?, ?, ?)", name, surname, telefono, data, ora, status, posti)
+        dbUsers.execute("INSERT INTO prenotazioni (nome, cognome, telefono, data, ora, status, posti, email) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", name, surname, telefono, data, ora, status, posti, email)
+
+        s = smtplib.SMTP(host="smtp.gmail.com", port=587)
+        s.starttls()
+        s.login("chiarulli14@gmail.com", "dajfosbvggcdemwu")
+
+        newPasswordSend = Template("Ciao $nome, la tua prenotazione in data $data alle ore $ora è stata inviata. Ti faremo sapere quando verrà accettata. Grazie mille per aver scelto noi!")
+        
+        body = newPasswordSend.substitute(nome = name, data = data, ora = ora)
+
+        senderEmail = "chiarulli14@gmail.com"
+
+
+        msg = MIMEMultipart()
+        msg['From'] = senderEmail
+        msg['To'] = email
+        msg['Subject'] = "Prenotazione inviata"
+        msg.attach(MIMEText(body, 'plain'))
+
+        s.send_message(msg)
+        s.quit()
+        del msg
 
         ## DA SISTEMARE DOPO. VA MODIFICATO LO STATUS SOLO ALLA DATA SELEZIONATA
         # db.execute("UPDATE orari_disponibili SET status = 'ndisp' WHERE orario = ?", ora)
@@ -289,8 +317,31 @@ def register():
         if not check_password_hash(hash, password):
             return apology("Internal server error, please try again in a few minutes")
         
+        
+        
         # inserts the new user's data into the database
         dbUsers.execute("INSERT INTO users (name, surname, email, hash) VALUES (?, ?, ?, ?)", nome, cognome, email, hash)
+
+        s = smtplib.SMTP(host="smtp.gmail.com", port=587)
+        s.starttls()
+        s.login("chiarulli14@gmail.com", "dajfosbvggcdemwu")
+
+        newPasswordSend = Template("Ciao $nome, benvenuto in Divina. L'account alla mail $mail è stato creato con successo!")
+        
+        body = newPasswordSend.substitute(nome = nome, mail = email)
+
+        senderEmail = "chiarulli14@gmail.com"
+
+
+        msg = MIMEMultipart()
+        msg['From'] = senderEmail
+        msg['To'] = email
+        msg['Subject'] = "Conferma Registrazione"
+        msg.attach(MIMEText(body, 'plain'))
+
+        s.send_message(msg)
+        s.quit()
+        del msg
 
         return redirect("/")
     
@@ -478,6 +529,55 @@ def utentiPrenotati():
             if not nuovoStatus:
                 return apology("Nuovo status non inserito correttamente")
         
+            userInfo = dbUsers.execute("SELECT * FROM prenotazioni WHERE id = ?", idPrenotazione)
+            nome = userInfo[0]["nome"]
+            data = userInfo[0]["data"]
+            ora = userInfo[0]["ora"]
+            email = userInfo[0]["email"]
+
+            if nuovoStatus == "incoming":
+                s = smtplib.SMTP(host="smtp.gmail.com", port=587)
+                s.starttls()
+                s.login("chiarulli14@gmail.com", "dajfosbvggcdemwu")
+
+                newPasswordSend = Template("Ciao $nome, la tua prenotazione in data $data alle ore $ora è stata confermata. Ti aspettiamo!")
+                
+                body = newPasswordSend.substitute(nome = nome, data = data, ora = ora)
+
+                senderEmail = "chiarulli14@gmail.com"
+
+
+                msg = MIMEMultipart()
+                msg['From'] = senderEmail
+                msg['To'] = email
+                msg['Subject'] = "Prenotazione confermata"
+                msg.attach(MIMEText(body, 'plain'))
+
+                s.send_message(msg)
+                s.quit()
+                del msg
+
+            elif nuovoStatus == "past":
+                s = smtplib.SMTP(host="smtp.gmail.com", port=587)
+                s.starttls()
+                s.login("chiarulli14@gmail.com", "dajfosbvggcdemwu")
+
+                newPasswordSend = Template("Ciao $nome, la tua prenotazione in data $data alle ore $ora è stata rifiutata, Ci scusiamo per l'inconveniente. Prova a controllare gli orari di apertura o a chiamare il nostro numero 080.......")
+                
+                body = newPasswordSend.substitute(nome = nome, data = data, ora = ora)
+
+                senderEmail = "chiarulli14@gmail.com"
+
+
+                msg = MIMEMultipart()
+                msg['From'] = senderEmail
+                msg['To'] = email
+                msg['Subject'] = "Prenotazione rifiutata"
+                msg.attach(MIMEText(body, 'plain'))
+
+                s.send_message(msg)
+                s.quit()
+                del msg
 
             # updates the status in the database
             dbUsers.execute("UPDATE prenotazioni SET status = ? WHERE id = ?", nuovoStatus, idPrenotazione)

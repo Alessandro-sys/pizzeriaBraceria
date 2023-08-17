@@ -5,6 +5,10 @@ import requests
 import subprocess
 import urllib
 import uuid
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+from string import Template
 
 from flask import redirect, render_template, session
 from functools import wraps

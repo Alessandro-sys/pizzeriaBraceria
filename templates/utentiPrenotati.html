@@ -53,13 +53,16 @@
                         <form action="">
                             <button class="{{ prenotazione.status}}">
                                 {% if prenotazione.status == 'incoming' %}
-                                    Non ancora eseguito
+                                    Accettato
                                 {% endif %}
                                 {% if prenotazione.status == 'doing' %}
-                                    In esecuzione
+                                    Accettato non Presentato
                                 {% endif %}
                                 {% if prenotazione.status == 'past' %}
-                                    Passato
+                                    Rifiutato
+                                {% endif %}
+                                {% if prenotazione.status == 'pending' %}
+                                    In Attesa
                                 {% endif %}
                             </button>
                         </form>
@@ -69,9 +72,10 @@
                             <input type="hidden" name="idPrenotazione" value="{{ prenotazione.id }}">
                             <select name="cambioStatus" class="formInput">
                                 <option selected disabled>Stato</option>
-                                <option value="incoming">Non ancora eseguito</option>
-                                <option value="doing">In esecuzione</option>
-                                <option value="past">Passato</option>
+                                <option value="pending">In Attesa</option>
+                                <option value="incoming">Accettato</option>
+                                <option value="doing">Non presentato</option>
+                                <option value="past">Rifiutato</option>
                             </select>
                             <button type="submit" class="submitButton">Conferma</button>
                         </form>
