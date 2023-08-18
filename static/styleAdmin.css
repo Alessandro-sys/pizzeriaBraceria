@@ -96,6 +96,29 @@ h1{
     text-align: center;
 }
 
+
+@media screen and (width < 600px) {
+    .settings{
+        height: fit-content;
+    }
+    .settingsButton{
+        font-size: 10px;
+    }
+    .socialLogo{
+        max-width: 20px;
+    }
+}
+
+
+@media screen and (height < 600px){
+    .welcome{
+        height: fit-content !important
+    }
+    .scurente{
+        height: fit-content !important
+    }
+}
+
 /* fine globali */
 
 
