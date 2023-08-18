@@ -208,6 +208,13 @@ h1{
     text-align: center;
 }
 
+@media screen and (width < 1400px) and (width > 600px){
+    .testo{
+        max-width: 60%;
+    }
+}
+
+
 @media screen and (width < 600px) {
     .title{
         font-size: 50px;
@@ -221,10 +228,19 @@ h1{
     .socialLogo{
         max-width: 20px;
     }
+    .testo{
+        max-width: 70%;
+    }
+    .hstoria{
+        font-size: large;
+    }
+    .storia{
+        font-size: medium;
+    }
 }
 
 
-@media screen and (height < 100px) and (height > 700){
+@media screen and (height < 1000px) and (height > 700){
     #map{
         height: 300px;
     }
@@ -234,10 +250,25 @@ h1{
     #map{
         height: 200px;
     }
+    .hstoria{
+        font-size: medium;
+    }
+    .storia{
+        font-size: small;
+    }
 }
 
 @media screen and (height < 500px) {
     #map{
         height: 0px;
+    }
+    .hstoria{
+        font-size: medium;
+    }
+    .storia{
+        font-size: small;
+    }
+    .testo{
+        max-width: 100%;
     }
 }

@@ -195,9 +195,31 @@ def prenotazioni():
         s.starttls()
         s.login("chiarulli14@gmail.com", "dajfosbvggcdemwu")
 
-        newPasswordSend = Template("Ciao $nome, la tua prenotazione in data $data alle ore $ora è stata inviata. Ti faremo sapere quando verrà accettata. Grazie mille per aver scelto noi!")
+        newPasswordSend = Template('''
+
+Gentile $nome,
+
+La prenotazione richiesta per il $data alle $ora presso il nostro ristorante Divina è attualmente in attesa di conferma.
+
+Dettagli della Prenotazione:
+- Data: $data
+- Ora: $ora
+- Numero di Persone: $posti
+- Nome del Cliente: $nome
+- Numero di Contatto: $telefono
+
+Stiamo lavorando per verificare la disponibilità e confermare la vostra prenotazione. 
+
+Appena avremo ulteriori informazioni sulla conferma della vostra prenotazione, vi contatteremo immediatamente. 
+
+Nel frattempo, vi invitiamo a rimanere in contatto con noi attraverso il numero 0805615713 per eventuali domande.
+
+Cordiali saluti,
+Divina Pizzeria Braceria
+
+        ''')
         
-        body = newPasswordSend.substitute(nome = name, data = data, ora = ora)
+        body = newPasswordSend.substitute(nome = name, data = data, ora = ora, posti = posti, telefono = telefono)
 
         senderEmail = "chiarulli14@gmail.com"
 
@@ -205,7 +227,7 @@ def prenotazioni():
         msg = MIMEMultipart()
         msg['From'] = senderEmail
         msg['To'] = email
-        msg['Subject'] = "Prenotazione inviata"
+        msg['Subject'] = "Ricezione Prenotazione Divina"
         msg.attach(MIMEText(body, 'plain'))
 
         s.send_message(msg)
@@ -534,15 +556,40 @@ def utentiPrenotati():
             data = userInfo[0]["data"]
             ora = userInfo[0]["ora"]
             email = userInfo[0]["email"]
+            numero = userInfo[0]["telefono"]
+            posti = userInfo[0]["posti"]
 
             if nuovoStatus == "incoming":
                 s = smtplib.SMTP(host="smtp.gmail.com", port=587)
                 s.starttls()
                 s.login("chiarulli14@gmail.com", "dajfosbvggcdemwu")
 
-                newPasswordSend = Template("Ciao $nome, la tua prenotazione in data $data alle ore $ora è stata confermata. Ti aspettiamo!")
+                newPasswordSend = Template('''
+
+
+Gentile $nome,
+
+Siamo lieti di confermare la vostra prenotazione per il $data alle $ora.
+
+Dettagli della Prenotazione:
+- Data: $data
+- Ora: $ora
+- Numero di Persone: $posti
+- Nome del Cliente: $nome
+- Numero di Contatto: $numero
+
+In caso di qualsiasi modifica o cancellazione della prenotazione, vi preghiamo di contattarci al numero 0805615713
+
+Se avete ulteriori richieste speciali o esigenze alimentari, vi preghiamo di comunicarcele in anticipo in modo da poterle soddisfare al meglio.
+
+Cordiali saluti,  
+Divina Pizzeria Braceria
+
+
+
+                ''')
                 
-                body = newPasswordSend.substitute(nome = nome, data = data, ora = ora)
+                body = newPasswordSend.substitute(nome = nome, data = data, ora = ora, numero = numero, posti = posti)
 
                 senderEmail = "chiarulli14@gmail.com"
 
@@ -550,7 +597,7 @@ def utentiPrenotati():
                 msg = MIMEMultipart()
                 msg['From'] = senderEmail
                 msg['To'] = email
-                msg['Subject'] = "Prenotazione confermata"
+                msg['Subject'] = "Conferma Prenotazione Divina"
                 msg.attach(MIMEText(body, 'plain'))
 
                 s.send_message(msg)
@@ -562,7 +609,23 @@ def utentiPrenotati():
                 s.starttls()
                 s.login("chiarulli14@gmail.com", "dajfosbvggcdemwu")
 
-                newPasswordSend = Template("Ciao $nome, la tua prenotazione in data $data alle ore $ora è stata rifiutata, Ci scusiamo per l'inconveniente. Prova a controllare gli orari di apertura o a chiamare il nostro numero 080.......")
+                newPasswordSend = Template('''
+
+Gentile $nome,
+
+Siamo spiacenti di informarvi che la prenotazione richiesta per il $data alle $ora presso il nostro ristorante Divina non è stata confermata.
+
+Ci scusiamo sinceramente per l'inconveniente
+
+Vi invitiamo a contattarci al numero 0805615713 per ulteriori informazioni o per discutere di alternative disponibili per una nuova prenotazione.
+
+Ci auguriamo di avere l'opportunità di accogliervi nel nostro ristorante in futuro e vi ringraziamo per la vostra comprensione.
+
+Cordiali saluti,
+Divina Pizzeria Braceria
+
+
+''')
                 
                 body = newPasswordSend.substitute(nome = nome, data = data, ora = ora)
 
