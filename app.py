@@ -830,4 +830,11 @@ def aggiungiOrario():
                 return apology("Assicurati di aver inserito l'orario nel formato coretto, hh:mm")
 
         
-            
+
+@app.route("/termini")
+def termini():
+    return render_template("termini.html")
+
+@app.route("/cookie")
+def cookie():
+    return render_template("cookie.html")
