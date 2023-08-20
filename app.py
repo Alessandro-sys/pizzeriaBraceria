@@ -106,14 +106,35 @@ def menu():
         else:
             vsx.append(vino)
 
+
+    # Selezione degli antipasti
+    antipasti = db.execute("SELECT * FROM antipasti")
+
+    antipastiSenzaHidden = []
+
+    for antipasto in antipasti:
+        if antipasto["status"] == "show":
+            antipastiSenzaHidden.append(antipasto)
+
+    asx = []
+    adx = []
+
+    for antipasto in antipastiSenzaHidden:
+        id = int(antipasto["id"])
+
+        if (id % 2) == 0:
+            adx.append(antipasto)
+        else:
+            asx.append(antipasto)
+
     
     if len(session) == 0:
         # if user is not logged, prints the menu in the not logged template
-        return render_template("menu.html", sx = sx, dx = dx, vsx = vsx, vdx = vdx, bevande = bevande, vini = vini)
+        return render_template("menu.html", sx = sx, dx = dx, vsx = vsx, vdx = vdx, asx = asx, adx = adx, bevande = bevandeSenzaHidden, vini = viniSenzaHidden, antipasti = antipastiSenzaHidden)
     
     elif len(session) != 0:
         # if user is logged, prints the menu in the logged template
-        return render_template("menuLogged.html", sx = sx, dx = dx, vsx = vsx, vdx = vdx, bevande = bevande, vini = vini)
+        return render_template("menuLogged.html", sx = sx, dx = dx, vsx = vsx, vdx = vdx, asx = asx, adx = adx, bevande = bevandeSenzaHidden, vini = viniSenzaHidden, antipasti = antipastiSenzaHidden)
 
 
 @app.route("/prenotazioni", methods=["GET", "POST"])
@@ -329,7 +350,7 @@ def register():
         
         # for each email in the database, if exists a mail same as the one inserted returns error
         for reemail in registered:
-            if email in reemail["email"]:
+            if email == reemail["email"]:
                 return apology("Email già in uso")
         
         # criptation of the password
@@ -419,6 +440,13 @@ def aggiungi():
                 else:
                     # if there's a description adds a new food with description
                     db.execute("INSERT INTO vini (food_name, price, description) VALUES (?, ?, ?)", nome, price, description)
+            elif section == "antipasti":
+                if description == None:
+                    # if there's no description adds a new food with no description
+                    db.execute("INSERT INTO antipasti (food_name, price) VALUES (?, ?)", nome, price)
+                else:
+                    # if there's a description adds a new food with description
+                    db.execute("INSERT INTO antipasti (food_name, price, description) VALUES (?, ?, ?)", nome, price, description)
 
             return redirect("/aggiungi")
     else:
@@ -451,8 +479,16 @@ def rimuovi():
                     menuViniSenzaHidden.append(vino)
 
 
+            menuAntipasti = db.execute("SELECT * FROM antipasti")
+
+            menuAntipastiSenzaHidden = []
+
+            for antipasto in menuAntipasti:
+                if antipasto["status"] == "show":
+                    menuAntipastiSenzaHidden.append(antipasto)
+
             # renders form with all foods
-            return render_template("rimuovi.html", menu = menuBevandeSenzaHidden, menuVini = menuViniSenzaHidden)
+            return render_template("rimuovi.html", menu = menuBevandeSenzaHidden, menuVini = menuViniSenzaHidden, menuAntipasti = menuAntipastiSenzaHidden)
         
         if request.method == "POST":
             status = "hidden"
@@ -470,6 +506,10 @@ def rimuovi():
 
             elif section == "vini":
                 db.execute("UPDATE vini SET status = ? WHERE food_name = ?", status, item)
+
+                return redirect("/rimuovi")
+            elif section == "antipasti":
+                db.execute("UPDATE antipasti SET status = ? WHERE food_name = ?", status, item)
 
                 return redirect("/rimuovi")
     else:
@@ -752,7 +792,16 @@ def ripristinaElementi():
                 if vino["status"] == "hidden":
                     viniRimossi.append(vino)
             
-            return render_template("ripristina.html", menu = bevandeRimosse, menuVini = viniRimossi)
+
+            antipasti = db.execute("SELECT * FROM antipasti")
+
+            antipastiRimossi = []
+
+            for antipasto in antipasti:
+                if antipasto["status"] == "hidden":
+                    antipastiRimossi.append(antipasto)
+
+            return render_template("ripristina.html", menu = bevandeRimosse, menuVini = viniRimossi, menuAntipasti = antipastiRimossi)
         
         elif request.method == "POST":
             status = "show"
@@ -767,6 +816,11 @@ def ripristinaElementi():
 
             elif section == "vini":
                 db.execute("UPDATE vini SET status = ? WHERE food_name = ?", status, item)
+
+                return redirect("/ripristinaElementi")
+            
+            elif section == "antipasti":
+                db.execute("UPDATE antipasti SET status = ? WHERE food_name = ?", status, item)
 
                 return redirect("/ripristinaElementi")
     else:

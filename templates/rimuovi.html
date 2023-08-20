@@ -25,7 +25,7 @@
                             <option selected disabled>Seleziona la sezione</option>
                             <option value="bevande">Bevande</option>
                             <option value="vini">Vini</option>
-                            
+                            <option value="antipasti">Antipasti</option>
                         </select>
                     </div>
 
@@ -42,6 +42,13 @@
                             <option value="{{ item.food_name }}">{{ item.food_name }}</option>
                             {% endfor %}
                         </select>
+                        <select name="item" class="formInput" id="antipasti" required>
+                            <option selected disabled>Seleziona un elemento da rimuovere</option>
+                            {% for item in menuAntipasti %}
+                            <option value="{{ item.food_name }}">{{ item.food_name }}</option>
+                            {% endfor %}
+                        </select>
+
                     </div>
                     <div class="form-field">
                         <button type="submit" class="bottoneSubmit">Rimuovi</button>

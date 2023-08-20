@@ -102,6 +102,41 @@
                 {% endfor %}
             </table>
         </div>
+
+
+        <br><br><br>
+        <div class="menuTitleDiv">
+            <h5 class="menuSection">ANTIPASTI</h5>
+        </div>
+        <div id="menuBevande" class="dual">
+            <table class="sx">
+                {% for antipasto in asx %}
+                <tr>
+                    <td class="menuItem">{{ antipasto.food_name }} <span class="subtitle">{{ antipasto.description }}</span></td>
+                    <td class="menuItem">€ {{ antipasto.price }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+            <table class="dx">
+                {% for antipasto in adx %}
+                <tr>
+                    <td class="menuItem">{{ antipasto.food_name }} <span class="subtitle">{{ antipasto.description }}</span></td>
+                    <td class="menuItem">€ {{ antipasto.price }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+
+        <div id="menuBevandePhone" class="single">
+            <table class="menuCentrale">
+                {% for antipasto in antipasti %}
+                <tr>
+                    <td class="menuItem">{{ antipasto.food_name }} <span class="subtitle">{{ antipasto.description }}</span></td>
+                    <td class="menuItem">€ {{ antipasto.price }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
     </div>
 
     <div class="settings">
