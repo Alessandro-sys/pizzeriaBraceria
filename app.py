@@ -109,11 +109,11 @@ def menu():
     
     if len(session) == 0:
         # if user is not logged, prints the menu in the not logged template
-        return render_template("menu.html", sx = sx, dx = dx, vsx = vsx, vdx = vdx)
+        return render_template("menu.html", sx = sx, dx = dx, vsx = vsx, vdx = vdx, bevande = bevande, vini = vini)
     
     elif len(session) != 0:
         # if user is logged, prints the menu in the logged template
-        return render_template("menuLogged.html", sx = sx, dx = dx, vsx = vsx, vdx = vdx)
+        return render_template("menuLogged.html", sx = sx, dx = dx, vsx = vsx, vdx = vdx, bevande = bevande, vini = vini)
 
 
 @app.route("/prenotazioni", methods=["GET", "POST"])

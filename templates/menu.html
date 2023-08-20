@@ -36,7 +36,7 @@
             <div class="menuTitleDiv">
                 <h5 class="menuSection">BEVANDE</h5>
             </div>
-            <div class="menuBevande">
+            <div id="menuBevande" class="dual">
                 <table class="sx">
                     {% for bevanda in sx %}
                     <tr>
@@ -54,13 +54,26 @@
                     {% endfor %}
                 </table>
             </div>
+
+            <div id="menuBevandePhone" class="single">
+                <table class="sx">
+                    {% for bevanda in bevande %}
+                    <tr>
+                        <td class="menuItem">{{ bevanda.food_name }} <span class="subtitle">{{ bevanda.description }}</span></td>
+                        <td class="menuItem">€ {{ bevanda.price }}</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+                
+            </div>
+
             
         </div>
         <br><br><br>
         <div class="menuTitleDiv">
             <h5 class="menuSection">VINI</h5>
         </div>
-        <div class="menuBevande">
+        <div id="menuBevande" class="dual">
             <table class="sx">
                 {% for vino in vsx %}
                 <tr>
@@ -71,6 +84,17 @@
             </table>
             <table class="dx">
                 {% for vino in vdx %}
+                <tr>
+                    <td class="menuItem">{{ vino.food_name }} <span class="subtitle">{{ vino.description }}</span></td>
+                    <td class="menuItem">€ {{ vino.price }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+
+        <div id="menuBevandePhone" class="single">
+            <table class="menuCentrale">
+                {% for vino in vini %}
                 <tr>
                     <td class="menuItem">{{ vino.food_name }} <span class="subtitle">{{ vino.description }}</span></td>
                     <td class="menuItem">€ {{ vino.price }}</td>

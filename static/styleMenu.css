@@ -146,13 +146,22 @@ h1{
     vertical-align: baseline;
 }
 
-.menuBevande{
+#menuBevande{
     width: 100%;
     display: flex;
     justify-content: center;
     gap: 200px;
 }
 
+#menuBevandePhone{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.single{
+    display: none !important;
+}
 
 .menuDiv{
     height: fit-content;
@@ -196,3 +205,45 @@ table td{
     
 }
 
+
+@media screen and (width < 1200px) {
+    .menuSection{
+        font-size: 30px !important;
+    }
+    .menuItem{
+        font-size: 15px !important;
+        line-height: 50px !important;
+    }
+    .dual{
+        display: none !important;
+    }
+    .single{
+        width: 100% !important;
+        display: flex !important;
+        justify-content: center !important;
+    }
+}
+
+
+
+@media screen and (width < 600px) {
+    .settings{
+        height: fit-content;
+    }
+    .settingsButton{
+        font-size: 10px;
+    }
+    .socialLogo{
+        max-width: 20px;
+    }
+}
+
+
+@media screen and (height < 600px){
+    .formPrenotazione{
+        height: fit-content !important
+    }
+    .scurente{
+        height: fit-content !important
+    }
+}
