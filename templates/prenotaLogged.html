@@ -10,6 +10,10 @@
     <link rel="stylesheet" href="../static/stylePrenota.css">
 {% endblock %}
 
+{% block script %}
+    <script src="../static/scriptData.js" defer></script>
+{% endblock %}
+
 {% block body %}
 
     <div class="formPrenotazione">
@@ -44,7 +48,7 @@
                     </div>
                     
                     <div class="form-field">
-                        <input type="date" name="date" placeholder="Data" id="dataInserimento" required class="formDate">
+                        <input type="date" name="date" id="data" required class="formDate" >
                     </div>
                     <div class="form-field">
                         <input type="number" name="posti" placeholder="Persone" required class="formInput">
