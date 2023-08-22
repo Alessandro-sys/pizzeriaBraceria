@@ -10,10 +10,26 @@ cibi = []
 
 for categoria in categorie:
     cibiDatabase = db.execute("SELECT * FROM ?", categoria["categoria"])
-    cibi.append(cibiDatabase)
+
+    csx = []
+    cdx = []
+
+    for cibo in cibiDatabase:
+        if (cibo["id"] % 2) == 0:
+            csx.append(cibo)
+        else:
+            cdx.append(cibo)
+
+    doppioCibo = []
+
+    doppioCibo.append(csx)
+    doppioCibo.append(cdx)
+
+    cibi.append(doppioCibo)
 
 
 for categoria in cibi:
     print("CATEGORIA BREAK")
-    for cibo in categoria:
-        print(cibo)
+    for singolaCategoria in categoria:
+        for cibo in singolaCategoria:
+            print(cibo)

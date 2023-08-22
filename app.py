@@ -66,78 +66,39 @@ def pages():
 
 @app.route("/menu")
 def menu():
-    # select all drinks from "bevande" database
-    bevande = db.execute("SELECT * FROM bevande")
-    
-    bevandeSenzaHidden = []
-    for bevanda in bevande:
-        if bevanda["status"] == "show":
-            bevandeSenzaHidden.append(bevanda)
 
+    categorie = db.execute("SELECT * FROM categorie")
 
-    # creates two lists, left and right, to store the items in the menu
-    sx = []
-    dx = []
+    cibi = []
 
-    # splits the drinks in two columns, style choice
-    for bevanda in bevandeSenzaHidden:
-        id = int(bevanda["id"])
-        
-        if (id % 2) == 0:
-            dx.append(bevanda)
-        else:
-            sx.append(bevanda)
+    for categoria in categorie:
+        cibiDatabase = db.execute("SELECT * FROM ?", categoria["categoria"])
 
+        csx = []
+        cdx = []
 
-    # Sezione dei vini
-    vini = db.execute("SELECT * FROM vini")
+        for cibo in cibiDatabase:
+            if (cibo["id"] % 2) == 0:
+                csx.append(cibo)
+            else:
+                cdx.append(cibo)
 
-    viniSenzaHidden = []
+        doppioCibo = []
 
-    for vino in vini:
-        if vino["status"] == "show":
-            viniSenzaHidden.append(vino)
+        doppioCibo.append(csx)
+        doppioCibo.append(cdx)
 
-    vsx = []
-    vdx = []
+        cibi.append(doppioCibo)
 
-    for vino in viniSenzaHidden:
-        id = int(vino["id"])
-
-        if (id % 2) == 0:
-            vdx.append(vino)
-        else:
-            vsx.append(vino)
-
-
-    # Selezione degli antipasti
-    antipasti = db.execute("SELECT * FROM antipasti")
-
-    antipastiSenzaHidden = []
-
-    for antipasto in antipasti:
-        if antipasto["status"] == "show":
-            antipastiSenzaHidden.append(antipasto)
-
-    asx = []
-    adx = []
-
-    for antipasto in antipastiSenzaHidden:
-        id = int(antipasto["id"])
-
-        if (id % 2) == 0:
-            adx.append(antipasto)
-        else:
-            asx.append(antipasto)
 
     
     if len(session) == 0:
         # if user is not logged, prints the menu in the not logged template
-        return render_template("menu.html", sx = sx, dx = dx, vsx = vsx, vdx = vdx, asx = asx, adx = adx, bevande = bevandeSenzaHidden, vini = viniSenzaHidden, antipasti = antipastiSenzaHidden)
+        return render_template("menu.html", cibi = cibi)
     
     elif len(session) != 0:
         # if user is logged, prints the menu in the logged template
-        return render_template("menuLogged.html", sx = sx, dx = dx, vsx = vsx, vdx = vdx, asx = asx, adx = adx, bevande = bevandeSenzaHidden, vini = viniSenzaHidden, antipasti = antipastiSenzaHidden)
+        return render_template("menuLogged.html", cibi = cibi)
 
 
 @app.route("/prenotazioni", methods=["GET", "POST"])
