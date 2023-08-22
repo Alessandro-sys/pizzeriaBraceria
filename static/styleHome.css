@@ -50,6 +50,13 @@ h1{
     background-size: cover;
 }
 
+.welcomeVideo{
+    height: 100vh;
+    width: 100%;
+    background-image: url(ultimissimo\ spot\ telenorba.mov);
+    background-size: cover;
+}
+
 .scurente{
     height: 100vh;
     background-color: rgba(0,0,0,.8);
@@ -57,7 +64,7 @@ h1{
 
 .gradiente{
     height: 100vh;
-    background-image: linear-gradient(black, rgba(0,0,0,.8), rgba(0,0,0,.3));
+    background-image: linear-gradient(black, rgba(0,0,0,.6), rgba(0,0,0,.3));
 }
 
 .titleDiv{
