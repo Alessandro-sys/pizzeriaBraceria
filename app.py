@@ -49,7 +49,7 @@ def index():
         return render_template("home.html")
     
     elif len(session) != 0:
-        if session["user_id"] == 1 or session["user_id"] == 5:
+        if session["user_id"] == 1 or session["user_id"] == 5 or session["user_id"] == 8:
             return render_template("homeAdmin.html")
         else:
             return render_template("homeLogged.html")
@@ -207,6 +207,9 @@ def prenotazioni():
         if not posti:
             return apology("assicurati di aver inserito il numero di persone")
 
+        dataConvertita = datetime.strptime(data, "%Y-%m-%d")
+
+        data = dataConvertita.strftime("%d-%m-%Y")
         
 
         # inserts the booking into the database
@@ -393,7 +396,7 @@ def register():
 @login_required
 def admin():
     # checks if the user trying to access the admin page is user 1 or 2 (the only admins of the page)
-    if session["user_id"] == 1 or session["user_id"] == 5:
+    if session["user_id"] == 1 or session["user_id"] == 5 or session["user_id"] == 8:
         return render_template("admin.html")
     
     else:
@@ -403,7 +406,7 @@ def admin():
 @app.route("/aggiungi", methods=["GET", "POST"])
 @login_required
 def aggiungi():
-    if session["user_id"] == 1 or session["user_id"] == 5:
+    if session["user_id"] == 1 or session["user_id"] == 5 or session["user_id"] == 8:
 
         if request.method == "GET":
             # renders template for adding food to the menu
@@ -455,7 +458,7 @@ def aggiungi():
 @app.route("/rimuovi", methods=["GET", "POST"])
 @login_required
 def rimuovi():
-    if session["user_id"] == 1 or session["user_id"] == 5:
+    if session["user_id"] == 1 or session["user_id"] == 5 or session["user_id"] == 8:
         if request.method == "GET":
             # selects every food from the menu
             menuBevande = db.execute("SELECT * FROM bevande")
@@ -521,7 +524,7 @@ def rimuovi():
 @app.route("/utentiPrenotati", methods=["GET", "POST"])
 @login_required
 def utentiPrenotati():
-    if session["user_id"] == 1 or session["user_id"] == 5:
+    if session["user_id"] == 1 or session["user_id"] == 5 or session["user_id"] == 8:
         if request.method == "GET":
             # access the global variable past_order, it containst the last order of the bookings selected
             global past_order
@@ -533,7 +536,7 @@ def utentiPrenotati():
             prenotati = dbUsers.execute("SELECT * FROM prenotazioni")
             
             # sorts the lists of the booked users from time
-            lista_dizionari_ordinata = sorted(prenotati, key=lambda x: (datetime.strptime(x["data"], "%Y-%m-%d"), datetime.strptime(x["ora"], "%H:%M")) , reverse=True)
+            lista_dizionari_ordinata = sorted(prenotati, key=lambda x: (datetime.strptime(x["data"], "%d-%m-%Y"), datetime.strptime(x["ora"], "%H:%M")) , reverse=True)
 
             # initialise three lists, one containing today orders, one containing future orders and one containing past orders
             today = []
@@ -542,7 +545,7 @@ def utentiPrenotati():
 
             # adds in every list the correct booking
             for dizionario in lista_dizionari_ordinata:
-                data_dizionario = datetime.strptime(dizionario["data"], "%Y-%m-%d").date()
+                data_dizionario = datetime.strptime(dizionario["data"], "%d-%m-%Y").date()
 
                 if data_dizionario == data_odierna:
                     today.append(dizionario)
@@ -773,7 +776,7 @@ def newPasswordFun():
 @app.route("/ripristinaElementi", methods=["GET", "POST"])
 @login_required
 def ripristinaElementi():
-    if session["user_id"] == 1 or session["user_id"] == 5:
+    if session["user_id"] == 1 or session["user_id"] == 5 or session["user_id"] == 8:
 
         if request.method == "GET":
             bevande = db.execute("SELECT * FROM bevande")
@@ -831,7 +834,7 @@ def ripristinaElementi():
 @app.route("/orari", methods=["GET","POST"])
 @login_required
 def orari():
-    if session["user_id"] == 1 or session["user_id"] == 5:
+    if session["user_id"] == 1 or session["user_id"] == 5 or session["user_id"] == 8:
         if request.method == "GET":
             orari = db.execute("SELECT * FROM orari_disponibili")
 
@@ -859,7 +862,7 @@ def orari():
 @app.route("/aggiungiOrario", methods=["GET","POST"])
 @login_required
 def aggiungiOrario():
-    if session["user_id"] == 1 or session["user_id"] == 5:
+    if session["user_id"] == 1 or session["user_id"] == 5 or session["user_id"] == 8:
         if request.method == "GET":
             return redirect("/orari")
         elif request.method == "POST":
