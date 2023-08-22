@@ -33,6 +33,9 @@ app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
 
+
+
+
 @app.after_request
 def after_request(response):
     """Ensure responses aren't cached"""
@@ -40,7 +43,6 @@ def after_request(response):
     response.headers["Expires"] = 0
     response.headers["Pragma"] = "no-cache"
     return response
-
 
 @app.route("/")
 def index():
@@ -261,7 +263,7 @@ Divina Pizzeria Braceria
         ## DA SISTEMARE DOPO. VA MODIFICATO LO STATUS SOLO ALLA DATA SELEZIONATA
         # db.execute("UPDATE orari_disponibili SET status = 'ndisp' WHERE orario = ?", ora)
         # user gets redirected to the homepage
-        return redirect("/")
+        return redirect("/prenotazioneInviata")
     
 
 @app.route("/logout")
@@ -389,7 +391,7 @@ def register():
         s.quit()
         del msg
 
-        return redirect("/")
+        return redirect("/registrazioneAvvenuta")
     
 
 @app.route("/admin")
@@ -895,3 +897,14 @@ def termini():
 @app.route("/cookie")
 def cookie():
     return render_template("cookie.html")
+
+
+
+@app.route("/registrazioneAvvenuta")
+def registrazioneAvvenuta():
+    return render_template("registrazioneAvvenuta.html")
+
+@app.route("/prenotazioneInviata")
+def prenotazioneInviata():
+    return render_template("prenotazioneInviata.html")
+
