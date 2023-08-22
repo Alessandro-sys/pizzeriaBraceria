@@ -792,32 +792,28 @@ def ripristinaElementi():
     if session["user_id"] == 1 or session["user_id"] == 5 or session["user_id"] == 8:
 
         if request.method == "GET":
-            bevande = db.execute("SELECT * FROM bevande")
-
-            bevandeRimosse = []
-
-            for bevanda in bevande:
-                if bevanda["status"] == "hidden":
-                    bevandeRimosse.append(bevanda)
             
-            vini = db.execute("SELECT * FROM vini")
+            categorie = db.execute("SELECT * FROM categorie")
 
-            viniRimossi = []
+            cibi = []
 
-            for vino in vini:
-                if vino["status"] == "hidden":
-                    viniRimossi.append(vino)
-            
+            for categoria in categorie:
+                nomeCategoria = categoria["categoria"]
+                cibiDatabase = db.execute("SELECT * FROM ?", categoria["categoria"])
 
-            antipasti = db.execute("SELECT * FROM antipasti")
+                cibiDatabaseSenzaNascosti = []
 
-            antipastiRimossi = []
+                for cibo in cibiDatabase:
+                    if cibo["status"] == "hidden":
+                        cibiDatabaseSenzaNascosti.append(cibo)
 
-            for antipasto in antipasti:
-                if antipasto["status"] == "hidden":
-                    antipastiRimossi.append(antipasto)
 
-            return render_template("ripristina.html", menu = bevandeRimosse, menuVini = viniRimossi, menuAntipasti = antipastiRimossi)
+                dizionario = {}
+                dizionario["nome_categoria"] = nomeCategoria
+                dizionario["contenuto_categoria"] = cibiDatabaseSenzaNascosti
+                cibi.append(dizionario)
+
+            return render_template("ripristina.html", cibi = cibi)
         
         elif request.method == "POST":
             status = "show"
