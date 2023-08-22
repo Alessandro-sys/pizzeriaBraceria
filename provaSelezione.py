@@ -6,10 +6,11 @@ db = SQL("sqlite:///database.db")
 
 categorie = db.execute("SELECT * FROM categorie")
 
-cibi = []
+cibi = {}
 
 for categoria in categorie:
-    cibiDatabase = db.execute("SELECT * FROM ?", categoria["categoria"])
+    nomeCategoria = categoria["categoria"]
+    cibiDatabase = db.execute("SELECT * FROM ?", nomeCategoria)
 
     csx = []
     cdx = []
@@ -25,11 +26,8 @@ for categoria in categorie:
     doppioCibo.append(csx)
     doppioCibo.append(cdx)
 
-    cibi.append(doppioCibo)
+    cibi[nomeCategoria] = doppioCibo
 
+    
 
-for categoria in cibi:
-    print("CATEGORIA BREAK")
-    for singolaCategoria in categoria:
-        for cibo in singolaCategoria:
-            print(cibo)
+print(cibi)

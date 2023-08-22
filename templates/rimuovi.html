@@ -23,32 +23,21 @@
                     <div class="form-field">
                         <select name="section" class="formInput">
                             <option selected disabled>Seleziona la sezione</option>
-                            <option value="bevande">Bevande</option>
-                            <option value="vini">Vini</option>
-                            <option value="antipasti">Antipasti</option>
+                            {% for categoria in cibi %}
+                                <option value="{{ categoria.nome_categoria }}">{{ categoria.nome_categoria }}</option>
+                            {% endfor %}
                         </select>
                     </div>
 
                     <div class="form-field">
-                        <select name="item" class="formInput" id="bevande" required>
-                            <option selected disabled>Seleziona un elemento da rimuovere</option>
-                            {% for item in menu %}
-                            <option value="{{ item.food_name }}">{{ item.food_name }}</option>
-                            {% endfor %}
-                        </select>
-                        <select name="item" class="formInput" id="vini" required>
-                            <option selected disabled>Seleziona un elemento da rimuovere</option>
-                            {% for item in menuVini %}
-                            <option value="{{ item.food_name }}">{{ item.food_name }}</option>
-                            {% endfor %}
-                        </select>
-                        <select name="item" class="formInput" id="antipasti" required>
-                            <option selected disabled>Seleziona un elemento da rimuovere</option>
-                            {% for item in menuAntipasti %}
-                            <option value="{{ item.food_name }}">{{ item.food_name }}</option>
-                            {% endfor %}
-                        </select>
-
+                        {% for categoria in cibi %}
+                            <select name="item" class="formInput" id="{{ categoria.nome_categoria }}" required>
+                                <option selected disabled>Seleziona un elemento da rimuovere</option>
+                                {% for cibo in categoria.contenuto_categoria %}
+                                    <option value="{{ cibo.food_name }}">{{ cibo.food_name }}</option>
+                                {% endfor %}
+                            </select>
+                        {% endfor %}
                     </div>
                     <div class="form-field">
                         <button type="submit" class="bottoneSubmit">Rimuovi</button>

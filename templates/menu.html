@@ -35,10 +35,10 @@
         <div>
             {% for categoria in cibi %}
                 <div class="menuTitleDiv">
-                    <h5 class="menuSection">DIV</h5>
+                    <h5 class="menuSection">{{ categoria.nome_categoria }}</h5>
                 </div>
                 <div id="menuBevande" class="dual">
-                    {% for singolaCategoria in categoria %}
+                    {% for singolaCategoria in categoria.contenuto_categoria %}
                     <table class="sx">
                         {% for cibo in singolaCategoria %}
                         <tr>

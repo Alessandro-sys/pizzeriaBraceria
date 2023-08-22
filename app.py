@@ -72,12 +72,19 @@ def menu():
     cibi = []
 
     for categoria in categorie:
+        nomeCategoria = categoria["categoria"]
         cibiDatabase = db.execute("SELECT * FROM ?", categoria["categoria"])
 
         csx = []
         cdx = []
 
+        cibiDatabaseSenzaNascosti = []
+
         for cibo in cibiDatabase:
+            if cibo["status"] == "show":
+                cibiDatabaseSenzaNascosti.append(cibo)
+        
+        for cibo in cibiDatabaseSenzaNascosti:
             if (cibo["id"] % 2) == 0:
                 csx.append(cibo)
             else:
@@ -88,7 +95,10 @@ def menu():
         doppioCibo.append(csx)
         doppioCibo.append(cdx)
 
-        cibi.append(doppioCibo)
+        dizionario = {}
+        dizionario["nome_categoria"] = nomeCategoria.upper()
+        dizionario["contenuto_categoria"] = doppioCibo
+        cibi.append(dizionario)
 
 
     
@@ -473,37 +483,28 @@ def rimuovi():
     if session["user_id"] == 1 or session["user_id"] == 5 or session["user_id"] == 8:
         if request.method == "GET":
             # selects every food from the menu
-            menuBevande = db.execute("SELECT * FROM bevande")
+            categorie = db.execute("SELECT * FROM categorie")
 
-            # creates a new list containing all the showed drinks
-            menuBevandeSenzaHidden = []
+            cibi = []
 
-            # for each drink adds to the previous list only the drinks with the tag "show"
-            for bevanda in menuBevande:
-                if bevanda["status"] == "show":
-                    menuBevandeSenzaHidden.append(bevanda)
-            
+            for categoria in categorie:
+                nomeCategoria = categoria["categoria"]
+                cibiDatabase = db.execute("SELECT * FROM ?", categoria["categoria"])
 
-            # Does the same thing with wines
-            menuVini = db.execute("SELECT * FROM vini")
+                cibiDatabaseSenzaNascosti = []
 
-            menuViniSenzaHidden = []
-
-            for vino in menuVini:
-                if vino["status"] == "show":
-                    menuViniSenzaHidden.append(vino)
+                for cibo in cibiDatabase:
+                    if cibo["status"] == "show":
+                        cibiDatabaseSenzaNascosti.append(cibo)
 
 
-            menuAntipasti = db.execute("SELECT * FROM antipasti")
-
-            menuAntipastiSenzaHidden = []
-
-            for antipasto in menuAntipasti:
-                if antipasto["status"] == "show":
-                    menuAntipastiSenzaHidden.append(antipasto)
+                dizionario = {}
+                dizionario["nome_categoria"] = nomeCategoria
+                dizionario["contenuto_categoria"] = cibiDatabaseSenzaNascosti
+                cibi.append(dizionario)
 
             # renders form with all foods
-            return render_template("rimuovi.html", menu = menuBevandeSenzaHidden, menuVini = menuViniSenzaHidden, menuAntipasti = menuAntipastiSenzaHidden)
+            return render_template("rimuovi.html", cibi = cibi)
         
         if request.method == "POST":
             status = "hidden"
