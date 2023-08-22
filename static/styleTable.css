@@ -23,7 +23,7 @@ table{
 }
 
 table thead{
-    background-color: #2ec4b6;
+    background-color: #ffb800;
     
 }
 
@@ -91,7 +91,7 @@ table td{
     cursor: pointer;
     margin: 0 auto;
     text-align: center;
-    background-color: yellow;
+    background-color: green;
     font-family: 'REM', sans-serif;
     color: black;
     border-radius: 4px;
@@ -106,7 +106,7 @@ table td{
     cursor: pointer;
     margin: 0 auto;
     text-align: center;
-    background-color: green;
+    background-color: purple;
     font-family: 'REM', sans-serif;
     color: black;
     border-radius: 4px;
@@ -136,7 +136,7 @@ table td{
     cursor: pointer;
     margin: 0 auto;
     text-align: center;
-    background-color: grey;
+    background-color: yellow;
     font-family: 'REM', sans-serif;
     color: black;
     border-radius: 4px;

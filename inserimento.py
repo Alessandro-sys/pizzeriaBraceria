@@ -15,9 +15,11 @@
 from cs50 import SQL
 
 db = SQL("sqlite:///database.db")
+dbUsers = SQL("sqlite:///users.db")
 
-antipasti = db.execute("SELECT * FROM antipasti")
 
-for element in antipasti:
-    if element["description"] == None:
-        db.execute("UPDATE antipasti SET description = '' WHERE food_name = ?", element["food_name"])
+orari = db.execute("SELECT * FROM orari_disponibili")
+
+for orario in orari:
+    orarioDaInserire = orario["orario"]
+    dbUsers.execute("INSERT INTO orari_disponibili (orario) VALUES (?)", str(orarioDaInserire))

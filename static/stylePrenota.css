@@ -289,3 +289,13 @@ h1{
     color: rgb(117,117,117);
     text-indent: 40px;
 }
+
+
+
+.container {
+    padding-top: 1%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 3rem; /* Aggiunge uno spazio tra le card */
+}

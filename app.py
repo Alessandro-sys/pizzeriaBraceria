@@ -11,6 +11,7 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from string import Template
 import random
+import time
 
 
 from helpers import apology, login_required
@@ -258,6 +259,54 @@ Divina Pizzeria Braceria
 
         s.send_message(msg)
         s.quit()
+        del msg
+
+
+        # email al gestore
+        s = smtplib.SMTP(host="smtp.gmail.com", port=587)
+        s.starttls()
+        s.login("chiarulli14@gmail.com", "dajfosbvggcdemwu")
+
+        newPasswordSend = Template('''
+
+Per favore verifica le disponibilità per la data richiesta e confermala/rifiutala
+
+                                   
+Dettagli della Prenotazione:
+- Data: $data
+- Ora: $ora
+- Numero di Persone: $posti
+- Nome del Cliente: $nome
+- Numero di Contatto: $telefono
+                                   
+gestisci la prenotazione dal pannello di controllo
+
+
+        ''')
+        
+        body = newPasswordSend.substitute(nome = name, data = data, ora = ora, posti = posti, telefono = telefono)
+
+        senderEmail = "chiarulli14@gmail.com"
+
+
+        msg = MIMEMultipart()
+        msg['From'] = senderEmail
+        
+        utenti = dbUsers.execute("SELECT * FROM users")
+        admin = []
+        for utente in utenti:
+            if utente["id"] == 1 or utente["id"] == 5:
+                admin.append(utente["email"])
+
+        emailAdminList = ', '.join(admin)
+        
+        msg['To'] = emailAdminList
+        msg['Subject'] = "Nuova richiesta di prenotazione"
+        msg.attach(MIMEText(body, 'plain'))
+
+        s.send_message(msg)
+        s.quit()
+
         del msg
 
         ## DA SISTEMARE DOPO. VA MODIFICATO LO STATUS SOLO ALLA DATA SELEZIONATA
