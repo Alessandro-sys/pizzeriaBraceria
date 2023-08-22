@@ -144,7 +144,7 @@ def menu():
 def prenotazioni():
     if request.method == "GET":
         # selects every time avaliable for booking
-        orari = db.execute("SELECT * FROM orari_disponibili")
+        orari = dbUsers.execute("SELECT * FROM orari_disponibili")
 
         orariEffettivi = []
 
@@ -887,7 +887,7 @@ def ripristinaElementi():
 def orari():
     if session["user_id"] == 1 or session["user_id"] == 5 or session["user_id"] == 8:
         if request.method == "GET":
-            orari = db.execute("SELECT * FROM orari_disponibili")
+            orari = dbUsers.execute("SELECT * FROM orari_disponibili")
 
             orariOrdinati = sorted(orari, key=lambda x: datetime.strptime(x["orario"], '%H:%M'))
 
@@ -902,7 +902,7 @@ def orari():
             if not nuovoStatus:
                 return apology("Assdicurati di aver completato tutti i campi")
             
-            db.execute("UPDATE orari_disponibili SET status = ? WHERE id = ?", nuovoStatus, idOrario)
+            dbUsers.execute("UPDATE orari_disponibili SET status = ? WHERE id = ?", nuovoStatus, idOrario)
 
             return redirect("/orari")
 
@@ -932,7 +932,7 @@ def aggiungiOrario():
 
             
             if verifica_formato_ore(nuovoOrario):
-                db.execute("INSERT INTO orari_disponibili (orario) VALUES (?)", nuovoOrario)
+                dbUsers.execute("INSERT INTO orari_disponibili (orario) VALUES (?)", nuovoOrario)
                 return redirect("orari")
             else:
                 return apology("Assicurati di aver inserito l'orario nel formato coretto, hh:mm")
