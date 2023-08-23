@@ -45,6 +45,7 @@
             <div class="card-body">
                 <h5 class="card-title">{{ cibo.food_name }}</h5>
                 <p>{{ cibo.description }}</p>
+                <p>€{{ cibo.price }}</p>
                 {% if cibo.status == 'show' %}
                     <form action="/rimuovi" method="post">
                         <input type="hidden" name="nomeCategoria" value="{{ categoria }}">

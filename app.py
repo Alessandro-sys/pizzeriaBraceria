@@ -468,6 +468,7 @@ def aggiungi():
 @login_required
 def rimuovi():
     if session["user_id"] == 1 or session["user_id"] == 5 or session["user_id"] == 8:
+        
         if request.method == "POST":
             status = "hidden"
             categoria = request.form.get("nomeCategoria")
@@ -919,3 +920,19 @@ def modifica():
     
 
 
+@app.route("/aggiungiCategoria", methods=["GET","POST"])
+@login_required
+def aggiungiCategoria():
+    if request.method == "GET":
+        return render_template("aggiungiCategoria.html")
+    
+    elif request.method == "POST":
+        nomeCategoria = request.form.get("nome")
+
+        if not nomeCategoria:
+            return apology("Assicurati di aver inserito il nome della categoria")
+        
+        db.execute("INSERT INTO categorie (categoria) VALUES (?)", nomeCategoria)
+        db.execute("CREATE TABLE ?(id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, food_name TEXT NOT NULL, status TEXT NOT NULL DEFAULT 'show', price TEXT NOT NULL, description TEXT NOT NULL DEFAULT '')", nomeCategoria)
+
+        return redirect("gestioneCategorie")
