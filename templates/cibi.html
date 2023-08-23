@@ -13,8 +13,9 @@
 
     <div class="form-container">
         <div class="form-contained">
-            <form action="#" method="get">
+            <form action="/aggiungi" method="get">
                 <div class="button-container">
+                    <input type="hidden" name="categoria" value="{{ categoria }}">
                     <button type="submit" class="bottoneCambioCategoria">Aggiungi Cibo</button>
                 </div>
             </form>
@@ -59,7 +60,8 @@
                     </form>
                 {% endif %}
                 
-                <form action="#">
+                <form action="/modifica">
+                    <input type="hidden" name="nomeCategoria" value="{{ categoria }}">
                     <input type="hidden" name="nomeCibo" value="{{cibo.food_name}}">
                     <button type="submit" class="btn btn-primary" style="background-color: #ffb800 !important; border: #ffb800 !important; margin: 2px;">Modifica</button>
                 </form>

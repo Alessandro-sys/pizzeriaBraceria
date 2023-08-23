@@ -1,0 +1,52 @@
+{% extends "layout.html" %}
+
+
+{% block title %}
+    <title>ADMIN - GESTIONE CATEGORIE</title>
+{% endblock %}
+
+{% block style %}
+    <link rel="stylesheet" href="../static/stylePrenota.css">
+{% endblock %}
+
+{% block body %}
+
+    <div class="form-container">
+        <div class="form-contained">
+            <form action="/gestioneCategorie">
+                <div class="button-container">
+                    <button type="submit" class="bottoneCambioCategoria">Torna alle categorie</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="form-contained">
+            <form action="/">
+                <div class="button-container">
+                    <button type="submit" class="bottoneCambioCategoria">Torna alla Home</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="formInserimentoCibo">
+        <form action="/modifica" method="post">
+            <input type="hidden" name="categoria" value="{{categoria}}">
+            <input type="hidden" name="oldName" value="{{nome}}">
+            <div class="inputAreas">
+                <input type="text" placeholder="Nome" name="nome" required autocomplete="off" class="formInputNuovo" style="margin-bottom: 50px;" value="{{nome}}">
+                <input type="text" placeholder="Prezzo" name="prezzo" required autocomplete="off" class="formInputNuovo" style="margin-bottom: 50px;" value="{{prezzo}}">
+            </div>
+            <div class="textArea">
+                <textarea name="description" cols="50" rows="10" placeholder="Inserisci una descrizione (facoltativo)" class="franco">{{descrizione}}</textarea>
+            </div>
+            <div class="buttonArea">
+                <button type="submit" class="bottoneCapicollo">Modifica</button>
+            </div>
+            
+        </form>
+    </div>
+    
+
+
+{% endblock %}

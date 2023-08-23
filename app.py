@@ -432,48 +432,35 @@ def aggiungi():
 
         if request.method == "GET":
             # renders template for adding food to the menu
-            return render_template("aggiungi.html")
+            categoria = request.args.get("categoria")
+            return render_template("aggiungiCibo.html", categoria = categoria)
         
         elif request.method == "POST":
 
-            section = request.form.get("section")
+            categoria = request.form.get("categoria")
 
             # takes the name of the food from the form
-            nome = request.form.get("food_name")
+            nome = request.form.get("nome")
 
             # takes the price of the food from the menu (format x,xx (2 decimals possibly))
-            price = request.form.get("price")
+            price = request.form.get("prezzo")
 
             # takes description of the food from the form
-            description = request.form.get("descrizione")
+            description = request.form.get("description")
 
             # if name or price is not inserted returns error
             if (not nome) or (not price):
                 return apology("chigghione inserisci tutti i dati")
             
-            if section == "bevande":
-                if description == None:
-                    # if there's no description adds a new food with no description
-                    db.execute("INSERT INTO bevande (food_name, price) VALUES (?, ?)", nome, price)
-                else:
-                    # if there's a description adds a new food with description
-                    db.execute("INSERT INTO bevande (food_name, price, description) VALUES (?, ?, ?)", nome, price, description)
-            elif section == "vini":
-                if description == None:
-                    # if there's no description adds a new food with no description
-                    db.execute("INSERT INTO vini (food_name, price) VALUES (?, ?)", nome, price)
-                else:
-                    # if there's a description adds a new food with description
-                    db.execute("INSERT INTO vini (food_name, price, description) VALUES (?, ?, ?)", nome, price, description)
-            elif section == "antipasti":
-                if description == None:
-                    # if there's no description adds a new food with no description
-                    db.execute("INSERT INTO antipasti (food_name, price) VALUES (?, ?)", nome, price)
-                else:
-                    # if there's a description adds a new food with description
-                    db.execute("INSERT INTO antipasti (food_name, price, description) VALUES (?, ?, ?)", nome, price, description)
 
-            return redirect("/aggiungi")
+            if description == None:
+                # if there's no description adds a new food with no description
+                db.execute("INSERT INTO ? (food_name, price) VALUES (?, ?)", categoria, nome, price)
+            else:
+                # if there's a description adds a new food with description
+                db.execute("INSERT INTO ? (food_name, price, description) VALUES (?, ?, ?)", categoria, nome, price, description)
+
+            return redirect(url_for("gestioneCiboCategoria", categoria=categoria))
     else:
         return apology("Non sei autorizzato")
 
@@ -481,31 +468,6 @@ def aggiungi():
 @login_required
 def rimuovi():
     if session["user_id"] == 1 or session["user_id"] == 5 or session["user_id"] == 8:
-        if request.method == "GET":
-            # # selects every food from the menu
-            # categorie = db.execute("SELECT * FROM categorie")
-
-            # cibi = []
-
-            # for categoria in categorie:
-            #     nomeCategoria = categoria["categoria"]
-            #     cibiDatabase = db.execute("SELECT * FROM ?", categoria["categoria"])
-
-            #     cibiDatabaseSenzaNascosti = []
-
-            #     for cibo in cibiDatabase:
-            #         if cibo["status"] == "show":
-            #             cibiDatabaseSenzaNascosti.append(cibo)
-
-
-            #     dizionario = {}
-            #     dizionario["nome_categoria"] = nomeCategoria
-            #     dizionario["contenuto_categoria"] = cibiDatabaseSenzaNascosti
-            #     cibi.append(dizionario)
-
-            # # renders form with all foods
-            # return render_template("rimuovi.html", cibi = cibi)
-            return apology("Errore, riprova più tardi")
         if request.method == "POST":
             status = "hidden"
             categoria = request.form.get("nomeCategoria")
@@ -781,33 +743,8 @@ def newPasswordFun():
 @login_required
 def ripristinaElementi():
     if session["user_id"] == 1 or session["user_id"] == 5 or session["user_id"] == 8:
-
-        if request.method == "GET":
-            
-            # categorie = db.execute("SELECT * FROM categorie")
-
-            # cibi = []
-
-            # for categoria in categorie:
-            #     nomeCategoria = categoria["categoria"]
-            #     cibiDatabase = db.execute("SELECT * FROM ?", categoria["categoria"])
-
-            #     cibiDatabaseSenzaNascosti = []
-
-            #     for cibo in cibiDatabase:
-            #         if cibo["status"] == "hidden":
-            #             cibiDatabaseSenzaNascosti.append(cibo)
-
-
-            #     dizionario = {}
-            #     dizionario["nome_categoria"] = nomeCategoria
-            #     dizionario["contenuto_categoria"] = cibiDatabaseSenzaNascosti
-            #     cibi.append(dizionario)
-
-            # return render_template("ripristina.html", cibi = cibi)
-            return apology("Errore, riprova più tardi")
         
-        elif request.method == "POST":
+        if request.method == "POST":
             status = "show"
             categoria = request.form.get("nomeCategoria")
             item = request.form.get("nomeCibo")
@@ -942,3 +879,43 @@ def gestioneCiboCategoria(categoria):
         cibi = db.execute("SELECT * FROM ?", categoria)
 
         return render_template("cibi.html", cibi = cibi, categoria = categoria)
+    
+
+
+@app.route("/modifica", methods=["GET","POST"])
+@login_required
+def modifica():
+    if request.method == "GET":
+        categoria = request.args.get("nomeCategoria")
+        ciboSelezionato = request.args.get("nomeCibo")
+
+        dettagliCibo = db.execute("SELECT * FROM ? WHERE food_name = ?", categoria, ciboSelezionato)
+        
+        food_name = dettagliCibo[0]["food_name"]
+        price = dettagliCibo[0]["price"]
+        description = dettagliCibo[0]["description"]
+
+        return render_template("modificaCibo.html", categoria = categoria, nome = food_name, prezzo = price, descrizione = description)
+    
+    elif request.method == "POST":
+        oldNome = request.form.get("oldName")
+        categoria = request.form.get("categoria")
+        nome = request.form.get("nome")
+        prezzo = request.form.get("prezzo")
+        description = request.form.get("description")
+        if not description:
+            description = ""
+        if not nome or not prezzo:
+            return apology("Assicurati di aver riempito i campi di nome e prezzo")
+        if not oldNome:
+            return apology("Errore del server")
+
+
+        db.execute("UPDATE ? SET food_name = ? WHERE food_name = ?", categoria, nome, oldNome)
+        db.execute("UPDATE ? SET price = ? WHERE food_name = ?", categoria, prezzo, nome)
+        db.execute("UPDATE ? SET description = ? WHERE food_name = ?", categoria, description, nome)
+
+        return redirect(url_for("gestioneCiboCategoria", categoria=categoria))
+    
+
+
