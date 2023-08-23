@@ -27,6 +27,13 @@
                 <button type="submit" class="bottoneSubmit" style="margin: 2%;">Aggiungi</button>
             </form>
         </div>
+
+        <div class="pannelloDiControllo">
+            <form action="/orari" method="get">
+                <input type="date" name="data">
+                <button type="submit" class="bottoneSubmit" style="margin: 2%;">Seleziona Data</button>
+            </form>
+        </div>
         <table>
             <thead>
                 <tr>
@@ -47,6 +54,9 @@
                                 {% endif %}
                                 {% if orario.status == 'ndisp' %}
                                     Non Disponibile
+                                {% endif %}
+                                {% if orario.status == 'prenotato' %}
+                                    Prenotato
                                 {% endif %}
                             </button>
                         </form>

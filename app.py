@@ -189,6 +189,11 @@ def prenotazioni():
         # inserts the booking into the database
         dbUsers.execute("INSERT INTO prenotazioni (nome, cognome, telefono, data, ora, status, posti, email) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", name, surname, telefono, data, ora, status, posti, email)
 
+        idPrenotazione = db.execute("SELECT last_insert_rowid()")[0]["last_insert_rowid()"]
+            
+
+        dbUsers.execute("INSERT INTO gestione_prenotazioni (id_prenotazione, data, ora) VALUES (?, ?, ?)", idPrenotazione, data, ora)
+
         s = smtplib.SMTP(host="smtp.gmail.com", port=587)
         s.starttls()
         s.login("chiarulli14@gmail.com", "dajfosbvggcdemwu")
@@ -767,9 +772,42 @@ def ripristinaElementi():
 def orari():
     if session["user_id"] == 1 or session["user_id"] == 5 or session["user_id"] == 8:
         if request.method == "GET":
+            data = request.args.get("data")
+
+            if not data:
+                # Ottieni la data odierna
+                data_odierna = datetime.now()
+
+                # Formatta la data nel formato "dd-mm-yyyy"
+                data = data_odierna.strftime("%d-%m-%Y")
+            else:
+                dataConvertita = datetime.strptime(data, "%Y-%m-%d")
+
+                data = dataConvertita.strftime("%d-%m-%Y")
+
+            orariGiàSelezionatiData = dbUsers.execute("SELECT * FROM gestione_prenotazioni WHERE data = ?", data)
+
+            orariSelezionati = []
+
+            for prenotazione in orariGiàSelezionatiData:
+                orariSelezionati.append(prenotazione["ora"])
+
             orari = dbUsers.execute("SELECT * FROM orari_disponibili")
 
-            orariOrdinati = sorted(orari, key=lambda x: datetime.strptime(x["orario"], '%H:%M'))
+            orariModificati = []
+
+            print(orariSelezionati)
+
+            for orario in orari:
+                if orario["orario"] in orariSelezionati:
+                    orario["status"] = "prenotato"
+                    orariModificati.append(orario)
+                else:
+                    orariModificati.append(orario)
+
+            print(orariModificati)
+
+            orariOrdinati = sorted(orariModificati, key=lambda x: datetime.strptime(x["orario"], '%H:%M'))
 
             return render_template("orari.html", orari = orariOrdinati)
         
