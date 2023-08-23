@@ -1,6 +1,6 @@
 import os
 from cs50 import SQL
-from flask import Flask, flash, redirect, render_template, request, session
+from flask import Flask, flash, redirect, render_template, request, session, url_for
 from flask_session import Session
 from tempfile import mkdtemp
 from werkzeug.security import check_password_hash, generate_password_hash
@@ -482,52 +482,43 @@ def aggiungi():
 def rimuovi():
     if session["user_id"] == 1 or session["user_id"] == 5 or session["user_id"] == 8:
         if request.method == "GET":
-            # selects every food from the menu
-            categorie = db.execute("SELECT * FROM categorie")
+            # # selects every food from the menu
+            # categorie = db.execute("SELECT * FROM categorie")
 
-            cibi = []
+            # cibi = []
 
-            for categoria in categorie:
-                nomeCategoria = categoria["categoria"]
-                cibiDatabase = db.execute("SELECT * FROM ?", categoria["categoria"])
+            # for categoria in categorie:
+            #     nomeCategoria = categoria["categoria"]
+            #     cibiDatabase = db.execute("SELECT * FROM ?", categoria["categoria"])
 
-                cibiDatabaseSenzaNascosti = []
+            #     cibiDatabaseSenzaNascosti = []
 
-                for cibo in cibiDatabase:
-                    if cibo["status"] == "show":
-                        cibiDatabaseSenzaNascosti.append(cibo)
+            #     for cibo in cibiDatabase:
+            #         if cibo["status"] == "show":
+            #             cibiDatabaseSenzaNascosti.append(cibo)
 
 
-                dizionario = {}
-                dizionario["nome_categoria"] = nomeCategoria
-                dizionario["contenuto_categoria"] = cibiDatabaseSenzaNascosti
-                cibi.append(dizionario)
+            #     dizionario = {}
+            #     dizionario["nome_categoria"] = nomeCategoria
+            #     dizionario["contenuto_categoria"] = cibiDatabaseSenzaNascosti
+            #     cibi.append(dizionario)
 
-            # renders form with all foods
-            return render_template("rimuovi.html", cibi = cibi)
-        
+            # # renders form with all foods
+            # return render_template("rimuovi.html", cibi = cibi)
+            return apology("Errore, riprova più tardi")
         if request.method == "POST":
             status = "hidden"
-            section = request.form.get("section")
-            item = request.form.get("item")
+            categoria = request.form.get("nomeCategoria")
+            item = request.form.get("nomeCibo")
 
-            if not section or not item:
+            if not categoria or not item:
                 return apology("Assicurati di aver riempito tutti i campi")
             
-            if section == "bevande":
-                # deletes item from the menu database
-                db.execute("UPDATE bevande SET status = ? WHERE food_name = ?", status, item)
+            
+            db.execute("UPDATE ? SET status = ? WHERE food_name = ?", categoria, status, item)
 
-                return redirect("/rimuovi")
+            return redirect(url_for("gestioneCiboCategoria", categoria=categoria))
 
-            elif section == "vini":
-                db.execute("UPDATE vini SET status = ? WHERE food_name = ?", status, item)
-
-                return redirect("/rimuovi")
-            elif section == "antipasti":
-                db.execute("UPDATE antipasti SET status = ? WHERE food_name = ?", status, item)
-
-                return redirect("/rimuovi")
     else:
         return apology("Non sei autorizzato")
         
@@ -793,48 +784,41 @@ def ripristinaElementi():
 
         if request.method == "GET":
             
-            categorie = db.execute("SELECT * FROM categorie")
+            # categorie = db.execute("SELECT * FROM categorie")
 
-            cibi = []
+            # cibi = []
 
-            for categoria in categorie:
-                nomeCategoria = categoria["categoria"]
-                cibiDatabase = db.execute("SELECT * FROM ?", categoria["categoria"])
+            # for categoria in categorie:
+            #     nomeCategoria = categoria["categoria"]
+            #     cibiDatabase = db.execute("SELECT * FROM ?", categoria["categoria"])
 
-                cibiDatabaseSenzaNascosti = []
+            #     cibiDatabaseSenzaNascosti = []
 
-                for cibo in cibiDatabase:
-                    if cibo["status"] == "hidden":
-                        cibiDatabaseSenzaNascosti.append(cibo)
+            #     for cibo in cibiDatabase:
+            #         if cibo["status"] == "hidden":
+            #             cibiDatabaseSenzaNascosti.append(cibo)
 
 
-                dizionario = {}
-                dizionario["nome_categoria"] = nomeCategoria
-                dizionario["contenuto_categoria"] = cibiDatabaseSenzaNascosti
-                cibi.append(dizionario)
+            #     dizionario = {}
+            #     dizionario["nome_categoria"] = nomeCategoria
+            #     dizionario["contenuto_categoria"] = cibiDatabaseSenzaNascosti
+            #     cibi.append(dizionario)
 
-            return render_template("ripristina.html", cibi = cibi)
+            # return render_template("ripristina.html", cibi = cibi)
+            return apology("Errore, riprova più tardi")
         
         elif request.method == "POST":
             status = "show"
-            section = request.form.get("section")
-            item = request.form.get("item")
+            categoria = request.form.get("nomeCategoria")
+            item = request.form.get("nomeCibo")
+
+            if not categoria or not item:
+                return apology("Assicurati di aver riempito tutti i campi")
             
-            if section == "bevande":
-                # deletes item from the menu database
-                db.execute("UPDATE bevande SET status = ? WHERE food_name = ?", status, item)
-
-                return redirect("/ripristinaElementi")
-
-            elif section == "vini":
-                db.execute("UPDATE vini SET status = ? WHERE food_name = ?", status, item)
-
-                return redirect("/ripristinaElementi")
             
-            elif section == "antipasti":
-                db.execute("UPDATE antipasti SET status = ? WHERE food_name = ?", status, item)
+            db.execute("UPDATE ? SET status = ? WHERE food_name = ?", categoria, status, item)
 
-                return redirect("/ripristinaElementi")
+            return redirect(url_for("gestioneCiboCategoria", categoria=categoria))
     else:
         return apology("Non sei autorizzato")
 
@@ -915,3 +899,46 @@ def registrazioneAvvenuta():
 def prenotazioneInviata():
     return render_template("prenotazioneInviata.html")
 
+
+
+@app.route("/gestioneCategorie", methods=["GET", "POST"])
+@login_required
+def gestioneCategorie():
+    if request.method == "GET":
+
+        categorie = db.execute("SELECT * FROM categorie")
+
+        cibi = []
+
+        for categoria in categorie:
+            nomeCategoria = categoria["categoria"]
+            cibiDatabase = db.execute("SELECT * FROM ?", categoria["categoria"])
+
+
+
+            dizionario = {}
+            dizionario["nome_categoria"] = nomeCategoria
+            dizionario["contenuto_categoria"] = cibiDatabase
+            cibi.append(dizionario)
+
+
+        return render_template("gestioneCategoria.html", cibi = cibi)
+    
+    elif request.method == "POST":
+        categoria_selezionata = request.form.get("nomeCategoria")
+
+        if not categoria_selezionata:
+            return apology("assicurati di aver selezionato una categoria")
+        
+        return redirect(url_for("gestioneCiboCategoria", categoria=categoria_selezionata))
+    
+
+
+@app.route("/gestioneCiboCategoria/<categoria>", methods=["GET","POST"])
+@login_required
+def gestioneCiboCategoria(categoria):
+    if request.method == "GET":
+
+        cibi = db.execute("SELECT * FROM ?", categoria)
+
+        return render_template("cibi.html", cibi = cibi, categoria = categoria)

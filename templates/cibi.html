@@ -1,0 +1,80 @@
+{% extends "layout.html" %}
+
+
+{% block title %}
+    <title>ADMIN - GESTIONE CATEGORIE</title>
+{% endblock %}
+
+{% block style %}
+    <link rel="stylesheet" href="../static/stylePrenota.css">
+{% endblock %}
+
+{% block body %}
+
+    <div class="form-container">
+        <div class="form-contained">
+            <form action="#" method="get">
+                <div class="button-container">
+                    <button type="submit" class="bottoneCambioCategoria">Aggiungi Cibo</button>
+                </div>
+            </form>
+        </div>
+        
+        <div class="form-contained">
+            <form action="/gestioneCategorie">
+                <div class="button-container">
+                    <button type="submit" class="bottoneCambioCategoria">Torna alle categorie</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="form-contained">
+            <form action="/">
+                <div class="button-container">
+                    <button type="submit" class="bottoneCambioCategoria">Torna alla Home</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="container">
+        {% for cibo in cibi %}
+        <div class="card text-center" style="width: 18rem;">
+            
+            <div class="card-body">
+                <h5 class="card-title">{{ cibo.food_name }}</h5>
+                <p>{{ cibo.description }}</p>
+                {% if cibo.status == 'show' %}
+                    <form action="/rimuovi" method="post">
+                        <input type="hidden" name="nomeCategoria" value="{{ categoria }}">
+                        <input type="hidden" name="nomeCibo" value="{{cibo.food_name}}">
+                        <button type="submit" class="btn btn-primary" style="background-color: #ffb800 !important; border: #ffb800 !important; margin: 2px;">Disattiva</button>
+                    </form>
+                {% endif %}
+                {% if cibo.status == 'hidden' %}
+                    <form action="/ripristinaElementi" method="post">
+                        <input type="hidden" name="nomeCategoria" value="{{ categoria }}">
+                        <input type="hidden" name="nomeCibo" value="{{cibo.food_name}}">
+                        <button type="submit" class="btn btn-primary" style="background-color: #ffb800 !important; border: #ffb800 !important; margin: 2px;">Attiva</button>
+                    </form>
+                {% endif %}
+                
+                <form action="#">
+                    <input type="hidden" name="nomeCibo" value="{{cibo.food_name}}">
+                    <button type="submit" class="btn btn-primary" style="background-color: #ffb800 !important; border: #ffb800 !important; margin: 2px;">Modifica</button>
+                </form>
+                <button type="submit" disabled class="btn btn-primary" id="{{cibo.status}}">
+                    {% if cibo.status == 'show' %}
+                        Attivo
+                    {% endif %}
+                    {% if cibo.status == 'hidden' %}
+                        Non Attivo
+                    {% endif %}
+                                
+                </button>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+{% endblock %}

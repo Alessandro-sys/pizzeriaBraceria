@@ -299,3 +299,51 @@ h1{
     justify-content: flex-start;
     gap: 3rem; /* Aggiunge uno spazio tra le card */
 }
+
+
+#show{
+    background-color: green !important; 
+    border: green !important; 
+    margin: 2px !important;
+}
+
+#hidden{
+    background-color: red !important; 
+    border: red !important; 
+    margin: 2px !important;
+}
+
+
+.form-container {
+    padding: none;
+    display: flex;
+    justify-content: space-between; /* Distribuisce i form orizzontalmente */
+    width: 90%;
+    margin: 3% auto;
+    background-color: #ffb800;
+    border:none;
+    border-radius: 1rem;
+}
+
+.form-contained {
+    padding: 10px;
+    border-radius: 5px;
+    flex: 1; /* Fa sì che i form siano dello stesso larghezza e occupino lo spazio disponibile */
+    margin-right: 10px; /* Spazio tra i form */
+}
+
+.button-container {
+    text-align: center; /* Centra il bottone all'interno del form */
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.bottoneCambioCategoria{
+    font-family: 'REM', sans-serif;
+    background-color: transparent;
+    border: none;
+    color: white;
+    text-align: center;
+    justify-content: center;
+    font-size: x-large;
+}
