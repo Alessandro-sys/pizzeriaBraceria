@@ -23,7 +23,7 @@ dbUsers = SQL("sqlite:///users.db")
 past_order = "all"
 newPassword = None
 emailToRecover = ""
-
+data_selezionata = ""
 
 app = Flask(__name__)
 
@@ -770,6 +770,7 @@ def ripristinaElementi():
 @app.route("/orari", methods=["GET","POST"])
 @login_required
 def orari():
+    global data_selezionata
     if session["user_id"] == 1 or session["user_id"] == 5 or session["user_id"] == 8:
         if request.method == "GET":
             data = request.args.get("data")
@@ -785,6 +786,8 @@ def orari():
 
                 data = dataConvertita.strftime("%d-%m-%Y")
 
+            data_selezionata = data
+
             orariGiàSelezionatiData = dbUsers.execute("SELECT * FROM gestione_prenotazioni WHERE data = ?", data)
 
             orariSelezionati = []
@@ -792,13 +795,30 @@ def orari():
             for prenotazione in orariGiàSelezionatiData:
                 orariSelezionati.append(prenotazione["ora"])
 
+
+            modificheOrari = dbUsers.execute("SELECT * FROM modifiche_orari where data = ?", data)
+
+
             orari = dbUsers.execute("SELECT * FROM orari_disponibili")
+
+            orariMannaggia = []
+
+            for orario in orari:
+                for modifica in modificheOrari:
+                    if orario["orario"] == modifica["ora"]:
+                        orario["status"] = modifica["status"]
+                        orariMannaggia.append(orario)
+                    else:
+                        orariMannaggia.append(orario)
+            
+            
+
 
             orariModificati = []
 
             print(orariSelezionati)
 
-            for orario in orari:
+            for orario in orariMannaggia:
                 if orario["orario"] in orariSelezionati:
                     orario["status"] = "prenotato"
                     orariModificati.append(orario)
@@ -814,13 +834,25 @@ def orari():
         elif request.method == "POST":
             idOrario = request.form.get("idOrario")
             nuovoStatus = request.form.get("cambioStatus")
+            data = data_selezionata
+            data_selezionata = ""
 
             if not idOrario:
                 return apology("Errore interno del server", 104)
             if not nuovoStatus:
                 return apology("Assdicurati di aver completato tutti i campi")
             
-            dbUsers.execute("UPDATE orari_disponibili SET status = ? WHERE id = ?", nuovoStatus, idOrario)
+            orarioScelto = ""
+
+            orari = dbUsers.execute("SELECT * FROM orari_disponibili")
+
+            for orario in orari:
+                if orario["id"] == idOrario:
+                    orarioScelto = orario["orario"]
+
+
+            dbUsers.execute("INSERT INTO modifiche_orari (data, ora, status) VALUES (?, ?, ?)", data, orarioScelto, nuovoStatus)
+            
 
             return redirect("/orari")
 
@@ -969,8 +1001,14 @@ def aggiungiCategoria():
 
         if not nomeCategoria:
             return apology("Assicurati di aver inserito il nome della categoria")
+
+        categorieEsistenti = db.execute("SELECT * FROM categorie")
+
+        for categoria in categorieEsistenti:
+            if nomeCategoria == categoria["categoria"]:
+                return apology("Esiste già una categoria con questo nome")
         
         db.execute("INSERT INTO categorie (categoria) VALUES (?)", nomeCategoria)
         db.execute("CREATE TABLE ?(id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, food_name TEXT NOT NULL, status TEXT NOT NULL DEFAULT 'show', price TEXT NOT NULL, description TEXT NOT NULL DEFAULT '')", nomeCategoria)
 
-        return redirect("gestioneCategorie")
+        return redirect("/gestioneCategorie")
