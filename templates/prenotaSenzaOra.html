@@ -25,12 +25,12 @@
                 <form action="/menu">
                     <button class="menuButton" name="menu">MENU</button>
                 </form>
-                <form action="/prenotazioni">
+                <form action="/selezionaData">
                     <button class="menuButtonCurrent" name="prenotazioni">PRENOTAZIONI</button>
                 </form>
             </div>
             <div class="divPrenota">
-                <form action="/prenotazioni" method="post" class="formForm" onsubmit="return validateForm()">
+                <form action="/selezionaData" method="post" class="formForm" onsubmit="return validateForm()" id="formPrenota">
                     <div class="form-field">
                         <input type="text" name="nome" autofocus placeholder="Nome" required class="formInput">
                     </div>
@@ -48,21 +48,11 @@
                     </div>
                     
                     <div class="form-field">
-                        <input type="date" name="date" id="data" required class="formDate" >
+                        <input type="date" name="date" id="data" required class="formDate">
                     </div>
 
-                    <div class="form-field">
-                        <input type="number" name="posti" placeholder="Persone" required class="formInput">
-                    </div>
+                    
 
-                    <div class="form-field">
-                        <select name="orario" class="formOrario">
-                            <option selected disabled>Seleziona un orario</option>
-                            {% for orario in orari %}
-                                <option value="{{orario.orario}}">{{orario.orario}}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
 
                     <div class="form-field">
                       <button class="bottoneSubmit" type="submit">Prenota</button>

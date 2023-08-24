@@ -114,26 +114,26 @@ def menu():
 @app.route("/prenotazioni", methods=["GET", "POST"])
 def prenotazioni():
     if request.method == "GET":
-        # selects every time avaliable for booking
-        orari = dbUsers.execute("SELECT * FROM orari_disponibili")
+        # # selects every time avaliable for booking
+        # orari = dbUsers.execute("SELECT * FROM orari_disponibili")
 
-        orariEffettivi = []
+        # orariEffettivi = []
 
-        for orario in orari:
-            if orario["status"] == "disp":
-                    orariEffettivi.append(orario)
+        # for orario in orari:
+        #     if orario["status"] == "disp":
+        #             orariEffettivi.append(orario)
 
         
-        orariOrdinati = sorted(orariEffettivi, key=lambda x: datetime.strptime(x["orario"], '%H:%M'))
+        # orariOrdinati = sorted(orariEffettivi, key=lambda x: datetime.strptime(x["orario"], '%H:%M'))
 
-        if len(session) == 0:
-            # if user is not logged, prints the booking in the not logged template
-            return render_template("prenota.html", orari = orariOrdinati)
+        # if len(session) == 0:
+        #     # if user is not logged, prints the booking in the not logged template
+        #     return render_template("prenota.html", orari = orariOrdinati)
         
-        elif len(session) != 0:
-            # if user is logged, prints the booking in the logged template
-            return render_template("prenotaLogged.html", orari = orariOrdinati)
-
+        # elif len(session) != 0:
+        #     # if user is logged, prints the booking in the logged template
+        #     return render_template("prenotaLogged.html", orari = orariOrdinati)
+        return apology("non dovresti essere qui")
 
     elif request.method == "POST":
         # gets name from the form
@@ -774,6 +774,7 @@ def orari():
     if session["user_id"] == 1 or session["user_id"] == 5 or session["user_id"] == 8:
         if request.method == "GET":
             data = request.args.get("data")
+            dataPerDopo = data
 
             if not data:
                 # Ottieni la data odierna
@@ -825,7 +826,7 @@ def orari():
 
             orariOrdinati = sorted(orariModificati, key=lambda x: datetime.strptime(x["orario"], '%H:%M'))
 
-            return render_template("orari.html", orari = orariOrdinati)
+            return render_template("orari.html", orari = orariOrdinati, data = dataPerDopo)
         
         elif request.method == "POST":
             idOrario = request.form.get("idOrario")
@@ -1015,3 +1016,67 @@ def aggiungiCategoria():
         db.execute("CREATE TABLE ?(id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, food_name TEXT NOT NULL, status TEXT NOT NULL DEFAULT 'show', price TEXT NOT NULL, description TEXT NOT NULL DEFAULT '')", nomeCategoria)
 
         return redirect("/gestioneCategorie")
+    
+
+
+@app.route("/selezionaData", methods=["GET", "POST"])
+def selezionaData():
+    if request.method == "GET":
+        return render_template("prenotaSenzaOra.html")
+    elif request.method == "POST":
+        nome = request.form.get("nome")
+        cognome = request.form.get("cognome")
+        phone = request.form.get("phone")
+        email = request.form.get("email")
+        date = request.form.get("date")
+
+        dataConvertita = datetime.strptime(date, "%Y-%m-%d")
+
+        date = dataConvertita.strftime("%d-%m-%Y")
+
+        orariGiàSelezionatiData = dbUsers.execute("SELECT * FROM gestione_prenotazioni WHERE data = ?", date)
+
+        orariSelezionati = []
+
+        for prenotazione in orariGiàSelezionatiData:
+            orariSelezionati.append(prenotazione["ora"])
+
+        modificheOrari = dbUsers.execute("SELECT * FROM modifiche_orari where data = ?", date)
+
+        orari = dbUsers.execute("SELECT * FROM orari_disponibili")
+
+        for modifica in modificheOrari:
+            i = 0
+            for orario in orari:
+                if orario["orario"] == modifica["ora"]:
+                    orari[i]["status"] = modifica["status"]
+                i += 1
+
+
+        orariModificati = []
+
+        print()
+
+        for orario in orari:
+            if orario["orario"] in orariSelezionati:
+                orario["status"] = "prenotato"
+                orariModificati.append(orario)
+            else:
+                orariModificati.append(orario)
+
+
+        orariOrdinati = sorted(orariModificati, key=lambda x: datetime.strptime(x["orario"], '%H:%M'))
+
+        print(orariOrdinati)
+        orariDaMostrare = []
+
+        for orario in orariOrdinati:
+            if orario["status"] == "disp":
+                orariDaMostrare.append(orario)
+
+
+        dataConvertita = datetime.strptime(date, "%d-%m-%Y")
+
+        dataRiConvertita = dataConvertita.strftime("%Y-%m-%d")
+
+        return render_template("prenotaConOra.html", orari = orariDaMostrare, nome = nome, cognome = cognome, telefono = phone, email = email, data = dataRiConvertita)
