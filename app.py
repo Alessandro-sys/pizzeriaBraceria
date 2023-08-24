@@ -271,7 +271,7 @@ gestisci la prenotazione dal pannello di controllo
         utenti = dbUsers.execute("SELECT * FROM users")
         admin = []
         for utente in utenti:
-            if utente["id"] == 1 or utente["id"] == 5:
+            if utente["id"] == 1 : #or utente["id"] == 5
                 admin.append(utente["email"])
 
         emailAdminList = ', '.join(admin)
@@ -801,31 +801,27 @@ def orari():
 
             orari = dbUsers.execute("SELECT * FROM orari_disponibili")
 
-            orariMannaggia = []
 
-            for orario in orari:
-                for modifica in modificheOrari:
+
+            for modifica in modificheOrari:
+                i = 0
+                for orario in orari:
                     if orario["orario"] == modifica["ora"]:
-                        orario["status"] = modifica["status"]
-                        orariMannaggia.append(orario)
-                    else:
-                        orariMannaggia.append(orario)
-            
-            
+                        orari[i]["status"] = modifica["status"]
+                    i += 1
 
 
             orariModificati = []
 
-            print(orariSelezionati)
+            print()
 
-            for orario in orariMannaggia:
+            for orario in orari:
                 if orario["orario"] in orariSelezionati:
                     orario["status"] = "prenotato"
                     orariModificati.append(orario)
                 else:
                     orariModificati.append(orario)
 
-            print(orariModificati)
 
             orariOrdinati = sorted(orariModificati, key=lambda x: datetime.strptime(x["orario"], '%H:%M'))
 
@@ -836,6 +832,12 @@ def orari():
             nuovoStatus = request.form.get("cambioStatus")
             data = data_selezionata
             data_selezionata = ""
+            if data == "":
+                # Ottieni la data odierna
+                data_odierna = datetime.now()
+
+                # Formatta la data nel formato "dd-mm-yyyy"
+                data = data_odierna.strftime("%d-%m-%Y")
 
             if not idOrario:
                 return apology("Errore interno del server", 104)
@@ -846,8 +848,9 @@ def orari():
 
             orari = dbUsers.execute("SELECT * FROM orari_disponibili")
 
-            for orario in orari:
-                if orario["id"] == idOrario:
+
+            for orario in orari:                
+                if orario["id"] == int(idOrario):
                     orarioScelto = orario["orario"]
 
 
