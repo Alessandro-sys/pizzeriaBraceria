@@ -1,0 +1,47 @@
+{% extends "layout.html" %}
+
+
+{% block title %}
+    <title>ADMIN - GESTIONE CATEGORIE</title>
+{% endblock %}
+
+{% block style %}
+    <link rel="stylesheet" href="../static/stylePrenota.css">
+{% endblock %}
+
+{% block body %}
+
+    <div class="form-container">
+        <div class="form-contained">
+            <form action="/gestioneCategorie">
+                <div class="button-container">
+                    <button type="submit" class="bottoneCambioCategoria">Torna alle categorie</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="form-contained">
+            <form action="/">
+                <div class="button-container">
+                    <button type="submit" class="bottoneCambioCategoria">Torna alla Home</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="formInserimentoCibo">
+        <form action="/modificaCategoria" method="post">
+            <div class="inputAreas">
+                <input type="hidden" value="{{categoria}}" name="oldCategoria">
+                <input type="text" placeholder="Nome Categoria" name="nome" required autocomplete="off" class="formInputNuovo" style="margin-bottom: 50px;" value="{{categoria}}">
+            </div>
+            <div class="buttonArea">
+                <button type="submit" class="bottoneCapicollo">Inserisci</button>
+            </div>
+            
+        </form>
+    </div>
+    
+
+
+{% endblock %}

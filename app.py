@@ -69,9 +69,16 @@ def menu():
 
     categorie = db.execute("SELECT * FROM categorie")
 
-    cibi = []
+    categorieDaMostrare = []
 
     for categoria in categorie:
+        if categoria["status"] == "show":
+            categorieDaMostrare.append(categoria)
+
+
+    cibi = []
+
+    for categoria in categorieDaMostrare:
         nomeCategoria = categoria["categoria"]
         cibiDatabase = db.execute("SELECT * FROM ?", categoria["categoria"])
 
@@ -916,167 +923,251 @@ def prenotazioneInviata():
 @app.route("/gestioneCategorie", methods=["GET", "POST"])
 @login_required
 def gestioneCategorie():
-    if request.method == "GET":
+    if session["user_id"] == 1 or session["user_id"] == 5 or session["user_id"] == 8:
+        if request.method == "GET":
 
-        categorie = db.execute("SELECT * FROM categorie")
+            categorie = db.execute("SELECT * FROM categorie")
 
-        cibi = []
+            cibi = []
 
-        for categoria in categorie:
-            nomeCategoria = categoria["categoria"]
-            cibiDatabase = db.execute("SELECT * FROM ?", categoria["categoria"])
-
-
-
-            dizionario = {}
-            dizionario["nome_categoria"] = nomeCategoria
-            dizionario["contenuto_categoria"] = cibiDatabase
-            cibi.append(dizionario)
+            for categoria in categorie:
+                nomeCategoria = categoria["categoria"]
+                status = categoria["status"]
+                cibiDatabase = db.execute("SELECT * FROM ?", categoria["categoria"])
 
 
-        return render_template("gestioneCategoria.html", cibi = cibi)
-    
-    elif request.method == "POST":
-        categoria_selezionata = request.form.get("nomeCategoria")
 
-        if not categoria_selezionata:
-            return apology("assicurati di aver selezionato una categoria")
+                dizionario = {}
+                dizionario["nome_categoria"] = nomeCategoria
+                dizionario["status"] = status
+                dizionario["contenuto_categoria"] = cibiDatabase
+                cibi.append(dizionario)
+
+
+            return render_template("gestioneCategoria.html", cibi = cibi)
         
-        return redirect(url_for("gestioneCiboCategoria", categoria=categoria_selezionata))
+        elif request.method == "POST":
+            categoria_selezionata = request.form.get("nomeCategoria")
+
+            if not categoria_selezionata:
+                return apology("assicurati di aver selezionato una categoria")
+            
+            return redirect(url_for("gestioneCiboCategoria", categoria=categoria_selezionata))
+    else:
+        return apology("Non sei autorizzato")
     
 
 
 @app.route("/gestioneCiboCategoria/<categoria>", methods=["GET","POST"])
 @login_required
 def gestioneCiboCategoria(categoria):
-    if request.method == "GET":
+    if session["user_id"] == 1 or session["user_id"] == 5 or session["user_id"] == 8:
+        if request.method == "GET":
 
-        cibi = db.execute("SELECT * FROM ?", categoria)
+            cibi = db.execute("SELECT * FROM ?", categoria)
 
-        return render_template("cibi.html", cibi = cibi, categoria = categoria)
+            return render_template("cibi.html", cibi = cibi, categoria = categoria)
+    else:
+        return apology("Non sei autorizzato")
     
 
 
 @app.route("/modifica", methods=["GET","POST"])
 @login_required
 def modifica():
-    if request.method == "GET":
-        categoria = request.args.get("nomeCategoria")
-        ciboSelezionato = request.args.get("nomeCibo")
+    if session["user_id"] == 1 or session["user_id"] == 5 or session["user_id"] == 8:
+        if request.method == "GET":
+            categoria = request.args.get("nomeCategoria")
+            ciboSelezionato = request.args.get("nomeCibo")
 
-        dettagliCibo = db.execute("SELECT * FROM ? WHERE food_name = ?", categoria, ciboSelezionato)
+            dettagliCibo = db.execute("SELECT * FROM ? WHERE food_name = ?", categoria, ciboSelezionato)
+            
+            food_name = dettagliCibo[0]["food_name"]
+            price = dettagliCibo[0]["price"]
+            description = dettagliCibo[0]["description"]
+
+            return render_template("modificaCibo.html", categoria = categoria, nome = food_name, prezzo = price, descrizione = description)
         
-        food_name = dettagliCibo[0]["food_name"]
-        price = dettagliCibo[0]["price"]
-        description = dettagliCibo[0]["description"]
+        elif request.method == "POST":
+            oldNome = request.form.get("oldName")
+            categoria = request.form.get("categoria")
+            nome = request.form.get("nome")
+            prezzo = request.form.get("prezzo")
+            description = request.form.get("description")
+            if not description:
+                description = ""
+            if not nome or not prezzo:
+                return apology("Assicurati di aver riempito i campi di nome e prezzo")
+            if not oldNome:
+                return apology("Errore del server")
 
-        return render_template("modificaCibo.html", categoria = categoria, nome = food_name, prezzo = price, descrizione = description)
+
+            db.execute("UPDATE ? SET food_name = ? WHERE food_name = ?", categoria, nome, oldNome)
+            db.execute("UPDATE ? SET price = ? WHERE food_name = ?", categoria, prezzo, nome)
+            db.execute("UPDATE ? SET description = ? WHERE food_name = ?", categoria, description, nome)
+
+            return redirect(url_for("gestioneCiboCategoria", categoria=categoria))
     
-    elif request.method == "POST":
-        oldNome = request.form.get("oldName")
-        categoria = request.form.get("categoria")
-        nome = request.form.get("nome")
-        prezzo = request.form.get("prezzo")
-        description = request.form.get("description")
-        if not description:
-            description = ""
-        if not nome or not prezzo:
-            return apology("Assicurati di aver riempito i campi di nome e prezzo")
-        if not oldNome:
-            return apology("Errore del server")
-
-
-        db.execute("UPDATE ? SET food_name = ? WHERE food_name = ?", categoria, nome, oldNome)
-        db.execute("UPDATE ? SET price = ? WHERE food_name = ?", categoria, prezzo, nome)
-        db.execute("UPDATE ? SET description = ? WHERE food_name = ?", categoria, description, nome)
-
-        return redirect(url_for("gestioneCiboCategoria", categoria=categoria))
-    
+    else:
+        return apology("Non sei autorizzato")
 
 
 @app.route("/aggiungiCategoria", methods=["GET","POST"])
 @login_required
 def aggiungiCategoria():
-    if request.method == "GET":
-        return render_template("aggiungiCategoria.html")
-    
-    elif request.method == "POST":
-        nomeCategoria = request.form.get("nome")
-
-        if not nomeCategoria:
-            return apology("Assicurati di aver inserito il nome della categoria")
-
-        categorieEsistenti = db.execute("SELECT * FROM categorie")
-
-        for categoria in categorieEsistenti:
-            if nomeCategoria == categoria["categoria"]:
-                return apology("Esiste già una categoria con questo nome")
+    if session["user_id"] == 1 or session["user_id"] == 5 or session["user_id"] == 8:
+        if request.method == "GET":
+            return render_template("aggiungiCategoria.html")
         
-        db.execute("INSERT INTO categorie (categoria) VALUES (?)", nomeCategoria)
-        db.execute("CREATE TABLE ?(id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, food_name TEXT NOT NULL, status TEXT NOT NULL DEFAULT 'show', price TEXT NOT NULL, description TEXT NOT NULL DEFAULT '')", nomeCategoria)
+        elif request.method == "POST":
+            nomeCategoria = request.form.get("nome")
 
-        return redirect("/gestioneCategorie")
+            if not nomeCategoria:
+                return apology("Assicurati di aver inserito il nome della categoria")
+
+            categorieEsistenti = db.execute("SELECT * FROM categorie")
+
+            for categoria in categorieEsistenti:
+                if nomeCategoria == categoria["categoria"]:
+                    return apology("Esiste già una categoria con questo nome")
+            
+            db.execute("INSERT INTO categorie (categoria) VALUES (?)", nomeCategoria)
+            db.execute("CREATE TABLE ?(id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, food_name TEXT NOT NULL, status TEXT NOT NULL DEFAULT 'show', price TEXT NOT NULL, description TEXT NOT NULL DEFAULT '')", nomeCategoria)
+
+            return redirect("/gestioneCategorie")
+    else:
+        return apology("Non sei autorizzato")
     
 
 
 @app.route("/selezionaData", methods=["GET", "POST"])
 def selezionaData():
-    if request.method == "GET":
-        return render_template("prenotaSenzaOra.html")
-    elif request.method == "POST":
-        nome = request.form.get("nome")
-        cognome = request.form.get("cognome")
-        phone = request.form.get("phone")
-        email = request.form.get("email")
-        date = request.form.get("date")
+    if session["user_id"] == 1 or session["user_id"] == 5 or session["user_id"] == 8:
+        if request.method == "GET":
+            return render_template("prenotaSenzaOra.html")
+        elif request.method == "POST":
+            nome = request.form.get("nome")
+            cognome = request.form.get("cognome")
+            phone = request.form.get("phone")
+            email = request.form.get("email")
+            date = request.form.get("date")
 
-        dataConvertita = datetime.strptime(date, "%Y-%m-%d")
+            dataConvertita = datetime.strptime(date, "%Y-%m-%d")
 
-        date = dataConvertita.strftime("%d-%m-%Y")
+            date = dataConvertita.strftime("%d-%m-%Y")
 
-        orariGiàSelezionatiData = dbUsers.execute("SELECT * FROM gestione_prenotazioni WHERE data = ?", date)
+            orariGiàSelezionatiData = dbUsers.execute("SELECT * FROM gestione_prenotazioni WHERE data = ?", date)
 
-        orariSelezionati = []
+            orariSelezionati = []
 
-        for prenotazione in orariGiàSelezionatiData:
-            orariSelezionati.append(prenotazione["ora"])
+            for prenotazione in orariGiàSelezionatiData:
+                orariSelezionati.append(prenotazione["ora"])
 
-        modificheOrari = dbUsers.execute("SELECT * FROM modifiche_orari where data = ?", date)
+            modificheOrari = dbUsers.execute("SELECT * FROM modifiche_orari where data = ?", date)
 
-        orari = dbUsers.execute("SELECT * FROM orari_disponibili")
+            orari = dbUsers.execute("SELECT * FROM orari_disponibili")
 
-        for modifica in modificheOrari:
-            i = 0
+            for modifica in modificheOrari:
+                i = 0
+                for orario in orari:
+                    if orario["orario"] == modifica["ora"]:
+                        orari[i]["status"] = modifica["status"]
+                    i += 1
+
+
+            orariModificati = []
+
+            print()
+
             for orario in orari:
-                if orario["orario"] == modifica["ora"]:
-                    orari[i]["status"] = modifica["status"]
-                i += 1
+                if orario["orario"] in orariSelezionati:
+                    orario["status"] = "prenotato"
+                    orariModificati.append(orario)
+                else:
+                    orariModificati.append(orario)
 
 
-        orariModificati = []
+            orariOrdinati = sorted(orariModificati, key=lambda x: datetime.strptime(x["orario"], '%H:%M'))
 
-        print()
+            print(orariOrdinati)
+            orariDaMostrare = []
 
-        for orario in orari:
-            if orario["orario"] in orariSelezionati:
-                orario["status"] = "prenotato"
-                orariModificati.append(orario)
-            else:
-                orariModificati.append(orario)
+            for orario in orariOrdinati:
+                if orario["status"] == "disp":
+                    orariDaMostrare.append(orario)
 
 
-        orariOrdinati = sorted(orariModificati, key=lambda x: datetime.strptime(x["orario"], '%H:%M'))
+            dataConvertita = datetime.strptime(date, "%d-%m-%Y")
 
-        print(orariOrdinati)
-        orariDaMostrare = []
+            dataRiConvertita = dataConvertita.strftime("%Y-%m-%d")
 
-        for orario in orariOrdinati:
-            if orario["status"] == "disp":
-                orariDaMostrare.append(orario)
+            return render_template("prenotaConOra.html", orari = orariDaMostrare, nome = nome, cognome = cognome, telefono = phone, email = email, data = dataRiConvertita)
+    else:
+        return apology("Non sei autorizzato")
+    
+
+@app.route("/nascondiCategoria", methods=["GET", "POST"])
+@login_required
+def nascondiCategoria():
+    if session["user_id"] == 1 or session["user_id"] == 5 or session["user_id"] == 8:
+        if request.method == "POST":
+            status = "hidden"
+            categoria = request.form.get("nomeCategoria")
+
+            db.execute("UPDATE categorie SET status = ? WHERE categoria = ?", status, categoria)
+            return redirect("/gestioneCategorie")
+    else:
+        return apology("Non sei autorizzato")
 
 
-        dataConvertita = datetime.strptime(date, "%d-%m-%Y")
+@app.route("/ripristinaCategoria", methods=["GET", "POST"])
+@login_required
+def ripristinaCategoria():
+    if session["user_id"] == 1 or session["user_id"] == 5 or session["user_id"] == 8:
+        if request.method == "POST":
+            status = "show"
+            categoria = request.form.get("nomeCategoria")
 
-        dataRiConvertita = dataConvertita.strftime("%Y-%m-%d")
+            db.execute("UPDATE categorie SET status = ? WHERE categoria = ?", status, categoria)
+            return redirect("/gestioneCategorie")
+    else:
+        return apology("Non sei autorizzato")
 
-        return render_template("prenotaConOra.html", orari = orariDaMostrare, nome = nome, cognome = cognome, telefono = phone, email = email, data = dataRiConvertita)
+
+
+@app.route("/rimuoviCategoria", methods=["GET", "POST"])
+@login_required
+def rimuoviCategoria():
+    if session["user_id"] == 1 or session["user_id"] == 5 or session["user_id"] == 8:
+        if request.method == "POST":
+            categoria = request.form.get("nomeCategoria")
+
+            db.execute("DROP TABLE ?", categoria)
+            db.execute("DELETE FROM categorie WHERE categoria = ?", categoria)
+            return redirect("/gestioneCategorie")
+    
+    else:
+        return apology("Non sei autorizzato")
+    
+
+    
+
+@app.route("/modificaCategoria", methods=["GET", "POST"])
+@login_required
+def modificaCategoria():
+    if session["user_id"] == 1 or session["user_id"] == 5 or session["user_id"] == 8:
+        if request.method == "GET":
+            nome = request.args.get("nomeCategoria")
+
+            return render_template("modificaCategoria.html", categoria = nome)
+        
+        elif request.method == "POST":
+            oldCategoria = request.form.get("oldCategoria")
+            newCategoria = request.form.get("nome")
+            db.execute("UPDATE categorie SET categoria = ? WHERE categoria = ? ", newCategoria, oldCategoria)
+            db.execute("ALTER TABLE ? RENAME TO ?", oldCategoria, newCategoria)
+            
+            return redirect("/gestioneCategorie")
+        
+    else:
+        return apology("Non sei autorizzato")

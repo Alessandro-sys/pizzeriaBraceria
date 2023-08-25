@@ -48,10 +48,38 @@
             <img src="../static/1.jpg" class="card-img-top" alt="...">
             <div class="card-body">
                 <h5 class="card-title">{{ categoria.nome_categoria }}</h5>
+                {% if categoria.status == 'show' %}
+                    <form action="/nascondiCategoria" method="post">
+                        <input type="hidden" name="nomeCategoria" value="{{ categoria.nome_categoria }}">
+                        <button type="submit" class="btn btn-primary" style="background-color: #ffb800 !important; border: #ffb800 !important; margin: 2px;">Disattiva</button>
+                    </form>
+                {% endif %}
+                {% if categoria.status == 'hidden' %}
+                    <form action="/ripristinaCategoria" method="post">
+                        <input type="hidden" name="nomeCategoria" value="{{ categoria.nome_categoria}}">
+                        <button type="submit" class="btn btn-primary" style="background-color: #ffb800 !important; border: #ffb800 !important; margin: 2px;">Attiva</button>
+                    </form>
+                {% endif %}
                 <form action="/gestioneCategorie" method="post">
                     <input type="hidden" name="nomeCategoria" value="{{categoria.nome_categoria}}">
-                    <button type="submit" class="btn btn-primary" style="background-color: #ffb800 !important; border: #ffb800 !important;">Modifica</button>
+                    <button type="submit" class="btn btn-primary" style="background-color: #ffb800 !important; border: #ffb800 !important; margin: 2px;">Entra</button>
                 </form>
+                <form action="/modificaCategoria" method="get">
+                    <input type="hidden" name="nomeCategoria" value="{{categoria.nome_categoria}}">
+                    <button type="submit" class="btn btn-primary" style="background-color: #ffb800 !important; border:#ffb800 !important;  margin: 2px;" >Modifica</button>
+                </form>
+                <form action="/rimuoviCategoria" method="post">
+                    <input type="hidden" name="nomeCategoria" value="{{categoria.nome_categoria}}">
+                    <button type="submit" disabled class="btn btn-primary" style="background-color: red !important; border:red !important;  margin: 2px;">Elimina</button>
+                </form>
+                <button type="submit" disabled class="btn btn-primary" id="{{categoria.status}}" style=" margin: 2px;">
+                    {% if categoria.status == 'show' %}
+                        Attivo
+                    {% endif %}
+                    {% if categoria.status == 'hidden' %}
+                        Non Attivo
+                    {% endif %}                             
+                </button>
             </div>
         </div>
         {% endfor %}

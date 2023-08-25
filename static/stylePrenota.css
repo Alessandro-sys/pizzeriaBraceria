@@ -404,3 +404,7 @@ h1{
     color: #4A4A4A;
     text-indent: 40px;
 }
+
+.btn{
+    width: 100%;
+}
