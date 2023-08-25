@@ -14,12 +14,13 @@ import random
 import time
 
 
-from helpers import apology, login_required
+from helpers import apology, login_required, sendEmail
 
 
 db = SQL("sqlite:///database.db")
 dbUsers = SQL("sqlite:///users.db")
 
+# Variabili globali utilizzate nel codice
 past_order = "all"
 newPassword = None
 emailToRecover = ""
@@ -53,6 +54,7 @@ def index():
     
     elif len(session) != 0:
         if session["user_id"] == 1 or session["user_id"] == 5 or session["user_id"] == 8:
+            # Renders admin template if an admin access the page
             return render_template("homeAdmin.html")
         else:
             return render_template("homeLogged.html")
@@ -67,44 +69,61 @@ def pages():
 @app.route("/menu")
 def menu():
 
+    # c'è una tabella che contiene i nomi delle categorie e il loro status, li seleziona tutti
     categorie = db.execute("SELECT * FROM categorie")
 
+    # inizializza un array che conterrà solo le categorie con il tag show
     categorieDaMostrare = []
 
+    # analizza ogni categoria e se c'è il tag show la inserisce nell'array categorieDaMostrare
     for categoria in categorie:
         if categoria["status"] == "show":
             categorieDaMostrare.append(categoria)
 
-
+    # array che conterrà tutti delle liste contenenti il nome della categoria e i cibi contenuti
     cibi = []
 
+
     for categoria in categorieDaMostrare:
+        # prende il nome della categoria
         nomeCategoria = categoria["categoria"]
+        # seleziona tutti i cibi presenti nella categoria selezionata
         cibiDatabase = db.execute("SELECT * FROM ?", categoria["categoria"])
 
+        # inizializza menu di sinistra
         csx = []
+        # inizializza menu di destra
         cdx = []
 
+        # array che contiene tutti i cibi con il tag show
         cibiDatabaseSenzaNascosti = []
 
+        # inserisce in cibiDatabaseSenzaNascosti tutti i cibi con il tag show
         for cibo in cibiDatabase:
             if cibo["status"] == "show":
                 cibiDatabaseSenzaNascosti.append(cibo)
         
+        # mette metà cibi nell'array di sinistra e metà in quello di destra, per rendere la pagina più ordinata
         for cibo in cibiDatabaseSenzaNascosti:
             if (cibo["id"] % 2) == 0:
                 csx.append(cibo)
             else:
                 cdx.append(cibo)
 
+        # crea un array che contiene i due array di sinistra e destra
         doppioCibo = []
 
+        # inserisce gli array di sinistra e destra nell'array unico
         doppioCibo.append(csx)
         doppioCibo.append(cdx)
 
+        # crea un dizionario in cui inserire tutti i dati racoclti fin ora. Il dizionario è più comodo per le chiavi, più facili da accedere in jinja
         dizionario = {}
+        # come nome_categoria inserisce il nome della categoria tutto in stampatello (scelta di stile)
         dizionario["nome_categoria"] = nomeCategoria.upper()
+        # come contenuto categoria inserisce il la lista contenente due liste contenenti i cibi [[{},{},{}],[{},{},{}]]
         dizionario["contenuto_categoria"] = doppioCibo
+        # inserisce tutto quanto nell'array cibi
         cibi.append(dizionario)
 
 
@@ -121,26 +140,7 @@ def menu():
 @app.route("/prenotazioni", methods=["GET", "POST"])
 def prenotazioni():
     if request.method == "GET":
-        # # selects every time avaliable for booking
-        # orari = dbUsers.execute("SELECT * FROM orari_disponibili")
-
-        # orariEffettivi = []
-
-        # for orario in orari:
-        #     if orario["status"] == "disp":
-        #             orariEffettivi.append(orario)
-
-        
-        # orariOrdinati = sorted(orariEffettivi, key=lambda x: datetime.strptime(x["orario"], '%H:%M'))
-
-        # if len(session) == 0:
-        #     # if user is not logged, prints the booking in the not logged template
-        #     return render_template("prenota.html", orari = orariOrdinati)
-        
-        # elif len(session) != 0:
-        #     # if user is logged, prints the booking in the logged template
-        #     return render_template("prenotaLogged.html", orari = orariOrdinati)
-        return apology("non dovresti essere qui")
+        return redirect("/")
 
     elif request.method == "POST":
         # gets name from the form
@@ -196,16 +196,15 @@ def prenotazioni():
         # inserts the booking into the database
         dbUsers.execute("INSERT INTO prenotazioni (nome, cognome, telefono, data, ora, status, posti, email) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", name, surname, telefono, data, ora, status, posti, email)
 
+        # recupera l'id della prenotazione dall'array prenotazioni
         idPrenotazione = db.execute("SELECT last_insert_rowid()")[0]["last_insert_rowid()"]
             
-
+        # inserisce nella tabella gestione_prenotazioni la transazione appena avvenuta, per poi rendere l'orario di sistema prenotato
         dbUsers.execute("INSERT INTO gestione_prenotazioni (id_prenotazione, data, ora) VALUES (?, ?, ?)", idPrenotazione, data, ora)
 
-        s = smtplib.SMTP(host="smtp.gmail.com", port=587)
-        s.starttls()
-        s.login("chiarulli14@gmail.com", "dajfosbvggcdemwu")
-
-        newPasswordSend = Template('''
+        
+        # invia un'email di conferma prenotazione
+        emailBody = Template('''
 
 Gentile $nome,
 
@@ -229,28 +228,16 @@ Divina Pizzeria Braceria
 
         ''')
         
-        body = newPasswordSend.substitute(nome = name, data = data, ora = ora, posti = posti, telefono = telefono)
+        body = emailBody.substitute(nome = name, data = data, ora = ora, posti = posti, telefono = telefono)
 
-        senderEmail = "chiarulli14@gmail.com"
+        subject = "Ricezione prenotazione divina"
 
-
-        msg = MIMEMultipart()
-        msg['From'] = senderEmail
-        msg['To'] = email
-        msg['Subject'] = "Ricezione Prenotazione Divina"
-        msg.attach(MIMEText(body, 'plain'))
-
-        s.send_message(msg)
-        s.quit()
-        del msg
+        # funzione per inviare effettivamente l'email
+        sendEmail(body, email, subject)
 
 
         # email al gestore
-        s = smtplib.SMTP(host="smtp.gmail.com", port=587)
-        s.starttls()
-        s.login("chiarulli14@gmail.com", "dajfosbvggcdemwu")
-
-        newPasswordSend = Template('''
+        bodyTemplate = Template('''
 
 Per favore verifica le disponibilità per la data richiesta e confermala/rifiutala
 
@@ -267,34 +254,24 @@ gestisci la prenotazione dal pannello di controllo
 
         ''')
         
-        body = newPasswordSend.substitute(nome = name, data = data, ora = ora, posti = posti, telefono = telefono)
-
-        senderEmail = "chiarulli14@gmail.com"
-
-
-        msg = MIMEMultipart()
-        msg['From'] = senderEmail
+        body = bodyTemplate.substitute(nome = name, data = data, ora = ora, posti = posti, telefono = telefono)
         
         utenti = dbUsers.execute("SELECT * FROM users")
+        # arrai contenente le email degli admin
         admin = []
+
         for utente in utenti:
             if utente["id"] == 1 : #or utente["id"] == 5
                 admin.append(utente["email"])
 
+        # inserise tutte le email admin in una singola stringa di valori separati da virgola
         emailAdminList = ', '.join(admin)
-        
-        msg['To'] = emailAdminList
-        msg['Subject'] = "Nuova richiesta di prenotazione"
-        msg.attach(MIMEText(body, 'plain'))
 
-        s.send_message(msg)
-        s.quit()
+        subject = "Nuova richiesta di prenotazione"
 
-        del msg
+        # manda la mail effettivamente
+        sendEmail(body, emailAdminList, subject)
 
-        ## DA SISTEMARE DOPO. VA MODIFICATO LO STATUS SOLO ALLA DATA SELEZIONATA
-        # db.execute("UPDATE orari_disponibili SET status = 'ndisp' WHERE orario = ?", ora)
-        # user gets redirected to the homepage
         return redirect("/prenotazioneInviata")
     
 
@@ -402,26 +379,15 @@ def register():
         # inserts the new user's data into the database
         dbUsers.execute("INSERT INTO users (name, surname, email, hash) VALUES (?, ?, ?, ?)", nome, cognome, email, hash)
 
-        s = smtplib.SMTP(host="smtp.gmail.com", port=587)
-        s.starttls()
-        s.login("chiarulli14@gmail.com", "dajfosbvggcdemwu")
 
-        newPasswordSend = Template("Ciao $nome, benvenuto in Divina. L'account alla mail $mail è stato creato con successo!")
+        # invia email conferma registrazione
+        emailBody = Template("Ciao $nome, benvenuto in Divina. L'account alla mail $mail è stato creato con successo!")
         
-        body = newPasswordSend.substitute(nome = nome, mail = email)
+        body = emailBody.substitute(nome = nome, mail = email)
 
-        senderEmail = "chiarulli14@gmail.com"
+        subject = "Conferma registrazione"
 
-
-        msg = MIMEMultipart()
-        msg['From'] = senderEmail
-        msg['To'] = email
-        msg['Subject'] = "Conferma Registrazione"
-        msg.attach(MIMEText(body, 'plain'))
-
-        s.send_message(msg)
-        s.quit()
-        del msg
+        sendEmail(body, email, subject)
 
         return redirect("/registrazioneAvvenuta")
     
@@ -479,19 +445,25 @@ def aggiungi():
 @app.route("/rimuovi", methods=["GET", "POST"])
 @login_required
 def rimuovi():
+    # pagina accessibile solo da admin
     if session["user_id"] == 1 or session["user_id"] == 5 or session["user_id"] == 8:
         
         if request.method == "POST":
+            # imposta lo status del cibo come hidden
             status = "hidden"
+            # prende la categoria in cui si trova il cibo
             categoria = request.form.get("nomeCategoria")
+            # prende il cibo effettivo
             item = request.form.get("nomeCibo")
 
+            # controlla se tutti i campi sono riempiti correttamente (forse non serve, è un tasto)
             if not categoria or not item:
-                return apology("Assicurati di aver riempito tutti i campi")
+                return apology("Errore interno del server, riprova più tardi")
             
-            
+            # aggiorna lo status del cibo selezionato impostandolo come hidden, non verrà mostrato nel menu
             db.execute("UPDATE ? SET status = ? WHERE food_name = ?", categoria, status, item)
 
+            # ritorna alla pagina dei cibi nella categoria selezionatsa
             return redirect(url_for("gestioneCiboCategoria", categoria=categoria))
 
     else:
@@ -536,24 +508,7 @@ def utentiPrenotati():
             # gets the selected order from the form
             ordine = request.args.get("sort")
             
-            # # if no order is inserted it can be either the first time on the page or a booking status has been changed
-            # if not ordine:
-            #     # takes the last selected order
-            #     ordine = past_order
-            
-            # # renders the layout of the booking based on the order selected 
-            # if ordine == "all":
-            #     past_order = ordine
-            #     return render_template("utentiPrenotati.html", prenotati = lista_dizionari_ordinata)
-            # if ordine == "today":
-            #     past_order = ordine
-            #     return render_template("utentiPrenotati.html", prenotati = today)
-            # elif ordine == "past":
-            #     past_order = ordine
-            #     return render_template("utentiPrenotati.html", prenotati = past)
-            # elif ordine == "incoming":
-            #     past_order = ordine
-            #     return render_template("utentiPrenotati.html", prenotati = incoming)
+            # cambiare ordine di disposizione delle prenotazioni
 
             return render_template("utentiPrenotati.html", prenotati = lista_dizionari_ordinata, passati = past, arrivo = incoming, oggi = today)
 
@@ -582,10 +537,7 @@ def utentiPrenotati():
             posti = userInfo[0]["posti"]
 
             if nuovoStatus == "incoming":
-                s = smtplib.SMTP(host="smtp.gmail.com", port=587)
-                s.starttls()
-                s.login("chiarulli14@gmail.com", "dajfosbvggcdemwu")
-
+                # invia email di prenotazione accettata
                 newPasswordSend = Template('''
 
 
@@ -613,24 +565,12 @@ Divina Pizzeria Braceria
                 
                 body = newPasswordSend.substitute(nome = nome, data = data, ora = ora, numero = numero, posti = posti)
 
-                senderEmail = "chiarulli14@gmail.com"
+                subject = "Conferma prenotazione Divina"
 
-
-                msg = MIMEMultipart()
-                msg['From'] = senderEmail
-                msg['To'] = email
-                msg['Subject'] = "Conferma Prenotazione Divina"
-                msg.attach(MIMEText(body, 'plain'))
-
-                s.send_message(msg)
-                s.quit()
-                del msg
+                sendEmail(body, email, subject)
 
             elif nuovoStatus == "past":
-                s = smtplib.SMTP(host="smtp.gmail.com", port=587)
-                s.starttls()
-                s.login("chiarulli14@gmail.com", "dajfosbvggcdemwu")
-
+                #invia email di prenotazione rifiutata
                 newPasswordSend = Template('''
 
 Gentile $nome,
@@ -651,18 +591,9 @@ Divina Pizzeria Braceria
                 
                 body = newPasswordSend.substitute(nome = nome, data = data, ora = ora)
 
-                senderEmail = "chiarulli14@gmail.com"
+                subject = "Prenotazione rifiutata Divina"
 
-
-                msg = MIMEMultipart()
-                msg['From'] = senderEmail
-                msg['To'] = email
-                msg['Subject'] = "Prenotazione rifiutata"
-                msg.attach(MIMEText(body, 'plain'))
-
-                s.send_message(msg)
-                s.quit()
-                del msg
+                sendEmail(body, email, subject)
 
             # updates the status in the database
             dbUsers.execute("UPDATE prenotazioni SET status = ? WHERE id = ?", nuovoStatus, idPrenotazione)
@@ -674,66 +605,72 @@ Divina Pizzeria Braceria
 
 @app.route("/forgottenEmail", methods=["GET", "POST"])
 def forgottenEmail():
+    # richiama la variabile globale per metterci la mail selezionata da recuperare
     global emailToRecover
+
     if request.method == "GET":
+        # render template della pagina inserimento email
         return render_template("recuperoEmail.html")
+    
     elif request.method == "POST":
+        # prende la mail dal form
         email = request.form.get("email")
+        
+        # se non è inserita nessuna email da errore
         if not email:
             return apology("Please insert a valid email")
         
+        # cerca l'utente con la mail selezionata dal database
         user = dbUsers.execute("SELECT * FROM users WHERE email = ?", email)
+        
+        # se nessun utente è stato trovato ritorna errore
         if len(user) != 1:
             return apology("No user found")
         else:
+            # imposta emailToRecover all'email inserita
             emailToRecover = email
+            # reindirizza al recupero password
             return redirect("/forgotten")
 
 
 
 @app.route("/forgotten", methods=["GET","POST"])
 def forgotten():
+    # richiama la variabile globale emailToRecover, contenente l'email inserita nel form prima
     global emailToRecover
+    # richiama la variabile globale newPassword, che conterrà la password temporanea
     global newPassword
     if newPassword == None:
+        # se è la prima volta che viene aperta la pagina genera la password temporanea
         newPassword = str(random.randint(1000, 9999))
     else:
+        # se la mail è stata mandata con la password nuova non deve rigenerare la password, deve mantenerla per aspettare la risposta dell'utente
         newPassword = newPassword
 
     if request.method == "GET":
-        s = smtplib.SMTP(host="smtp.gmail.com", port=587)
-        s.starttls()
-        s.login("chiarulli14@gmail.com", "dajfosbvggcdemwu")
-
+        # invia email con la nuova password temporanea
         newPasswordSend = Template("Nuova password: $password")
         password_value = newPassword
         body = newPasswordSend.substitute(password=password_value)
 
-        print(password_value)
-        email = "chiarulli14@gmail.com"
+        subject = "Recuper Password Divina"
 
-
-        msg = MIMEMultipart()
-        msg['From'] = email
-        msg['To'] = emailToRecover
-        msg['Subject'] = "Recupero Password Divina"
-        msg.attach(MIMEText(body, 'plain'))
-
-        s.send_message(msg)
-        s.quit()
-        del msg
+        sendEmail(body, emailToRecover, subject)
 
         return render_template("recupero.html")
+    
     elif request.method == "POST":
+        # prende la password temporanea inserita dal form
         inserted = request.form.get("password")
 
-        print(newPassword)
-
+        # se la password inserita coincida con la password inviata reindirizza alla prossima pagina (inserimento della nuova password)
         if inserted == newPassword:
             rows = dbUsers.execute("SELECT * FROM users WHERE email = ?", emailToRecover)
             session["user_id"] = rows[0]["id"]
             newPassword = None
             return redirect("/newPassword")
+        # manca cosa fare quando la password nuova non è corretta
+            
         
 
 @app.route("/newPassword", methods=["GET", "POST"])
@@ -741,12 +678,20 @@ def newPasswordFun():
     if request.method == "GET":
         return render_template("newPassword.html")
     elif request.method == "POST":
+        # prende la nuova password dal form
         password = request.form.get("password")
+        
+        # se non è stata inserita ritorna errore
         if not password:
             return apology("Assicurati di aver inserito la password corretta")
         
+        # prende l'id dell'utente corrente
         currUser = session["user_id"]
+        
+        # cripta la password
         hash = generate_password_hash(password, method='pbkdf2', salt_length=16)
+        
+        # aggiorna il database con la nuova password
         dbUsers.execute("UPDATE users SET hash = ? WHERE id = ?", hash, currUser)
 
         return redirect("/")
