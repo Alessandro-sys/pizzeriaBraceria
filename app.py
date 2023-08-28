@@ -48,16 +48,16 @@ def after_request(response):
 
 @app.route("/")
 def index():
-    if len(session) == 0:
-        # if the user is not logged returns the home not logged template
-        return render_template("home.html")
-    
-    elif len(session) != 0:
+    if len(session) != 0:
         if session["user_id"] == 1 or session["user_id"] == 5 or session["user_id"] == 8:
             # Renders admin template if an admin access the page
             return render_template("homeAdmin.html")
-        else:
-            return render_template("homeLogged.html")
+        
+    lenght = len(session)
+    # if the user is not logged returns the home not logged template
+    return render_template("home.html", len = lenght)
+    
+    
 
 
 @app.route("/home")
@@ -128,13 +128,10 @@ def menu():
 
 
     
-    if len(session) == 0:
-        # if user is not logged, prints the menu in the not logged template
-        return render_template("menu.html", cibi = cibi)
-    
-    elif len(session) != 0:
-        # if user is logged, prints the menu in the logged template
-        return render_template("menuLogged.html", cibi = cibi)
+    lenght = len(session)
+
+    return render_template("menu.html", cibi = cibi, len = lenght)
+
 
 
 @app.route("/prenotazioni", methods=["GET", "POST"])
@@ -638,6 +635,13 @@ def forgottenEmail():
 def forgotten():
     # richiama la variabile globale emailToRecover, contenente l'email inserita nel form prima
     global emailToRecover
+
+    # prende i dati dell'utente dal database
+    database = dbUsers.execute("SELECT * FROM users WHERE email = ?", emailToRecover)
+
+    # prende il nome dell'utente
+    nome = database[0]["name"]
+    
     # richiama la variabile globale newPassword, che conterrà la password temporanea
     global newPassword
     if newPassword == None:
@@ -649,7 +653,21 @@ def forgotten():
 
     if request.method == "GET":
         # invia email con la nuova password temporanea
-        newPasswordSend = Template("Nuova password: $password")
+        newPasswordSend = Template('''
+
+Ciao $nome,
+
+La richiesta di ripristino password è andata a buon fine
+                                   
+Password temporanea: $password
+                                   
+Inserisi questa password nella schermata del nostro sito, ti permetterà di inserire una nuova password per il tuo account.
+Per qualsiasi problema contattaci al numero di telefono 0805615713.
+                                   
+Saluti
+Lo staff di Divina
+                 
+                                   ''')
         password_value = newPassword
         body = newPasswordSend.substitute(password=password_value)
 
@@ -987,68 +1005,71 @@ def aggiungiCategoria():
 
 @app.route("/selezionaData", methods=["GET", "POST"])
 def selezionaData():
-    if session["user_id"] == 1 or session["user_id"] == 5 or session["user_id"] == 8:
-        if request.method == "GET":
-            return render_template("prenotaSenzaOra.html")
-        elif request.method == "POST":
-            nome = request.form.get("nome")
-            cognome = request.form.get("cognome")
-            phone = request.form.get("phone")
-            email = request.form.get("email")
-            date = request.form.get("date")
+    if request.method == "GET":
+        
+        lenght = len(session)
+        
+        return render_template("prenotaSenzaOra.html", len = lenght)
+    elif request.method == "POST":
+        nome = request.form.get("nome")
+        cognome = request.form.get("cognome")
+        phone = request.form.get("phone")
+        email = request.form.get("email")
+        date = request.form.get("date")
 
-            dataConvertita = datetime.strptime(date, "%Y-%m-%d")
+        dataConvertita = datetime.strptime(date, "%Y-%m-%d")
 
-            date = dataConvertita.strftime("%d-%m-%Y")
+        date = dataConvertita.strftime("%d-%m-%Y")
 
-            orariGiàSelezionatiData = dbUsers.execute("SELECT * FROM gestione_prenotazioni WHERE data = ?", date)
+        orariGiàSelezionatiData = dbUsers.execute("SELECT * FROM gestione_prenotazioni WHERE data = ?", date)
 
-            orariSelezionati = []
+        orariSelezionati = []
 
-            for prenotazione in orariGiàSelezionatiData:
-                orariSelezionati.append(prenotazione["ora"])
+        for prenotazione in orariGiàSelezionatiData:
+            orariSelezionati.append(prenotazione["ora"])
 
-            modificheOrari = dbUsers.execute("SELECT * FROM modifiche_orari where data = ?", date)
+        modificheOrari = dbUsers.execute("SELECT * FROM modifiche_orari where data = ?", date)
 
-            orari = dbUsers.execute("SELECT * FROM orari_disponibili")
+        orari = dbUsers.execute("SELECT * FROM orari_disponibili")
 
-            for modifica in modificheOrari:
-                i = 0
-                for orario in orari:
-                    if orario["orario"] == modifica["ora"]:
-                        orari[i]["status"] = modifica["status"]
-                    i += 1
-
-
-            orariModificati = []
-
-            print()
-
+        for modifica in modificheOrari:
+            i = 0
             for orario in orari:
-                if orario["orario"] in orariSelezionati:
-                    orario["status"] = "prenotato"
-                    orariModificati.append(orario)
-                else:
-                    orariModificati.append(orario)
+                if orario["orario"] == modifica["ora"]:
+                    orari[i]["status"] = modifica["status"]
+                i += 1
 
 
-            orariOrdinati = sorted(orariModificati, key=lambda x: datetime.strptime(x["orario"], '%H:%M'))
+        orariModificati = []
 
-            print(orariOrdinati)
-            orariDaMostrare = []
+        print()
 
-            for orario in orariOrdinati:
-                if orario["status"] == "disp":
-                    orariDaMostrare.append(orario)
+        for orario in orari:
+            if orario["orario"] in orariSelezionati:
+                orario["status"] = "prenotato"
+                orariModificati.append(orario)
+            else:
+                orariModificati.append(orario)
 
 
-            dataConvertita = datetime.strptime(date, "%d-%m-%Y")
+        orariOrdinati = sorted(orariModificati, key=lambda x: datetime.strptime(x["orario"], '%H:%M'))
 
-            dataRiConvertita = dataConvertita.strftime("%Y-%m-%d")
+        print(orariOrdinati)
+        orariDaMostrare = []
 
-            return render_template("prenotaConOra.html", orari = orariDaMostrare, nome = nome, cognome = cognome, telefono = phone, email = email, data = dataRiConvertita)
-    else:
-        return apology("Non sei autorizzato")
+        for orario in orariOrdinati:
+            if orario["status"] == "disp":
+                orariDaMostrare.append(orario)
+
+
+        dataConvertita = datetime.strptime(date, "%d-%m-%Y")
+
+        dataRiConvertita = dataConvertita.strftime("%Y-%m-%d")
+
+        lenght = len(session)
+
+        return render_template("prenotaConOra.html", orari = orariDaMostrare, nome = nome, cognome = cognome, telefono = phone, email = email, data = dataRiConvertita, len = lenght)
+
     
 
 @app.route("/nascondiCategoria", methods=["GET", "POST"])

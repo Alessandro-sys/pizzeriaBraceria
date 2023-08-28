@@ -79,12 +79,19 @@
             <form action="/cookie">
                 <button class="settingsButton">Cookie Policy</button>
             </form>
-            <form action="/login">
-                <button class="settingsButton" name="prenotazioni">LOGIN</button>
-            </form>
-            <form action="/register">
-                <button class="settingsButton" name="prenotazioni">REGISTRATI</button>
-            </form>
+            {% if len == 0 %}
+                <form action="/login">
+                    <button class="settingsButton" name="prenotazioni">LOGIN</button>
+                </form>
+                <form action="/register">
+                    <button class="settingsButton" name="prenotazioni">REGISTRATI</button>
+                </form>
+            {% endif %}
+            {% if len != 0 %}
+                <form action="/logout">
+                    <button class="settingsButton" name="prenotazioni">LOGOUT</button>
+                </form>
+            {% endif %}
         </div>
         <div class="social">
             <a href="https://www.instagram.com/divinapizzeria_braceria/">

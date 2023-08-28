@@ -41,3 +41,19 @@ function dateChanged() {
 document.getElementById("data").addEventListener("change", dateChanged);
 
   
+
+
+// Ottieni l'elemento dell'input
+const telefonoInput = document.getElementById('telefonoInput');
+
+// Aggiungi un gestore di eventi per l'input
+telefonoInput.addEventListener('input', function() {
+  const currentLength = telefonoInput.value.length;
+
+  // Verifica se la lunghezza supera il limite di 15 caratteri
+  if (currentLength > 15) {
+    telefonoInput.value = telefonoInput.value.slice(0, 15);
+    alert("Non puoi inserire un numero di telefono superiore a 15 caratteri");
+     // Tronca il valore a 15 caratteri
+  }
+});
