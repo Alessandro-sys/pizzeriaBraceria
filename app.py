@@ -705,7 +705,7 @@ Lo staff di Divina
                  
                                    ''')
         password_value = newPassword
-        body = newPasswordSend.substitute(password=password_value, nome = nome)
+        body = newPasswordSend.substitute(password = password_value, nome = nome)
 
         subject = "Recuper Password Divina"
 
