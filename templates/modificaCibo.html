@@ -29,8 +29,8 @@
         </div>
     </div>
 
-    <div class="formInserimentoCibo">
-        <form action="/modifica" method="post">
+    <div class="formInserimentoCibo" >
+        <form action="/modifica" method="post" enctype="multipart/form-data" id="upload-form">
             <input type="hidden" name="categoria" value="{{categoria}}">
             <input type="hidden" name="oldName" value="{{nome}}">
             <div class="inputAreas">
@@ -40,9 +40,15 @@
             <div class="textArea">
                 <textarea name="description" cols="50" rows="10" placeholder="Inserisci una descrizione (facoltativo)" class="franco">{{descrizione}}</textarea>
             </div>
-            <div class="buttonArea">
-                <button type="submit" class="bottoneCapicollo">Modifica</button>
+
+            <div class="dragArea">
+                <input type="file" id="file-input" name="file-input">
             </div>
+
+            <div class="buttonArea">
+                <button type="submit" class="bottoneCapicollo" id="uploadButton">Modifica</button>
+            </div>
+            
             
         </form>
     </div>

@@ -41,7 +41,12 @@
     <div class="container">
         {% for cibo in cibi %}
         <div class="card text-center" style="width: 18rem;">
+            {% if immagine[cibo.food_name] != '' %}
+            <div style="width: 100%; text-align: center;">
+                <img src="data:image/png;base64, {{ immagine[cibo.food_name] }}" class="card-img-top" alt="..." style="max-width: 20%;">
+            </div>
             
+            {% endif %}
             <div class="card-body">
                 <h5 class="card-title">{{ cibo.food_name }}</h5>
                 <p>{{ cibo.description }}</p>

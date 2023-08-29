@@ -29,8 +29,8 @@
         </div>
     </div>
 
-    <div class="formInserimentoCibo">
-        <form action="/aggiungi" method="post">
+    <div class="formInserimentoCibo" >
+        <form action="/aggiungi" method="post" enctype="multipart/form-data" id="upload-form">
             <input type="hidden" name="categoria" value="{{categoria}}">
             <div class="inputAreas">
                 <input type="text" placeholder="Nome" name="nome" required autocomplete="off" class="formInputNuovo" style="margin-bottom: 50px;">
@@ -39,6 +39,11 @@
             <div class="textArea">
                 <textarea name="description" cols="50" rows="10" placeholder="Inserisci una descrizione (facoltativo)" class="franco"></textarea>
             </div>
+
+            <div class="dragArea">
+                <input type="file" id="file-input" name="file-input">
+            </div>
+
             <div class="buttonArea">
                 <button type="submit" class="bottoneCapicollo">Inserisci</button>
             </div>
