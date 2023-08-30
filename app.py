@@ -9,14 +9,10 @@ from werkzeug.utils import secure_filename
 import base64
 from PIL import Image
 import io
+import imghdr
 # librerie per il cambio email
-import smtplib
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
 from string import Template
 import random
-import time
-
 
 from helpers import apology, login_required, sendEmail
 
@@ -33,8 +29,8 @@ data_selezionata = ""
 
 app = Flask(__name__)
 
-
-UPLOAD_FOLDER = r'C:\Users\chiar\Desktop\pizzeriaBraceria\static'
+UPLOAD_FOLDER = r'/Users/alessandrochiarulli/Documents/GitHub/pizzeriaBraceria/static'
+#UPLOAD_FOLDER = r'C:\Users\chiar\Desktop\pizzeriaBraceria\static'
 
 
 # Configure session to use filesystem (instead of signed cookies)
@@ -435,12 +431,7 @@ def aggiungi():
 
             fileImmagine = request.files['file-input']
 
-            image = Image.open(fileImmagine)
-
-            output = io.BytesIO()
-            image.save(output, format='PNG')
-            fileImmagine = output.getvalue()
-
+            image_format = imghdr.what(None, h=fileImmagine.read())
 
             if fileImmagine.filename != '':
                 filenameSecure = secure_filename(fileImmagine.filename)
