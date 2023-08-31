@@ -29,8 +29,8 @@ data_selezionata = ""
 
 app = Flask(__name__)
 
-UPLOAD_FOLDER = r'/Users/alessandrochiarulli/Documents/GitHub/pizzeriaBraceria/static'
-#UPLOAD_FOLDER = r'C:\Users\chiar\Desktop\pizzeriaBraceria\static'
+#UPLOAD_FOLDER = r'/Users/alessandrochiarulli/Documents/GitHub/pizzeriaBraceria/static'
+UPLOAD_FOLDER = r'C:\Users\chiar\Desktop\pizzeriaBraceria\static'
 
 
 # Configure session to use filesystem (instead of signed cookies)
@@ -431,9 +431,10 @@ def aggiungi():
 
             fileImmagine = request.files['file-input']
 
-            image_format = imghdr.what(None, h=fileImmagine.read())
+           
 
             if fileImmagine.filename != '':
+                image_format = imghdr.what(None, h=fileImmagine.read())
                 filenameSecure = secure_filename(fileImmagine.filename)
                 file_path = os.path.join(app.config['UPLOAD_FOLDER'], filenameSecure)
                 fileImmagine.save(file_path)
@@ -447,10 +448,10 @@ def aggiungi():
 
                     if description == None:
                         # if there's no description adds a new food with no description
-                        db.execute("INSERT INTO ? (food_name, price, immagine) VALUES (?, ?, ?)", categoria, nome, price, image_data)
+                        db.execute("INSERT INTO ? (food_name, price, immagine, formato) VALUES (?, ?, ?, ?)", categoria, nome, price, image_data, image_format)
                     else:
                         # if there's a description adds a new food with description
-                        db.execute("INSERT INTO ? (food_name, price, description, immagine) VALUES (?, ?, ?, ?)", categoria, nome, price, description, image_data)
+                        db.execute("INSERT INTO ? (food_name, price, description, immagine, formato) VALUES (?, ?, ?, ?, ?)", categoria, nome, price, description, image_data, image_format)
 
             else:
                 if description == None:
@@ -962,15 +963,19 @@ def gestioneCiboCategoria(categoria):
 
                 image_blob = cibo['immagine']
 
+
                 if image_blob is None:
                     link_immagini[cibo["food_name"]] = ''
                 else:
                     # Convertire l'immagine BLOB in un formato utilizzabile
                     immagineFinale = base64.b64encode(image_blob).decode('utf-8')
-                    link_immagini[cibo["food_name"]] = immagineFinale
+                    link_immagini[cibo["food_name"]] = {}
+                    link_immagini[cibo["food_name"]]["immagine"] = immagineFinale
+                    link_immagini[cibo["food_name"]]["formato"] = cibo["formato"]
 
 
-            return render_template("cibi.html", cibi = cibi, categoria = categoria, immagine = link_immagini)
+            print(link_immagini)
+            return render_template("cibi.html", cibi = cibi, categoria = categoria, immagine = immagineFinale)
     else:
         return apology("Non sei autorizzato")
     
@@ -1008,22 +1013,19 @@ def modifica():
 
             fileImmagine = request.files['file-input']
 
-            image = Image.open(fileImmagine)
-
-            output = io.BytesIO()
-            image.save(output, format='PNG')
-            fileImmagine = output.getvalue()
-
-
             if fileImmagine.filename != '':
+                image_format = imghdr.what(None, h=fileImmagine.read())
                 filenameSecure = secure_filename(fileImmagine.filename)
                 file_path = os.path.join(app.config['UPLOAD_FOLDER'], filenameSecure)
                 fileImmagine.save(file_path)
+                
 
                 with open (file_path, "rb") as image_file:
                     image_data = image_file.read()
 
+
                     db.execute("UPDATE ? SET immagine = ? WHERE food_name = ?", categoria, image_data, oldNome)
+                    db.execute("UPDATE ? SET formato = ? WHERE food_name = ?", categoria, image_format, oldNome)
 
             db.execute("UPDATE ? SET food_name = ? WHERE food_name = ?", categoria, nome, oldNome)
             db.execute("UPDATE ? SET price = ? WHERE food_name = ?", categoria, prezzo, nome)
@@ -1056,7 +1058,7 @@ def aggiungiCategoria():
                     return apology("Esiste già una categoria con questo nome")
             
             db.execute("INSERT INTO categorie (categoria) VALUES (?)", nomeCategoria)
-            db.execute("CREATE TABLE ?(id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, food_name TEXT NOT NULL, status TEXT NOT NULL DEFAULT 'show', price TEXT NOT NULL, description TEXT NOT NULL DEFAULT '', immagine BLOB)", nomeCategoria)
+            db.execute("CREATE TABLE ?(id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, food_name TEXT NOT NULL, status TEXT NOT NULL DEFAULT 'show', price TEXT NOT NULL, description TEXT NOT NULL DEFAULT '', immagine BLOB, formato TEXT)", nomeCategoria)
 
             return redirect("/gestioneCategorie")
     else:

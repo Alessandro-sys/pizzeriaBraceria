@@ -42,10 +42,19 @@
         {% for cibo in cibi %}
         <div class="card text-center" style="width: 18rem;">
             {% if immagine[cibo.food_name] != '' %}
-            <div style="width: 100%; text-align: center;">
-                <img src="data:image/png;base64, {{ immagine[cibo.food_name] }}" class="card-img-top" alt="..." style="max-width: 20%;">
-            </div>
-            
+                questo ha qualcosa dentro
+                {% if immagine[cibo.food_name]['formato'] == 'png' %}
+                    trovato un'immagine png
+                    <div style="width: 100%; text-align: center;">
+                        <img src="data:image/png;base64, {{ immagine[cibo.food_name]['immagine'] }}" class="card-img-top" alt="..." style="max-width: 20%;">
+                    </div>
+                {% endif %}
+                {% if immagine[cibo.food_name]['formato'] == 'jpg' %}
+                    trovato un'immagine jpg
+                    <div style="width: 100%; text-align: center;">
+                        <img src="data:image/jpg;base64, {{ immagine[cibo.food_name]['immagine'] }}" class="card-img-top" alt="..." style="max-width: 20%;">
+                    </div>
+                {% endif %}
             {% endif %}
             <div class="card-body">
                 <h5 class="card-title">{{ cibo.food_name }}</h5>
