@@ -30,15 +30,29 @@
     </div>
 
     <div class="formInserimentoCibo">
-        <form action="/modificaCategoria" method="post">
+        <form action="/modificaCategoria" method="post" enctype="multipart/form-data" id="upload-form">
             <div class="inputAreas">
                 <input type="hidden" value="{{categoria}}" name="oldCategoria">
                 <input type="text" placeholder="Nome Categoria" name="nome" required autocomplete="off" class="formInputNuovo" style="margin-bottom: 50px;" value="{{categoria}}">
+            </div>
+
+            <div class="dragArea">
+                <input type="file" id="file-input" name="file-input" >
             </div>
             <div class="buttonArea">
                 <button type="submit" class="bottoneCapicollo">Inserisci</button>
             </div>
             
+        </form>
+    </div>
+
+    <br><br><br><br><br>
+    <div class="formInserimentoCibo">
+        <form action="/rimuoviImmagineCategoria" method="post">
+            <input type="hidden" value="{{categoria}}" name="categoria">
+            <div class="buttonArea">
+                <button type="submit" class="bottoneCapicollo">Rimuovi Immagine</button>
+            </div>
         </form>
     </div>
     

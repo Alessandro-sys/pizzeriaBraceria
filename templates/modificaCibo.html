@@ -42,7 +42,7 @@
             </div>
 
             <div class="dragArea">
-                <input type="file" id="file-input" name="file-input">
+                <input type="file" id="file-input" name="file-input" >
             </div>
 
             <div class="buttonArea">
@@ -50,6 +50,18 @@
             </div>
             
             
+        </form>
+    </div>
+
+
+    <br><br>
+    <div class="formInserimentoCibo">
+        <form action="/rimuoviImmagineCibo" method="post">
+            <input type="hidden" value="{{categoria}}" name="categoria">
+            <input type="hidden" value="{{nome}}" name="nomeCibo">
+            <div class="buttonArea">
+                <button type="submit" class="bottoneCapicollo">Rimuovi Immagine</button>
+            </div>
         </form>
     </div>
     

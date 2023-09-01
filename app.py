@@ -434,11 +434,16 @@ def aggiungi():
            
 
             if fileImmagine.filename != '':
-                image_format = imghdr.what(None, h=fileImmagine.read())
+                
                 filenameSecure = secure_filename(fileImmagine.filename)
                 file_path = os.path.join(app.config['UPLOAD_FOLDER'], filenameSecure)
                 fileImmagine.save(file_path)
                 
+                image_format = ""
+                with Image.open(file_path) as img:
+                    # Ottieni il formato dell'immagine
+                    image_format = img.format
+
                 with open (file_path, "rb") as image_file:
                     image_data = image_file.read()
 
@@ -934,8 +939,30 @@ def gestioneCategorie():
                 dizionario["contenuto_categoria"] = cibiDatabase
                 cibi.append(dizionario)
 
+            link_immagini = {}
 
-            return render_template("gestioneCategoria.html", cibi = cibi)
+            for categoria in categorie:
+
+                formato = categoria["formato"]
+                image_blob = categoria['immagine']
+                
+                nomeCategoria = categoria["categoria"]
+
+
+                if image_blob is None:
+                    link_immagini[nomeCategoria] = ''
+                else:
+                    # Convertire l'immagine BLOB in un formato utilizzabile
+                    immagineFinale = base64.b64encode(image_blob).decode('utf-8') 
+
+                    infoImmagini = []
+                    infoImmagini.append(immagineFinale)
+                    infoImmagini.append(formato)
+                    
+                    link_immagini[nomeCategoria] = infoImmagini
+
+
+            return render_template("gestioneCategoria.html", cibi = cibi, immagini = link_immagini)
         
         elif request.method == "POST":
             categoria_selezionata = request.form.get("nomeCategoria")
@@ -1018,12 +1045,12 @@ def modifica():
 
 
             fileImmagine = request.files['file-input']
+            
             if fileImmagine.filename != '':
-
                 filenameSecure = secure_filename(fileImmagine.filename)
                 file_path = os.path.join(app.config['UPLOAD_FOLDER'], filenameSecure)
                 fileImmagine.save(file_path)
-
+                
                 with Image.open(file_path) as img:
                     # Ottieni il formato dell'immagine
                     formato = img.format        
@@ -1063,8 +1090,29 @@ def aggiungiCategoria():
             for categoria in categorieEsistenti:
                 if nomeCategoria == categoria["categoria"]:
                     return apology("Esiste già una categoria con questo nome")
+
+            fileImmagine = request.files['file-input']
             
-            db.execute("INSERT INTO categorie (categoria) VALUES (?)", nomeCategoria)
+            if fileImmagine.filename != '':
+                filenameSecure = secure_filename(fileImmagine.filename)
+                file_path = os.path.join(app.config['UPLOAD_FOLDER'], filenameSecure)
+                fileImmagine.save(file_path)
+                
+
+                image_format = ""
+                with Image.open(file_path) as img:
+                    # Ottieni il formato dell'immagine
+                    image_format = img.format        
+                       
+
+                with open (file_path, "rb") as image_file:
+                    image_data = image_file.read()
+                    db.execute("INSERT INTO categorie (categoria, immagine, formato) VALUES (?, ?, ?)", nomeCategoria, image_data, image_format)
+            
+            else:
+                db.execute("INSERT INTO categorie (categoria) VALUES (?)", nomeCategoria)
+            
+            
             db.execute("CREATE TABLE ?(id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, food_name TEXT NOT NULL, status TEXT NOT NULL DEFAULT 'show', price TEXT NOT NULL, description TEXT NOT NULL DEFAULT '', immagine BLOB, formato TEXT)", nomeCategoria)
 
             return redirect("/gestioneCategorie")
@@ -1200,10 +1248,69 @@ def modificaCategoria():
         elif request.method == "POST":
             oldCategoria = request.form.get("oldCategoria")
             newCategoria = request.form.get("nome")
+
+            fileImmagine = request.files['file-input']
+            
+            if fileImmagine.filename != '':
+                filenameSecure = secure_filename(fileImmagine.filename)
+                file_path = os.path.join(app.config['UPLOAD_FOLDER'], filenameSecure)
+                fileImmagine.save(file_path)
+                
+                with Image.open(file_path) as img:
+                    # Ottieni il formato dell'immagine
+                    formato = img.format        
+                    db.execute("UPDATE categorie SET formato = ? WHERE categoria = ?", formato, oldCategoria)     
+
+                with open (file_path, "rb") as image_file:
+                    image_data = image_file.read()
+                    db.execute("UPDATE categorie SET immagine = ? WHERE categoria = ?", image_data, oldCategoria)
+
+
             db.execute("UPDATE categorie SET categoria = ? WHERE categoria = ? ", newCategoria, oldCategoria)
-            db.execute("ALTER TABLE ? RENAME TO ?", oldCategoria, newCategoria)
+            
+            if oldCategoria != newCategoria:
+                db.execute("ALTER TABLE ? RENAME TO ?", oldCategoria, newCategoria)
             
             return redirect("/gestioneCategorie")
+        
+    else:
+        return apology("Non sei autorizzato")
+    
+
+
+@app.route("/rimuoviImmagineCategoria", methods=["GET","POST"])
+@login_required
+def rimuoviImmagineCategoria():
+    if session["user_id"] == 1 or session["user_id"] == 5 or session["user_id"] == 8:
+        if request.method == "POST":
+            categoria = request.form.get("categoria")
+
+            immagine = None
+            formato = None
+
+            db.execute("UPDATE categorie SET immagine = ? WHERE categoria = ?", immagine, categoria)
+            db.execute("UPDATE categorie SET formato = ? WHERE categoria = ?", formato, categoria)
+
+            return redirect("/gestioneCategorie")
+        
+    else:
+        return apology("Non sei autorizzato")
+    
+@app.route("/rimuoviImmagineCibo", methods=["GET","POST"])
+@login_required
+def rimuoviImmagineCibo():
+    if session["user_id"] == 1 or session["user_id"] == 5 or session["user_id"] == 8:
+        if request.method == "POST":
+            categoria = request.form.get("categoria")
+            nomeCibo = request.form.get("nomeCibo")
+
+            immagine = None
+            formato = None
+
+            db.execute("UPDATE ? SET immagine = ? WHERE food_name = ?", categoria, immagine, nomeCibo)
+            db.execute("UPDATE ? SET formato = ? WHERE food_name = ?", categoria, formato, nomeCibo)
+
+            return redirect(url_for("gestioneCiboCategoria", categoria=categoria))
         
     else:
         return apology("Non sei autorizzato")

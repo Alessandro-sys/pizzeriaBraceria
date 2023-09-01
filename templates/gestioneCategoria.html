@@ -45,7 +45,18 @@
     <div class="container">
         {% for categoria in cibi %}
         <div class="card text-center" style="width: 18rem;">
-            <img src="../static/1.jpg" class="card-img-top" alt="...">
+            {% if immagini[categoria.nome_categoria] != '' %}
+                {% if immagini[categoria.nome_categoria][1] == 'PNG' %}
+                    <div style="width: 100%; text-align: center;">
+                        <img src="data:image/png;base64, {{ immagini[categoria.nome_categoria][0] }}" class="card-img-top" alt="..." style="max-width: 20%;">
+                    </div>
+                {% endif %}
+                {% if immagini[categoria.nome_categoria][1] == 'JPEG' %}
+                    <div style="width: 100%; text-align: center;">
+                        <img src="data:image/jpg;base64, {{ immagini[categoria.nome_categoria][0] }}" class="card-img-top" alt="..." style="max-width: 20%;">
+                    </div>
+                {% endif %}
+            {% endif %}
             <div class="card-body">
                 <h5 class="card-title">{{ categoria.nome_categoria }}</h5>
                 {% if categoria.status == 'show' %}

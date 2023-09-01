@@ -30,9 +30,12 @@
     </div>
 
     <div class="formInserimentoCibo">
-        <form action="/aggiungiCategoria" method="post">
+        <form action="/aggiungiCategoria" method="post" enctype="multipart/form-data" id="upload-form">
             <div class="inputAreas">
                 <input type="text" placeholder="Nome Categoria" name="nome" required autocomplete="off" class="formInputNuovo" style="margin-bottom: 50px;">
+            </div>
+            <div class="dragArea">
+                <input type="file" id="file-input" name="file-input">
             </div>
             <div class="buttonArea">
                 <button type="submit" class="bottoneCapicollo">Inserisci</button>
