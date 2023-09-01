@@ -14,7 +14,7 @@ import imghdr
 from string import Template
 import random
 
-from helpers import apology, login_required, sendEmail
+from helpers import apology, login_required, sendEmail, getFormat
 
 
 db = SQL("sqlite:///database.db")
@@ -30,11 +30,11 @@ data_selezionata = ""
 app = Flask(__name__)
 
 #UPLOAD_FOLDER = r'/Users/alessandrochiarulli/Documents/GitHub/pizzeriaBraceria/static'
-UPLOAD_FOLDER = r'C:\Users\chiar\Desktop\pizzeriaBraceria\static'
+UPLOAD_FOLDER = r'C:\Users\chiar\Desktop\pizzeriaBraceria\static\immagini_menu'
 
 
 # Configure session to use filesystem (instead of signed cookies)
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
@@ -961,21 +961,26 @@ def gestioneCiboCategoria(categoria):
 
             for cibo in cibi:
 
+                formato = cibo["formato"]
                 image_blob = cibo['immagine']
+                
+                nomeCibo = cibo["food_name"]
 
 
                 if image_blob is None:
-                    link_immagini[cibo["food_name"]] = ''
+                    link_immagini[nomeCibo] = ''
                 else:
                     # Convertire l'immagine BLOB in un formato utilizzabile
-                    immagineFinale = base64.b64encode(image_blob).decode('utf-8')
-                    link_immagini[cibo["food_name"]] = {}
-                    link_immagini[cibo["food_name"]]["immagine"] = immagineFinale
-                    link_immagini[cibo["food_name"]]["formato"] = cibo["formato"]
+                    immagineFinale = base64.b64encode(image_blob).decode('utf-8') 
 
+                    infoImmagini = []
+                    infoImmagini.append(immagineFinale)
+                    infoImmagini.append(formato)
+                    
+                    link_immagini[nomeCibo] = infoImmagini
 
-            print(link_immagini)
-            return render_template("cibi.html", cibi = cibi, categoria = categoria, immagine = immagineFinale)
+            return render_template("cibi.html", cibi = cibi, categoria = categoria, immagine = link_immagini)
+
     else:
         return apology("Non sei autorizzato")
     
@@ -1011,21 +1016,23 @@ def modifica():
                 return apology("Errore del server")
 
 
-            fileImmagine = request.files['file-input']
 
+            fileImmagine = request.files['file-input']
             if fileImmagine.filename != '':
-                image_format = imghdr.what(None, h=fileImmagine.read())
+
                 filenameSecure = secure_filename(fileImmagine.filename)
                 file_path = os.path.join(app.config['UPLOAD_FOLDER'], filenameSecure)
                 fileImmagine.save(file_path)
-                
+
+                with Image.open(file_path) as img:
+                    # Ottieni il formato dell'immagine
+                    formato = img.format        
+                    db.execute("UPDATE ? SET formato = ? WHERE food_name = ?", categoria, formato, oldNome)     
 
                 with open (file_path, "rb") as image_file:
                     image_data = image_file.read()
-
-
                     db.execute("UPDATE ? SET immagine = ? WHERE food_name = ?", categoria, image_data, oldNome)
-                    db.execute("UPDATE ? SET formato = ? WHERE food_name = ?", categoria, image_format, oldNome)
+        
 
             db.execute("UPDATE ? SET food_name = ? WHERE food_name = ?", categoria, nome, oldNome)
             db.execute("UPDATE ? SET price = ? WHERE food_name = ?", categoria, prezzo, nome)

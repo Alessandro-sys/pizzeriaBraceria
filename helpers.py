@@ -9,6 +9,7 @@ import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from string import Template
+import imghdr
 
 from flask import redirect, render_template, session
 from functools import wraps
@@ -124,3 +125,10 @@ def sendEmail(body, toemail, subject):
     s.send_message(msg)
     s.quit()
     del msg
+
+
+
+def getFormat(file):
+    format = imghdr.what(None, h=file.read())
+    return format
+    
