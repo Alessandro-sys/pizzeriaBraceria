@@ -12,6 +12,21 @@ body, html{
     justify-content: center;
     background-color: #011627;
 }
+.mainContainerAmongo{
+    min-height: fit-content;
+    display: flexbox;
+    align-items: flex-start;
+    justify-content: center;
+    background-color: #011627;
+}
+
+.container {
+    padding-top: 1%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 3rem; /* Aggiunge uno spazio tra le card */
+}
 
 table{
     width: 96%;

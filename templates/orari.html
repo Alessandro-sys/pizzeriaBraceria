@@ -11,7 +11,7 @@
 
 {% block body %}
 
-    <div class="mainContainer">
+    <div class="mainContainerAmongo">
         <div class="pannelloDiControllo">
             <form action="/admin">    
                 <button type="submit" class="bottoneSubmit">Torna al pannello di controllo</button>
@@ -35,54 +35,46 @@
             </form>
         </div>
         
-        
-        <div class="container">
-            {% for orario in orari %}
-                <div class="card-body">
-                    <h5 class="card-title">{{ cibo.orario }}</h5>
-                    
-                    {% if orario.status == 'prenotato' %}
-                        <button type="submit" disabled class="btn btn-primary">Richiesto</button>
-                    
-                    {% endif %}
-                    {% if cibo.status == 'show' %}
-                        <form action="/rimuovi" method="post">
-                            <input type="hidden" name="nomeCategoria" value="{{ categoria }}">
-                            <input type="hidden" name="nomeCibo" value="{{cibo.food_name}}">
-                            <button type="submit" class="btn btn-primary" style="background-color: #ffb800 !important; border: #ffb800 !important; margin: 2px;">Disattiva</button>
-                        </form>
-                    {% endif %}
-                    {% if cibo.status == 'hidden' %}
-                        <form action="/ripristinaElementi" method="post">
-                            <input type="hidden" name="nomeCategoria" value="{{ categoria }}">
-                            <input type="hidden" name="nomeCibo" value="{{cibo.food_name}}">
-                            <button type="submit" class="btn btn-primary" style="background-color: #ffb800 !important; border: #ffb800 !important; margin: 2px;">Attiva</button>
-                        </form>
-                    {% endif %}
-                    
-                    <form action="/modifica">
-                        <input type="hidden" name="nomeCategoria" value="{{ categoria }}">
-                        <input type="hidden" name="nomeCibo" value="{{cibo.food_name}}">
-                        <button type="submit" class="btn btn-primary" style="background-color: #ffb800 !important; border: #ffb800 !important; margin: 2px;">Modifica</button>
+    </div>
+
+
+    <div class="container">
+        {% for orario in orari %}
+        <div class="card text-center" style="width: 18rem;">
+            <div class="card-body">
+                <h5 class="card-title">{{ orario.orario }}</h5>
+                {% if orario.status == 'prenotato' %}
+                    <button type="submit" disabled class="btn btn-primary" style="background-color: #ffb800 !important; border: #ffb800 !important; margin: 2px; width: 100%;">Richiesto</button>
+                    <form action="/utentiPrenotati">
+                        <button type="submit" class="btn btn-primary" style="background-color: #ffb800 !important; border: #ffb800 !important; margin: 2px; width: 100%;">Vai alle Prenotazoni</button>
                     </form>
-                    <button type="submit" disabled class="btn btn-primary" id="{{cibo.status}}">
-                        {% if cibo.status == 'show' %}
-                            Attivo
-                        {% endif %}
-                        {% if cibo.status == 'hidden' %}
-                            Non Attivo
-                        {% endif %}
-                                    
-                    </button>
-                </div>
+                {% endif %}
+                {% if orario.status == 'disp' %}
+                    <button type="submit" disabled class="btn btn-primary" style="background-color: green !important; border: green !important; margin: 2px; width: 100%;">Disponibile</button>
+                    <form action="/orari" method="post">
+                        <input type="hidden" name="idOrario" value="{{ orario.id }}">
+                        <input type="hidden" value="disattiva" name="cambioStatus">
+                        <button type="submit"  class="btn btn-primary" style="background-color: green !important; border: green !important; margin: 2px; width: 100%;">Disattiva Orario</button>
+                    </form>           
+                {% endif %}
+                {% if orario.status == 'ndisp' %}
+                    <button type="submit" disabled class="btn btn-primary" style="background-color: red !important; border: red !important; margin: 2px; width: 100%;">Non Disponibile</button>
+                    <form action="/orari" method="post">
+                        <input type="hidden" name="idOrario" value="{{ orario.id }}">
+                        <input type="hidden" value="attiva" name="cambioStatus">
+                        <button type="submit"  class="btn btn-primary" style="background-color: red !important; border: red !important; margin: 2px; width: 100%;">Attiba Orario</button>
+                    </form>  
+                {% endif %}
+                
             </div>
-            {% endfor %}
         </div>
-
         {% endfor %}
+    </div>
 
 
-        <table>
+    
+
+        <!-- <table>
             <thead>
                 <tr>
                     <th>Orario</th>
@@ -128,6 +120,6 @@
                 </tr>
                 {% endfor %}
             </tbody>
-        </table>
+        </table> -->
 
 {% endblock %}

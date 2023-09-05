@@ -853,7 +853,7 @@ def orari():
             if not idOrario:
                 return apology("Errore interno del server", 104)
             if not nuovoStatus:
-                return apology("Assdicurati di aver completato tutti i campi")
+                return apology("Errore del server")
             
             orarioScelto = ""
 
@@ -864,10 +864,15 @@ def orari():
                 if orario["id"] == int(idOrario):
                     orarioScelto = orario["orario"]
 
-
-            dbUsers.execute("INSERT INTO modifiche_orari (data, ora, status) VALUES (?, ?, ?)", data, orarioScelto, nuovoStatus)
+            if nuovoStatus == "disattiva":
+                status = "ndisp"
+                dbUsers.execute("INSERT INTO modifiche_orari (data, ora, status) VALUES (?, ?, ?)", data, orarioScelto, status)
+            elif nuovoStatus == "attiva":
+                status = "disp"
+                dbUsers.execute("INSERT INTO modifiche_orari (data, ora, status) VALUES (?, ?, ?)", data, orarioScelto, status)
+            else:
+                return apology("Errore interno del server")
             
-
             return redirect("/orari")
 
     else:
