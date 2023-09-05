@@ -29,8 +29,8 @@ data_selezionata = ""
 
 app = Flask(__name__)
 
-#UPLOAD_FOLDER = r'/Users/alessandrochiarulli/Documents/GitHub/pizzeriaBraceria/static'
-UPLOAD_FOLDER = r'C:\Users\chiar\Desktop\pizzeriaBraceria\static\immagini_menu'
+UPLOAD_FOLDER = r'/Users/alessandrochiarulli/Documents/GitHub/pizzeriaBraceria/static'
+#UPLOAD_FOLDER = r'C:\Users\chiar\Desktop\pizzeriaBraceria\static\immagini_menu'
 
 
 # Configure session to use filesystem (instead of signed cookies)
