@@ -34,6 +34,54 @@
                 <button type="submit" class="bottoneSubmit" style="margin: 2%;">Seleziona Data</button>
             </form>
         </div>
+        
+        
+        <div class="container">
+            {% for orario in orari %}
+                <div class="card-body">
+                    <h5 class="card-title">{{ cibo.orario }}</h5>
+                    
+                    {% if orario.status == 'prenotato' %}
+                        <button type="submit" disabled class="btn btn-primary">Richiesto</button>
+                    
+                    {% endif %}
+                    {% if cibo.status == 'show' %}
+                        <form action="/rimuovi" method="post">
+                            <input type="hidden" name="nomeCategoria" value="{{ categoria }}">
+                            <input type="hidden" name="nomeCibo" value="{{cibo.food_name}}">
+                            <button type="submit" class="btn btn-primary" style="background-color: #ffb800 !important; border: #ffb800 !important; margin: 2px;">Disattiva</button>
+                        </form>
+                    {% endif %}
+                    {% if cibo.status == 'hidden' %}
+                        <form action="/ripristinaElementi" method="post">
+                            <input type="hidden" name="nomeCategoria" value="{{ categoria }}">
+                            <input type="hidden" name="nomeCibo" value="{{cibo.food_name}}">
+                            <button type="submit" class="btn btn-primary" style="background-color: #ffb800 !important; border: #ffb800 !important; margin: 2px;">Attiva</button>
+                        </form>
+                    {% endif %}
+                    
+                    <form action="/modifica">
+                        <input type="hidden" name="nomeCategoria" value="{{ categoria }}">
+                        <input type="hidden" name="nomeCibo" value="{{cibo.food_name}}">
+                        <button type="submit" class="btn btn-primary" style="background-color: #ffb800 !important; border: #ffb800 !important; margin: 2px;">Modifica</button>
+                    </form>
+                    <button type="submit" disabled class="btn btn-primary" id="{{cibo.status}}">
+                        {% if cibo.status == 'show' %}
+                            Attivo
+                        {% endif %}
+                        {% if cibo.status == 'hidden' %}
+                            Non Attivo
+                        {% endif %}
+                                    
+                    </button>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        {% endfor %}
+
+
         <table>
             <thead>
                 <tr>
