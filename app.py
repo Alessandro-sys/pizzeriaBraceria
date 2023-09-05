@@ -87,6 +87,7 @@ def menu():
 
     # array che conterrà tutti delle liste contenenti il nome della categoria e i cibi contenuti
     cibi = []
+    cibiSingolaColonna = []
 
 
     for categoria in categorieDaMostrare:
@@ -107,6 +108,14 @@ def menu():
         for cibo in cibiDatabase:
             if cibo["status"] == "show":
                 cibiDatabaseSenzaNascosti.append(cibo)
+
+        
+
+        dizionarioCibi = {}
+
+        dizionarioCibi["nome_categoria"] = nomeCategoria.upper()
+        dizionarioCibi["contenuto_categoria"] = cibiDatabaseSenzaNascosti
+        cibiSingolaColonna.append(dizionarioCibi)
         
         # mette metà cibi nell'array di sinistra e metà in quello di destra, per rendere la pagina più ordinata
         for cibo in cibiDatabaseSenzaNascosti:
@@ -131,11 +140,9 @@ def menu():
         # inserisce tutto quanto nell'array cibi
         cibi.append(dizionario)
 
-
-    
     lenght = len(session)
 
-    return render_template("menu.html", cibi = cibi, len = lenght)
+    return render_template("menu.html", cibi = cibi, len = lenght, cibiSingoli = cibiSingolaColonna)
 
 
 

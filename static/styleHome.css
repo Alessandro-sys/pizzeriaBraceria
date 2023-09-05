@@ -44,10 +44,7 @@ h1{
 
 
 .welcome{
-    height: 100vh;
-    width: 100%;
-    background-image: url(3.jpg);
-    background-size: cover;
+    display: none;
 }
 
 .welcomeVideo{
@@ -219,6 +216,16 @@ h1{
     .testo{
         max-width: 60%;
     }
+    .welcomeVideo{
+        display: none !important;
+    }
+    .welcome{
+        display: contents !important;
+        height: 100vh;
+        width: 100%;
+        background-image: url(3.jpg);
+        background-size: cover;
+    }
 }
 
 
@@ -246,6 +253,16 @@ h1{
     }
     .storia{
         font-size: medium;
+    }
+    .welcomeVideo{
+        display: none !important;
+    }
+    .welcome{
+        display: contents !important;
+        height: 100vh ;
+        width: 100% ;
+        background-image: url(3.jpg) ;
+        background-size: cover ;
     }
 }
 

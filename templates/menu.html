@@ -32,12 +32,12 @@
     </div>
 
     <div class="menuDiv">
-        <div>
+        <div class="dual">
             {% for categoria in cibi %}
                 <div class="menuTitleDiv">
                     <h5 class="menuSection">{{ categoria.nome_categoria }}</h5>
                 </div>
-                <div id="menuBevande" class="dual">
+                <div id="menuBevande" >
                     {% for singolaCategoria in categoria.contenuto_categoria %}
                     <table class="sx">
                         {% for cibo in singolaCategoria %}
@@ -49,21 +49,28 @@
                     </table>
                     {% endfor %}
                 </div>
-
-                <!-- <div id="menuBevandePhone" class="single">
-                    <table class="sx">
-                        {% for bevanda in bevande %}
-                        <tr>
-                            <td class="menuItem">{{ bevanda.food_name }} <span class="subtitle">{{ bevanda.description }}</span></td>
-                            <td class="menuItem">€ {{ bevanda.price }}</td>
-                        </tr>
-                        {% endfor %}
-                    </table>
-                    
-                </div> -->
             {% endfor %}
 
             <br><br><br>
+        </div>
+        <div class="single">
+            {% for categoria in cibiSingoli %}
+                <div class="menuTitleDiv">
+                    <h5 class="menuSection">{{ categoria.nome_categoria }}</h5>
+                </div>
+                <div id="menuBevande" class="tabellaSingola">
+                    <table class="sx">
+                        {% for cibo in categoria.contenuto_categoria %}
+                        <tr>
+                            <td class="menuItem">{{ cibo.food_name }} <span class="subtitle">{{ cibo.description }}</span></td>
+                            <td class="menuItem">€ {{ cibo.price }}</td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+            {% endfor %}
+
+            <br><br><br><br><br><br>
         </div>
         
 
