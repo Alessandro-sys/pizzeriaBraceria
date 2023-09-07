@@ -34,6 +34,20 @@
     <div class="menuDiv">
         <div class="dual">
             {% for categoria in cibi %}
+                <div class="immagineCategoriaMenu">
+                    {% if immagini[categoria.nome_categoria] != '' %}
+                        {% if immagini[categoria.nome_categoria][1] == 'PNG' %}
+                            
+                            <img src="data:image/png;base64, {{ immagini[categoria.nome_categoria][0] }}" alt="..." class="immagine">
+                            
+                        {% endif %}
+                        {% if immagini[categoria.nome_categoria][1] == 'JPEG' %}
+                            
+                            <img src="data:image/jpg;base64, {{ immagini[categoria.nome_categoria][0] }}" alt="..." class="immagine">
+                            
+                        {% endif %}
+                    {% endif %}
+                </div>
                 <div class="menuTitleDiv">
                     <h5 class="menuSection">{{ categoria.nome_categoria }}</h5>
                 </div>

@@ -1,8 +1,8 @@
 /* globali */
 
 body{
-    margin: 0;
     overflow-y: auto;
+    margin: 0;
     overflow-x: hidden;
 }
 
@@ -98,7 +98,17 @@ h1{
 /* fine globali */
 
 
+.immagineCategoriaMenu{
+    
+    width: 100%;
+    align-items: center;
+    text-align: center;
+}
 
+.immagine{
+    padding-top: 3%;
+    max-width: 20%;
+}
 
 
 .welcomeMenu{

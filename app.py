@@ -29,7 +29,7 @@ data_selezionata = ""
 
 app = Flask(__name__)
 
-UPLOAD_FOLDER = r'/Users/alessandrochiarulli/Documents/GitHub/pizzeriaBraceria/static'
+UPLOAD_FOLDER = r'/Users/ale/Desktop/pizzeriaBraceria/static/immagini_menu'
 #UPLOAD_FOLDER = r'C:\Users\chiar\Desktop\pizzeriaBraceria\static\immagini_menu'
 
 
@@ -140,9 +140,33 @@ def menu():
         # inserisce tutto quanto nell'array cibi
         cibi.append(dizionario)
 
+
+    link_immagini = {}
+
+    for categoria in categorieDaMostrare:
+
+        formato = categoria["formato"]
+        image_blob = categoria['immagine']
+        
+        nomeCategoria = categoria["categoria"].upper()
+
+
+        if image_blob is None:
+            link_immagini[nomeCategoria] = ''
+        else:
+            # Convertire l'immagine BLOB in un formato utilizzabile
+            immagineFinale = base64.b64encode(image_blob).decode('utf-8') 
+
+            infoImmagini = []
+            infoImmagini.append(immagineFinale)
+            infoImmagini.append(formato)
+            
+            link_immagini[nomeCategoria] = infoImmagini
+
+
     lenght = len(session)
 
-    return render_template("menu.html", cibi = cibi, len = lenght, cibiSingoli = cibiSingolaColonna)
+    return render_template("menu.html", cibi = cibi, len = lenght, cibiSingoli = cibiSingolaColonna, immagini = link_immagini)
 
 
 
@@ -450,6 +474,8 @@ def aggiungi():
                 with Image.open(file_path) as img:
                     # Ottieni il formato dell'immagine
                     image_format = img.format
+                    if image_format != "PNG" and image_format != "JPEG":
+                        return apology("formati supportati: jpg, png")
 
                 with open (file_path, "rb") as image_file:
                     image_data = image_file.read()
@@ -1065,7 +1091,9 @@ def modifica():
                 
                 with Image.open(file_path) as img:
                     # Ottieni il formato dell'immagine
-                    formato = img.format        
+                    formato = img.format
+                    if formato != "PNG" and formato != "JPEG":
+                        return apology("formati supportati: jpg, png")
                     db.execute("UPDATE ? SET formato = ? WHERE food_name = ?", categoria, formato, oldNome)     
 
                 with open (file_path, "rb") as image_file:
@@ -1114,7 +1142,10 @@ def aggiungiCategoria():
                 image_format = ""
                 with Image.open(file_path) as img:
                     # Ottieni il formato dell'immagine
-                    image_format = img.format        
+                    image_format = img.format
+                    if image_format != "PNG" and image_format != "JPEG":
+                        return apology("formati supportati: jpg, png")
+ 
                        
 
                 with open (file_path, "rb") as image_file:
@@ -1270,7 +1301,10 @@ def modificaCategoria():
                 
                 with Image.open(file_path) as img:
                     # Ottieni il formato dell'immagine
-                    formato = img.format        
+                    formato = img.format    
+                    if formato != "PNG" and formato != "JPEG":
+                        return apology("formati supportati: jpg, png")
+    
                     db.execute("UPDATE categorie SET formato = ? WHERE categoria = ?", formato, oldCategoria)     
 
                 with open (file_path, "rb") as image_file:
