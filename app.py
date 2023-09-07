@@ -471,7 +471,7 @@ def aggiungi():
                     db.execute("INSERT INTO ? (food_name, price) VALUES (?, ?)", categoria, nome, price)
                 else:
                     # if there's a description adds a new food with description
-                    db.execute("INSERT INTO ? (food_name, price, description, immagine) VALUES (?, ?, ?)", categoria, nome, price, description)
+                    db.execute("INSERT INTO ? (food_name, price, description) VALUES (?, ?, ?)", categoria, nome, price, description)
 
 
 
@@ -1337,5 +1337,20 @@ def eliminaOraio():
             idOrario = request.form.get("idOrario")
             dbUsers.execute("DELETE FROM orari_disponibili WHERE id = ?", idOrario)
             return redirect("/orari")
+    else:
+        return apology("Non sei autorizzato a raggiungere questa pagina")
+    
+
+@app.route("/eliminaCiboDefinitivamente", methods=["GET","POST"])
+@login_required
+def eliminaCiboDefinitivamente():
+    if session["user_id"] == 1 or session["user_id"] == 5 or session["user_id"] == 8:
+        if request.method == "GET":
+            nomeCibo = request.args.get("nomeCibo")
+            categoria = request.args.get("categoria")    
+
+            db.execute("DELETE FROM ? WHERE food_name = ?", categoria, nomeCibo)
+            return redirect(url_for("gestioneCiboCategoria", categoria=categoria))
+
     else:
         return apology("Non sei autorizzato a raggiungere questa pagina")

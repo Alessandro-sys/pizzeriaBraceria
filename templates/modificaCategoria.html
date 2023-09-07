@@ -54,6 +54,10 @@
                 <button type="submit" class="bottoneCapicollo">Rimuovi Immagine</button>
             </div>
         </form>
+        <form action="/rimuoviCategoria" method="post">
+            <input type="hidden" name="nomeCategoria" value="{{categoria}}">
+            <button type="submit" disabled class="bottoneCapicollo" style="background-color: red !important; border:red !important;  margin: 2px;">Elimina</button>
+        </form>
     </div>
     
 

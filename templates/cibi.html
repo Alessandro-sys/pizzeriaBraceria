@@ -56,39 +56,65 @@
                     </div>
                 {% endif %}
             {% endif %}
+            {% if immagine[cibo.food_name] == '' %}
+                    <img src="../static/modello-di-copertina-del-menu-del-ristorante-cafe-pagina-del-titolo-con-doodle-di-cibo-disegnato-a-mano-contorno-di-schizzo-colorato-su-sfondo-bianco-poster-vettoriale-con-illustrazione-dell-elemento-di-cottura-wdkmf1.jpg" alt="">
+            {% endif %}
             <div class="card-body">
                 <h5 class="card-title">{{ cibo.food_name }}</h5>
                 <p>{{ cibo.description }}</p>
                 <p>€{{ cibo.price }}</p>
-                {% if cibo.status == 'show' %}
-                    <form action="/rimuovi" method="post">
-                        <input type="hidden" name="nomeCategoria" value="{{ categoria }}">
-                        <input type="hidden" name="nomeCibo" value="{{cibo.food_name}}">
-                        <button type="submit" class="btn btn-primary" style="background-color: #ffb800 !important; border: #ffb800 !important; margin: 2px;">Disattiva</button>
-                    </form>
-                {% endif %}
-                {% if cibo.status == 'hidden' %}
-                    <form action="/ripristinaElementi" method="post">
-                        <input type="hidden" name="nomeCategoria" value="{{ categoria }}">
-                        <input type="hidden" name="nomeCibo" value="{{cibo.food_name}}">
-                        <button type="submit" class="btn btn-primary" style="background-color: #ffb800 !important; border: #ffb800 !important; margin: 2px;">Attiva</button>
-                    </form>
-                {% endif %}
-                
                 <form action="/modifica">
                     <input type="hidden" name="nomeCategoria" value="{{ categoria }}">
                     <input type="hidden" name="nomeCibo" value="{{cibo.food_name}}">
-                    <button type="submit" class="btn btn-primary" style="background-color: #ffb800 !important; border: #ffb800 !important; margin: 2px;">Modifica</button>
+                    <button type="submit" class="btn btn-primary" style="background-color: white !important; border: white !important; margin: 2px; color: black;">
+                        <img src="../static/edit_pencil_paper_modify_write_icon_141958.png" alt="" width="10%">
+                    </button>
                 </form>
-                <button type="submit" disabled class="btn btn-primary" id="{{cibo.status}}">
-                    {% if cibo.status == 'show' %}
-                        Attivo
-                    {% endif %}
-                    {% if cibo.status == 'hidden' %}
-                        Non Attivo
-                    {% endif %}
-                                
-                </button>
+
+                {% if cibo.status == 'show' %}
+                    <form id="myFormShow-{{cibo.food_name}}" action="/rimuovi" method="post" >
+                        <input type="hidden" name="nomeCategoria" value="{{ categoria }}">
+                        <input type="hidden" name="nomeCibo" value="{{ cibo.food_name }}">
+                        <label class="custom-switch">
+                            <input type="checkbox" id="mySwitchShow-{{cibo.food_name}}" name="switch" checked>
+                            <span class="custom-slider"></span>
+                        </label>
+                    </form>
+                    <script>
+                        document.addEventListener("DOMContentLoaded", function() {
+                            const mySwitchShow = document.getElementById("mySwitchShow-{{cibo.food_name}}");
+                            const myFormShow = document.getElementById("myFormShow-{{cibo.food_name}}"); // Ottieni la form corretta
+                            
+                            mySwitchShow.addEventListener("change", function() {
+                                myFormShow.submit();
+                            });
+                        });
+                    </script>
+                {% endif %}
+
+
+                {% if cibo.status == 'hidden' %}
+                    <form id="myFormHidden-{{cibo.food_name}}" action="/ripristinaElementi" method="post">
+                        <input type="hidden" name="nomeCategoria" value="{{ categoria }}">
+                        <input type="hidden" name="nomeCibo" value="{{cibo.food_name}}">
+                        <label class="custom-switch">
+                            <input type="checkbox" id="mySwitchHidden-{{cibo.food_name}}" name="switch">
+                            <span class="custom-slider"></span>
+                        </label>
+                    </form>
+                    <script>
+                        document.addEventListener("DOMContentLoaded", function() {
+                            const mySwitchShow = document.getElementById("mySwitchHidden-{{cibo.food_name}}");
+                            const myFormShow = document.getElementById("myFormHidden-{{cibo.food_name}}"); // Ottieni la form corretta
+                            
+                            mySwitchShow.addEventListener("change", function() {
+                                myFormShow.submit();
+                            });
+                        });
+                    </script>
+                {% endif %}
+
+                
             </div>
         </div>
         {% endfor %}

@@ -57,40 +57,68 @@
                     </div>
                 {% endif %}
             {% endif %}
+            {% if immagini[categoria.nome_categoria] == '' %}
+                    <img src="../static/modello-di-copertina-del-menu-del-ristorante-cafe-pagina-del-titolo-con-doodle-di-cibo-disegnato-a-mano-contorno-di-schizzo-colorato-su-sfondo-bianco-poster-vettoriale-con-illustrazione-dell-elemento-di-cottura-wdkmf1.jpg" alt="">
+            {% endif %}
             <div class="card-body">
                 <h5 class="card-title">{{ categoria.nome_categoria }}</h5>
-                {% if categoria.status == 'show' %}
-                    <form action="/nascondiCategoria" method="post">
-                        <input type="hidden" name="nomeCategoria" value="{{ categoria.nome_categoria }}">
-                        <button type="submit" class="btn btn-primary" style="background-color: #ffb800 !important; border: #ffb800 !important; margin: 2px;">Disattiva</button>
-                    </form>
-                {% endif %}
-                {% if categoria.status == 'hidden' %}
-                    <form action="/ripristinaCategoria" method="post">
-                        <input type="hidden" name="nomeCategoria" value="{{ categoria.nome_categoria}}">
-                        <button type="submit" class="btn btn-primary" style="background-color: #ffb800 !important; border: #ffb800 !important; margin: 2px;">Attiva</button>
-                    </form>
-                {% endif %}
-                <form action="/gestioneCategorie" method="post">
-                    <input type="hidden" name="nomeCategoria" value="{{categoria.nome_categoria}}">
-                    <button type="submit" class="btn btn-primary" style="background-color: #ffb800 !important; border: #ffb800 !important; margin: 2px;">Entra</button>
-                </form>
+
                 <form action="/modificaCategoria" method="get">
                     <input type="hidden" name="nomeCategoria" value="{{categoria.nome_categoria}}">
-                    <button type="submit" class="btn btn-primary" style="background-color: #ffb800 !important; border:#ffb800 !important;  margin: 2px;" >Modifica</button>
+                    <button type="submit" class="btn btn-primary" style="background-color: white !important; border: white !important; margin: 2px; color: black;">
+                        <img src="../static/edit_pencil_paper_modify_write_icon_141958.png" alt="" width="10%">
+                    </button>
                 </form>
-                <form action="/rimuoviCategoria" method="post">
+
+
+                {% if categoria.status == 'show' %}
+                    <form id="myFormShow-{{categoria.nome_categoria}}" action="/nascondiCategoria" method="post" >
+                        <input type="hidden" name="nomeCategoria" value="{{ categoria.nome_categoria }}">
+                        <label class="custom-switch">
+                            <input type="checkbox" id="mySwitchShow-{{categoria.nome_categoria}}" name="switch" checked>
+                            <span class="custom-slider"></span>
+                        </label>
+                    </form>
+                    <script>
+                        document.addEventListener("DOMContentLoaded", function() {
+                            const mySwitchShow = document.getElementById("mySwitchShow-{{categoria.nome_categoria}}");
+                            const myFormShow = document.getElementById("myFormShow-{{categoria.nome_categoria}}"); // Ottieni la form corretta
+                            
+                            mySwitchShow.addEventListener("change", function() {
+                                myFormShow.submit();
+                            });
+                        });
+                    </script>
+                {% endif %}
+
+
+                {% if categoria.status == 'hidden' %}
+                    <form id="myFormHidden-{{categoria.nome_categoria}}" action="/ripristinaCategoria" method="post">
+                        <input type="hidden" name="nomeCategoria" value="{{ categoria.nome_categoria}}">
+                        <label class="custom-switch">
+                            <input type="checkbox" id="mySwitchHidden-{{categoria.nome_categoria}}" name="switch">
+                            <span class="custom-slider"></span>
+                        </label>
+                    </form>
+                    <script>
+                        document.addEventListener("DOMContentLoaded", function() {
+                            const mySwitchShow = document.getElementById("mySwitchHidden-{{categoria.nome_categoria}}");
+                            const myFormShow = document.getElementById("myFormHidden-{{categoria.nome_categoria}}"); // Ottieni la form corretta
+                            
+                            mySwitchShow.addEventListener("change", function() {
+                                myFormShow.submit();
+                            });
+                        });
+                    </script>
+                {% endif %}
+
+
+                <form action="/gestioneCategorie" method="post">
                     <input type="hidden" name="nomeCategoria" value="{{categoria.nome_categoria}}">
-                    <button type="submit" disabled class="btn btn-primary" style="background-color: red !important; border:red !important;  margin: 2px;">Elimina</button>
+                    <button type="submit" class="btn btn-primary" style="background-color: #ffb800 !important; border: #ffb800 !important; margin: 2px; width: 50% !important;">Entra</button>
                 </form>
-                <button type="submit" disabled class="btn btn-primary" id="{{categoria.status}}" style=" margin: 2px;">
-                    {% if categoria.status == 'show' %}
-                        Attivo
-                    {% endif %}
-                    {% if categoria.status == 'hidden' %}
-                        Non Attivo
-                    {% endif %}                             
-                </button>
+                
+                
             </div>
         </div>
         {% endfor %}
