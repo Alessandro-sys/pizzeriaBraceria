@@ -62,64 +62,16 @@
                     <form action="/orari" method="post">
                         <input type="hidden" name="idOrario" value="{{ orario.id }}">
                         <input type="hidden" value="attiva" name="cambioStatus">
-                        <button type="submit"  class="btn btn-primary" style="background-color: red !important; border: red !important; margin: 2px; width: 100%;">Attiba Orario</button>
+                        <button type="submit"  class="btn btn-primary" style="background-color: red !important; border: red !important; margin: 2px; width: 100%;">Attiva Orario</button>
                     </form>  
                 {% endif %}
-                
+                <form action="/eliminaOrario" method="post">
+                    <input type="hidden" name="idOrario" value="{{ orario.id }}">
+                    <button type="submit" class="btn btn-primary" style="background-color: red !important; border: red !important; margin: 2px; width: 100%;">Elimina Orario</button>
+                </form>
             </div>
         </div>
         {% endfor %}
     </div>
-
-
-    
-
-        <!-- <table>
-            <thead>
-                <tr>
-                    <th>Orario</th>
-                    <th>Status</th>
-                    <th>Azioni</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for orario in orari %}
-                <tr>
-                    <td>{{orario.orario}}</td>
-                    <td>
-                        <form action="">
-                            <button class="{{ orario.status }}">
-                                {% if orario.status == 'disp' %}
-                                    Disponibile
-                                {% endif %}
-                                {% if orario.status == 'ndisp' %}
-                                    Non Disponibile
-                                {% endif %}
-                                {% if orario.status == 'prenotato' %}
-                                    Prenotato
-                                {% endif %}
-                            </button>
-                        </form>
-                    </td>
-                    <td>
-                        <form action="/orari" method="post" class="formForm">
-                            <input type="hidden" name="idOrario" value="{{ orario.id }}">
-                            <select name="cambioStatus" class="formInput">
-                                {% if orario.status == 'disp' %}
-                                    <option value="disp" selected disabled>Disponibile</option>
-                                    <option value="ndisp">Non Disponibile</option>
-                                {% endif %}
-                                {% if orario.status == 'ndisp' %}
-                                    <option value="ndisp" selected disabled>Non Disponibile</option>
-                                    <option value="disp">Disponibile</option>
-                                {% endif %}
-                            </select>
-                            <button type="submit" class="submitButton">Conferma</button>
-                        </form>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table> -->
 
 {% endblock %}

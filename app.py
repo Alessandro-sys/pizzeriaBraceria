@@ -634,6 +634,8 @@ Divina Pizzeria Braceria
 
             # updates the status in the database
             dbUsers.execute("UPDATE prenotazioni SET status = ? WHERE id = ?", nuovoStatus, idPrenotazione)
+            print(idPrenotazione)
+            dbUsers.execute("DELETE FROM gestione_prenotazioni WHERE id_prenotazione = ?", idPrenotazione)
 
             return redirect("/utentiPrenotati")
     else:
@@ -823,8 +825,6 @@ def orari():
 
 
             orariModificati = []
-
-            print()
 
             for orario in orari:
                 if orario["orario"] in orariSelezionati:
@@ -1326,3 +1326,16 @@ def rimuoviImmagineCibo():
         
     else:
         return apology("Non sei autorizzato")
+    
+
+
+@app.route("/eliminaOrario", methods=["GET","POST"])
+@login_required
+def eliminaOraio():
+    if session["user_id"] == 1 or session["user_id"] == 5 or session["user_id"] == 8:
+        if request.method == "POST":
+            idOrario = request.form.get("idOrario")
+            dbUsers.execute("DELETE FROM orari_disponibili WHERE id = ?", idOrario)
+            return redirect("/orari")
+    else:
+        return apology("Non sei autorizzato a raggiungere questa pagina")
