@@ -67,8 +67,32 @@
             <h1 class="hstoria">La Nostra Storia</h1>
             <p class="storia">Divina Pizzeria & Braceria nasce a Bari nel 1998, in via Orazio Comes. <br>Da noi, tradizione e creatività trovano il giusto equilibrio in antipasti e piatti che rispecchiano le ricette della tradizione barese. Proponiamo ai nostri clienti un’ottima cucina, preparata con degli ingredienti freschi e genuini presentanti in un ambiente accogliente ed altamente professionale. <br>La scelta ideale per una cena tra amici o, più semplicemente, per il piacere di gustare un’ottima pizza in un ambiente rilassante. Da noi potrete gustare dell’ottima carne, accompagnata da fantasiosi contorni e da una buona selezione di vini. <br>Vi aspettiamo</p>
         </div>
+            <div class="gianfranco">
+                <button id="info-button" class="about-button">La Nostra Storia</button>
+                <div id="info-modal" class="modal">
+                    <div class="modal-content">
+                        <span class="close">&times;</span>
+                        <div class="aboutmeinside">
+                            <p class="text">
+                                Divina Pizzeria & Braceria nasce a Bari nel 1998, in via Orazio Comes. <br>Da noi, tradizione e creatività trovano il giusto equilibrio in antipasti e piatti che rispecchiano le ricette della tradizione barese. Proponiamo ai nostri clienti un’ottima cucina, preparata con degli ingredienti freschi e genuini presentanti in un ambiente accogliente ed altamente professionale. <br>La scelta ideale per una cena tra amici o, più semplicemente, per il piacere di gustare un’ottima pizza in un ambiente rilassante. Da noi potrete gustare dell’ottima carne, accompagnata da fantasiosi contorni e da una buona selezione di vini. <br>Vi aspettiamo
+                            </p>
+                            
+                        </div>
+                    </div>
+                </div>
+                <script>
+                    document.getElementById("info-button").addEventListener("click", function() {
+                    document.getElementById("info-modal").style.display = "block";
+                    });
+
+                    document.getElementsByClassName("close")[0].addEventListener("click", function() {
+                    document.getElementById("info-modal").style.display = "none";
+                    });
+                </script>
+        </div>
     </div>
 </div>
+
 
 
 

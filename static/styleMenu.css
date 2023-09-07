@@ -231,6 +231,18 @@ table td{
 
 
 @media screen and (width < 600px) {
+    .titleDiv{
+        margin-top: -15% !important;
+    }    
+    .menuButton{
+        font-size: 15px !important;
+    }
+    .menuButtonCurrent{
+        font-size: 15px !important;
+    }
+    .title{
+        font-size: 30px !important;
+    }
     .settings{
         height: fit-content;
     }

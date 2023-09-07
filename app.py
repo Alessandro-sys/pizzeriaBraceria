@@ -634,7 +634,7 @@ Divina Pizzeria Braceria
 
             # updates the status in the database
             dbUsers.execute("UPDATE prenotazioni SET status = ? WHERE id = ?", nuovoStatus, idPrenotazione)
-            print(idPrenotazione)
+            
             dbUsers.execute("DELETE FROM gestione_prenotazioni WHERE id_prenotazione = ?", idPrenotazione)
 
             return redirect("/utentiPrenotati")
