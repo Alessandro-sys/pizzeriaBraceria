@@ -14,12 +14,15 @@ import imghdr
 from string import Template
 import random
 
-from helpers import apology, login_required, sendEmail, getFormat
+from helpers import apology, login_required, sendEmail
 
 
 db = SQL("sqlite:///database.db")
 dbUsers = SQL("sqlite:///users.db")
-dbImmagini = SQL("sqlite:///immagini.db")
+
+# database per pythonanywhere
+#db = SQL("sqlite:////home/astroale/mysite/database.db")
+#dbUsers = SQL("sqlite:////home/astroale/mysite/users.db")
 
 # Variabili globali utilizzate nel codice
 past_order = "all"
@@ -31,6 +34,8 @@ app = Flask(__name__)
 
 UPLOAD_FOLDER = r'/Users/ale/Desktop/pizzeriaBraceria/static/immagini_menu'
 #UPLOAD_FOLDER = r'C:\Users\chiar\Desktop\pizzeriaBraceria\static\immagini_menu'
+# upload per pythonanywhere
+#UPLOAD_FOLDER = r'/home/astroale/mysite/static/immagini_menu'
 
 
 # Configure session to use filesystem (instead of signed cookies)
