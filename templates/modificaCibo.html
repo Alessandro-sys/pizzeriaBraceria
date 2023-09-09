@@ -33,21 +33,79 @@
         <form action="/modifica" method="post" enctype="multipart/form-data" id="upload-form">
             <input type="hidden" name="categoria" value="{{categoria}}">
             <input type="hidden" name="oldName" value="{{nome}}">
-            <div class="inputAreas">
-                <input type="text" placeholder="Nome" name="nome" required autocomplete="off" class="formInputNuovo" style="margin-bottom: 50px;" value="{{nome}}">
-                <input type="text" placeholder="Prezzo" name="prezzo" required autocomplete="off" class="formInputNuovo" style="margin-bottom: 50px;" value="{{prezzo}}">
-            </div>
-            <div class="textArea">
-                <textarea name="description" cols="50" rows="10" placeholder="Inserisci una descrizione (facoltativo)" class="franco">{{descrizione}}</textarea>
-            </div>
+            <div class="tutto">
+                <div class="sinistra">
+                    <div class="inputAreas">
+                        <input type="text" placeholder="Nome" name="nome" required autocomplete="off" class="formInputNuovo" style="margin-bottom: 50px;" value="{{nome}}">
+                        <input type="text" placeholder="Prezzo" name="prezzo" required autocomplete="off" class="formInputNuovo" style="margin-bottom: 50px;" value="{{prezzo}}">
+                    </div>
+                    <div class="textArea">
+                        <textarea name="description" cols="50" rows="10" placeholder="Inserisci una descrizione (facoltativo)" class="franco">{{descrizione}}</textarea>
+                    </div>
 
-            <div class="dragArea">
-                <input type="file" id="file-input" name="file-input" >
-                <p style="color: black;">Formati supportati: jpg, jpeg, png</p>
-            </div>
+                    <div class="buttonArea">
+                        <button type="submit" class="bottoneCapicollo" id="uploadButton">Salva</button>
+                    </div>
+                </div>
+                <div class="destra">
+                    {% if immagine == 'default' %}
+                        <div id="drop-zone" class="drop-zone" ondragover="handleDragOver(event)" ondrop="handleDrop(event)">
+                            <img src="../static/Screenshot 2023-09-09 at 14.09.57.png" alt="drop-zone" class="immagineUpload" id="immagineUpload">
+                            <p id="trascina" style="display: contents;">Trascina qui i tuoi file</p>
+                            <p id="successo" style="display: none;">Immagine Selezionata</p>
+                        </div>
+                    
+                        <div class="dragArea">
+                            
+                            <input type="file" id="file-input"  name="file-input"  multiple style="opacity: 0;">
+                            <label for="file-input" >Oppure seleziona un file <span style="font-weight: bold; text-decoration: underline;">cliccando qui</span></label>
+                            <p style="color: black;"><br><br>Formati supportati: jpg, jpeg, png</p>
+                        </div>
 
-            <div class="buttonArea">
-                <button type="submit" class="bottoneCapicollo" id="uploadButton">Modifica</button>
+                        <script>
+                            function handleDragOver(event) {
+                            event.preventDefault();
+                            const fileInput = document.getElementById('file-input');
+                            fileInput.style.backgroundColor = 'lightgray'; // Cambia lo stile dell'input per indicare il trascinamento
+                            }
+                        
+                            function handleDrop(event) {
+                            event.preventDefault();
+                            const dropZone = document.getElementById('drop-zone');
+                            const fileInput = document.getElementById('file-input');
+                        
+                            // Aggiungi i file trascinati all'input file
+                            fileInput.files = event.dataTransfer.files;
+                        
+                            // Ripristina lo stile dell'input
+                            fileInput.style.backgroundColor = 'transparent';
+
+                            const trascina = document.getElementById("trascina");
+                            const successo = document.getElementById("successo");
+                            const immagine = document.getElementById("immagineUpload");
+                            
+                            trascina.style.display = "none";
+                            successo.style.display = "contents";
+                            successo.style.width = "80%";
+                            successo.style.marginLeft = "10%";
+                            immagine.style.display = "none";
+
+                            }
+                        </script>
+                    {% endif %}
+                    {% if immagine != 'default' %}
+                        {% if formato == 'PNG' %}
+                            <div class="dropAreaConImmagine">
+                                <img src="data:image/png;base64, {{ immagine }}" class="card-img-top" alt="..." class="immagineVecchia">
+                            </div>
+                        {% endif %}
+                        {% if formato == 'JPEG' %}   
+                            <div class="dropAreaConImmagine">
+                                <img src="data:image/jpg;base64, {{ immagine }}" class="card-img-top" alt="..." class="immagineVecchia">
+                            </div>
+                        {% endif %}
+                    {% endif %}
+                </div>
             </div>
             
             
@@ -55,20 +113,21 @@
     </div>
 
 
+
     <br><br>
-    <div class="formInserimentoCibo">
+    <div class="formInserimentoCiboBottoni">
         <form action="/rimuoviImmagineCibo" method="post">
             <input type="hidden" value="{{categoria}}" name="categoria">
             <input type="hidden" value="{{nome}}" name="nomeCibo">
-            <div class="buttonArea">
-                <button type="submit" class="bottoneCapicollo" style="width: 100% !important;">Rimuovi Immagine</button>
+            <div class="areaBottoneSotto">
+                <button type="submit" class="bottoneCapicollo" >Rimuovi Immagine</button>
             </div>
         </form>
         <form action="/eliminaCiboDefinitivamente">
             <input type="hidden" value="{{categoria}}" name="categoria">
             <input type="hidden" value="{{nome}}" name="nomeCibo">
-            <div class="buttonArea">
-                <button type="submit" class="bottoneCapicollo" style="background-color: red !important; border: red !important; width: 100%;">Elimina Cibo</button>
+            <div class="areaBottoneSotto">
+                <button type="submit" class="bottoneCapicollo" style="background-color: red !important; border: red !important;">Elimina Cibo</button>
             </div>
         </form>
     </div>

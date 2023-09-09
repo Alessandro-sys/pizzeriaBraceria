@@ -1068,6 +1068,15 @@ def gestioneCiboCategoria(categoria):
 def modifica():
     if session["user_id"] == 1 or session["user_id"] == 5 or session["user_id"] == 8:
         if request.method == "GET":
+            immagine = request.args.get("immagine")
+            tipo = request.args.get("formato")
+
+            print(tipo)
+
+            if immagine == "" or tipo == "":
+                immagine = "default"
+                tipo = "default"
+
             categoria = request.args.get("nomeCategoria")
             ciboSelezionato = request.args.get("nomeCibo")
 
@@ -1077,7 +1086,7 @@ def modifica():
             price = dettagliCibo[0]["price"]
             description = dettagliCibo[0]["description"]
 
-            return render_template("modificaCibo.html", categoria = categoria, nome = food_name, prezzo = price, descrizione = description)
+            return render_template("modificaCibo.html", categoria = categoria, nome = food_name, prezzo = price, descrizione = description, immagine = immagine, formato = tipo)
         
         elif request.method == "POST":
             oldNome = request.form.get("oldName")
@@ -1215,7 +1224,7 @@ def selezionaData():
 
         orariModificati = []
 
-        print()
+
 
         for orario in orari:
             if orario["orario"] in orariSelezionati:

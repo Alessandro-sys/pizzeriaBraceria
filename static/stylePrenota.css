@@ -10,6 +10,13 @@ h1{
     margin: 0;
 }
 
+.tutto{
+    display: flex;
+    width: 100%;
+}
+.sinistra, .destra{
+    width: 50%;
+}
 
 .logo {
     margin-left: 2%; 
@@ -77,6 +84,54 @@ h1{
     height: 30vh;
     width: 100%;
     background-color: black;
+}
+
+.immagineUpload{
+    width: 10%;
+}
+
+.successo{
+    width: 80%;
+    margin-left: 10%;
+}
+
+.drop-zone{
+    height: 50%; width: 80%;
+    margin-left: 10%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 5px dashed grey;
+    border-radius: 2rem;
+}
+
+.dropAreaConImmagine{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    align-content: center;
+    height: fit-content; width: 80%;
+    padding: 10%;
+    margin-left: 20%;
+    border: 5px dashed grey;
+    border-radius: 2rem;
+}
+
+.immagineVecchia{
+    width: 50%;
+}
+
+
+.areaBottoneSotto{
+    padding-bottom: 1%;
+    width: 30%;
+    margin-left: auto; margin-right: auto;
+}
+
+.formInserimentoCiboBottoni{
+    width: 100%;
+    text-align: center;
+
 }
 
 .settingsButton{
