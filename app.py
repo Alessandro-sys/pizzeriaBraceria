@@ -32,8 +32,15 @@ data_selezionata = ""
 
 app = Flask(__name__)
 
-UPLOAD_FOLDER = r'/Users/ale/Desktop/pizzeriaBraceria/static/immagini_menu'
+# mac
+UPLOAD_FOLDER = r'/Users/alessandrochiarulli/Desktop/pizzeriaBraceria/static/immagini_menu'
+
+# mac mini
+#UPLOAD_FOLDER = r'/Users/ale/Desktop/pizzeriaBraceria/static/immagini_menu'
+
+# portatile
 #UPLOAD_FOLDER = r'C:\Users\chiar\Desktop\pizzeriaBraceria\static\immagini_menu'
+
 # upload per pythonanywhere
 #UPLOAD_FOLDER = r'/home/astroale/mysite/static/immagini_menu'
 
@@ -1068,25 +1075,28 @@ def gestioneCiboCategoria(categoria):
 def modifica():
     if session["user_id"] == 1 or session["user_id"] == 5 or session["user_id"] == 8:
         if request.method == "GET":
-            immagine = request.args.get("immagine")
-            tipo = request.args.get("formato")
-
-            print(tipo)
-
-            if immagine == "" or tipo == "":
-                immagine = "default"
-                tipo = "default"
-
             categoria = request.args.get("nomeCategoria")
             ciboSelezionato = request.args.get("nomeCibo")
 
             dettagliCibo = db.execute("SELECT * FROM ? WHERE food_name = ?", categoria, ciboSelezionato)
+
+            immagine = dettagliCibo[0]["immagine"]
+            formato = dettagliCibo[0]["formato"]
+
+
+            if immagine is None:
+                immagineFinale = 'default'
+                formato = 'default'
+            else:
+                # Convertire l'immagine BLOB in un formato utilizzabile
+                immagineFinale = base64.b64encode(immagine).decode('utf-8')
+
             
             food_name = dettagliCibo[0]["food_name"]
             price = dettagliCibo[0]["price"]
             description = dettagliCibo[0]["description"]
 
-            return render_template("modificaCibo.html", categoria = categoria, nome = food_name, prezzo = price, descrizione = description, immagine = immagine, formato = tipo)
+            return render_template("modificaCibo.html", categoria = categoria, nome = food_name, prezzo = price, descrizione = description, immagine = immagineFinale, formato = formato)
         
         elif request.method == "POST":
             oldNome = request.form.get("oldName")

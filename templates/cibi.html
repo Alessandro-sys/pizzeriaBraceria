@@ -57,7 +57,7 @@
                 {% endif %}
             {% endif %}
             {% if immagine[cibo.food_name] == '' %}
-                    <img src="../static/modello-di-copertina-del-menu-del-ristorante-cafe-pagina-del-titolo-con-doodle-di-cibo-disegnato-a-mano-contorno-di-schizzo-colorato-su-sfondo-bianco-poster-vettoriale-con-illustrazione-dell-elemento-di-cottura-wdkmf1.jpg" alt="">
+                    <img src="../static/e.jpg" alt="">
             {% endif %}
             <div class="card-body">
                 <h5 class="card-title">{{ cibo.food_name }}</h5>
@@ -66,14 +66,6 @@
                 <form action="/modifica">
                     <input type="hidden" name="nomeCategoria" value="{{ categoria }}">
                     <input type="hidden" name="nomeCibo" value="{{cibo.food_name}}">
-                    {% if immagine[cibo.food_name] != '' %}
-                        <input type="hidden" name="immagine" value="{{ immagine[cibo.food_name][0] }}">
-                        <input type="hidden" name="formato" value="{{immagine[cibo.food_name][1]}}">
-                    {% endif %}
-                    {% if immagine[cibo.food_name] == '' %}
-                        <input type="hidden" name="immagine">
-                        <input type="hidden" name="formato">
-                    {% endif %}
                     <button type="submit" class="btn btn-primary" style="background-color: white !important; border: white !important; margin: 2px; color: black;">
                         <img src="../static/edit_pencil_paper_modify_write_icon_141958.png" alt="" width="10%">
                     </button>
