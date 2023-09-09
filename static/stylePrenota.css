@@ -10,6 +10,20 @@ h1{
     margin: 0;
 }
 
+
+.logo {
+    margin-left: 2%; 
+    width:10%;
+}
+
+.menuButtons{
+    flex-grow: 1;
+    display: flex;
+    justify-content: center; /* Centra i pulsanti orizzontalmente */
+    align-items: center;
+    margin-left: -12%;
+}
+
 .titleDiv{
     width: 100%;
     text-align: center;
@@ -89,7 +103,19 @@ h1{
     text-align: center;
 }
 
+@media screen and (width < 1400px) and (width >= 600px ) {
+    .logo{
+        padding-top: 1%;
+    }
+}
+
+
+
+
 @media screen and (width < 600px) {
+    .logo{
+        padding-top: 2%;
+    }
     .settings{
         height: fit-content;
     }

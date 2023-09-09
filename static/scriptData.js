@@ -11,6 +11,7 @@ function validateForm() {
       }
     
     // Impedisci la selezione di giorni precedenti a oggi
+    
     if (selectedDate < oggi) {
       alert("Non puoi selezionare una data precedente a oggi.");
       dataInput.value = oggi.toISOString().split('T')[0];

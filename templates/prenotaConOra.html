@@ -19,15 +19,18 @@
     <div class="formPrenotazione">
         <div class="scurente">
             <div class="menuBar">
-                <form action="/home">
-                    <button class="menuButton" name="home">HOME</button>
-                </form>
-                <form action="/menu">
-                    <button class="menuButton" name="menu">MENU</button>
-                </form>
-                <form action="/selezionaData">
-                    <button class="menuButtonCurrent" name="prenotazioni">PRENOTAZIONI</button>
-                </form>
+                <img src="../static/logoPngInvertito.png" alt="Logo" class="logo">
+                <div class="menuButtons">
+                    <form action="/home">
+                        <button class="menuButton" name="home">HOME</button>
+                    </form>
+                    <form action="/menu">
+                        <button class="menuButton" name="menu">MENU</button>
+                    </form>
+                    <form action="/selezionaData">
+                        <button class="menuButtonCurrent" name="prenotazioni">PRENOTAZIONI</button>
+                    </form>
+                </div>
             </div>
             <div class="divPrenota">
                 <form action="/prenotazioni" method="post" class="formForm" onsubmit="return validateForm()">

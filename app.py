@@ -930,8 +930,15 @@ def aggiungiOrario():
                 except ValueError:
                     return False
 
+            orariEsistenti = dbUsers.execute("SELECT * FROM orari_disponibili")
+
             
+
             if verifica_formato_ore(nuovoOrario):
+                for orario in orariEsistenti:
+                    if orario["orario"] == nuovoOrario:
+                        return apology("Orario già esistente")
+                
                 dbUsers.execute("INSERT INTO orari_disponibili (orario) VALUES (?)", nuovoOrario)
                 return redirect("orari")
             else:

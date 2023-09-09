@@ -10,8 +10,21 @@ h1{
     margin: 0;
 }
 
+.logo {
+    margin-left: 2%; 
+    width:10%;
+}
+
+.menuButtons{
+    flex-grow: 1;
+    display: flex;
+    justify-content: center; /* Centra i pulsanti orizzontalmente */
+    align-items: center;
+    margin-left: -12%;
+}
+
 .titleDiv{
-    margin-top: -3%;
+    margin-top: -8%;
     width: 100%;
     height: 100%;
     display: flex;
@@ -218,6 +231,9 @@ table td{
 
 
 @media screen and (width < 1200px) {
+    .logo{
+        padding-top: 1%;
+    }
     .menuSection{
         font-size: 30px !important;
     }
@@ -241,8 +257,11 @@ table td{
 
 
 @media screen and (width < 600px) {
+    .logo{
+        padding-top: 2%;
+    }
     .titleDiv{
-        margin-top: -15% !important;
+        margin-top: -18% !important;
     }    
     .menuButton{
         font-size: 15px !important;
