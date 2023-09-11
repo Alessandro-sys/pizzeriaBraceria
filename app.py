@@ -820,6 +820,7 @@ def ripristinaElementi():
 @app.route("/orari", methods=["GET","POST"])
 @login_required
 def orari():
+    #
     global data_selezionata
     if session["user_id"] == 1 or session["user_id"] == 5 or session["user_id"] == 8:
         if request.method == "GET":
@@ -1416,6 +1417,60 @@ def eliminaCiboDefinitivamente():
 
             db.execute("DELETE FROM ? WHERE food_name = ?", categoria, nomeCibo)
             return redirect(url_for("gestioneCiboCategoria", categoria=categoria))
+
+    else:
+        return apology("Non sei autorizzato a raggiungere questa pagina")
+    
+
+
+
+@app.route("/soldOut", methods=["GET","POST"])
+@login_required
+def soldOut():
+    if session["user_id"] == 1 or session["user_id"] == 5 or session["user_id"] == 8:
+        global data_selezionata
+        if request.method == "GET":
+            if data_selezionata == "":
+                data_odierna = datetime.now()
+
+                # Formatta la data nel formato "dd-mm-yyyy"
+                data = data_odierna.strftime("%d-%m-%Y")
+            else:
+                data = data_selezionata
+            
+            orariDisponibili = dbUsers.execute("SELECT * FROM orari_disponibili")
+
+            status = "ndisp"
+            for orario in orariDisponibili:
+                dbUsers.execute("INSERT INTO modifiche_orari (data, ora, status) VALUES (?, ?, ?)", data, orario["orario"], status)
+
+            return redirect("/orari")
+
+    else:
+        return apology("Non sei autorizzato a raggiungere questa pagina")
+    
+
+@app.route("/attivazzione", methods=["GET","POST"])
+@login_required
+def attiva():
+    if session["user_id"] == 1 or session["user_id"] == 5 or session["user_id"] == 8:
+        global data_selezionata
+        if request.method == "GET":
+            if data_selezionata == "":
+                data_odierna = datetime.now()
+
+                # Formatta la data nel formato "dd-mm-yyyy"
+                data = data_odierna.strftime("%d-%m-%Y")
+            else:
+                data = data_selezionata
+            
+            orariDisponibili = dbUsers.execute("SELECT * FROM orari_disponibili")
+
+            status = "disp"
+            for orario in orariDisponibili:
+                dbUsers.execute("INSERT INTO modifiche_orari (data, ora, status) VALUES (?, ?, ?)", data, orario["orario"], status)
+
+            return redirect("/orari")
 
     else:
         return apology("Non sei autorizzato a raggiungere questa pagina")
