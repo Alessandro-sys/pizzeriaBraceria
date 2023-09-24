@@ -33,13 +33,13 @@ data_selezionata = ""
 app = Flask(__name__)
 
 # mac
-UPLOAD_FOLDER = r'/Users/alessandrochiarulli/Desktop/pizzeriaBraceria/static/immagini_menu'
+#UPLOAD_FOLDER = r'/Users/alessandrochiarulli/Desktop/pizzeriaBraceria/static/immagini_menu'
 
 # mac mini
 #UPLOAD_FOLDER = r'/Users/ale/Desktop/pizzeriaBraceria/static/immagini_menu'
 
 # portatile
-#UPLOAD_FOLDER = r'C:\Users\chiar\Desktop\pizzeriaBraceria\static\immagini_menu'
+UPLOAD_FOLDER = r'C:\Users\chiar\Desktop\pizzeriaBraceria\static\immagini_menu'
 
 # upload per pythonanywhere
 #UPLOAD_FOLDER = r'/home/astroale/mysite/static/immagini_menu'
@@ -1474,3 +1474,18 @@ def attiva():
 
     else:
         return apology("Non sei autorizzato a raggiungere questa pagina")
+
+
+@app.route("/eliminaPrenotazione", methods=["GET","POST"])
+@login_required
+def eliminaPrenotazione():
+    if session["user_id"] == 1 or session["user_id"] == 5 or session["user_id"] == 8:
+        if request.method == "POST":
+            idPrenotazione = request.form.get("idPrenotazione")
+            dbUsers.execute("DELETE FROM prenotazioni WHERE id = ?", idPrenotazione)
+            dbUsers.execute("DELETE FROM gesione_prenotazioni WHERE id_prenotazione = ?", idPrenotazione)
+            return redirect("/utentiPrenotati")
+        else:
+            return apology("Errore interno del server")
+    else: 
+        return apology("Non sei autorizzato ad accedere a questa pagina")
