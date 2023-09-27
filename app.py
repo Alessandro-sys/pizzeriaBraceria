@@ -33,10 +33,10 @@ data_selezionata = ""
 app = Flask(__name__)
 
 # mac
-UPLOAD_FOLDER = r'/Users/alessandrochiarulli/Desktop/pizzeriaBraceria/static/immagini_menu'
+#UPLOAD_FOLDER = r'/Users/alessandrochiarulli/Desktop/pizzeriaBraceria/static/immagini_menu'
 
 # mac mini
-#UPLOAD_FOLDER = r'/Users/ale/Desktop/pizzeriaBraceria/static/immagini_menu'
+UPLOAD_FOLDER = r'/Users/ale/Desktop/pizzeriaBraceria/static/immagini_menu'
 
 # portatile
 #UPLOAD_FOLDER = r'C:\Users\chiar\Desktop\pizzeriaBraceria\static\immagini_menu'
