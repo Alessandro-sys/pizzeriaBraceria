@@ -60,7 +60,9 @@
                     <img src="../static/e.jpg" alt="">
             {% endif %}
             <div class="card-body">
-                <h5 class="card-title">{{ cibo.food_name }}</h5>
+                <h5 class="card-title">
+                    {{ cibo.food_name }} 
+                </h5>
                 <p>{{ cibo.description }}</p>
                 <p>€{{ cibo.price }}</p>
                 <form action="/modifica">
